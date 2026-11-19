@@ -1,0 +1,26 @@
+{
+  "revision": "79b02f4a79e233c07ec4923e39f40be27448549d",
+  "repository": "https://github.com/Comfy-Org/workflow_templates",
+  "templates": [
+    {
+      "file": "video_wan2_2_14B_i2v.json",
+      "source": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/79b02f4a79e233c07ec4923e39f40be27448549d/templates/video_wan2_2_14B_i2v.json",
+      "sha256": "b2233e91356e3b7346717b969fb684e69a1c36f11306a610e24ab59fc399e372"
+    },
+    {
+      "file": "video_ltx2_5_i2v.json",
+      "source": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/79b02f4a79e233c07ec4923e39f40be27448549d/templates/video_ltx2_5_i2v.json",
+      "sha256": "03b136ba0ad752c1e91e496a23fa4f4826ef881777d591dc9129c459922e7dac"
+    },
+    {
+      "file": "audio_ace_step_1_5_split_4b.json",
+      "source": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/79b02f4a79e233c07ec4923e39f40be27448549d/templates/audio_ace_step_1_5_split_4b.json",
+      "sha256": "eec9e60b77bd570e9b951329de3ae3a699ea0136d0ed745d83aa6ba8ea0dd81b"
+    },
+    {
+      "file": "image_qwen_Image_2512.json",
+      "source": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/79b02f4a79e233c07ec4923e39f40be27448549d/templates/image_qwen_Image_2512.json",
+      "sha256": "4ad1265ec0ce1edf397d6a111a757e9d7831b63669e9ce815b9f3de91b335f1a"
+    }
+  ]
+}

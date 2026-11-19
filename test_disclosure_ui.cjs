@@ -1,0 +1,10 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const detail=(id,open)=>({id,dataset:{},open,querySelector(){return {textContent:id}}});
+const old=[detail('environment-history',false),detail('operation-history',true),detail('history-bridge',true)];
+const next=[detail('environment-history',false),detail('new-active-log',false),detail('operation-history',false),detail('history-bridge',false)];
+const document={activeElement:null,hidden:false,addEventListener(){},querySelectorAll(selector){return selector==='details'?this.current:[]},current:old};
+const ctx={document,location:{pathname:'/manager'},window:{scrollY:0,scrollTo(){},addEventListener(){}},setInterval(){}};
+vm.createContext(ctx);vm.runInContext(fs.readFileSync(__dirname+'/web/app.js','utf8').split('(async()=>{try{[data,verified]')[0],ctx);ctx.next=next;
+vm.runInContext('data={};verified={};render=()=>{document.current=next};renderLive()',ctx);
+assert.equal(next[1].open,false,'new logs must not inherit another panel open state');assert.equal(next[2].open,true,'history stays expanded by stable identity');assert.equal(next[3].open,true,'retry group stays expanded when a new task appears');
+console.log('Disclosure state survives task insertion without opening unrelated logs.');

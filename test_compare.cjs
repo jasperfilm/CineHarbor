@@ -1,0 +1,11 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const nodes={};for(const id of ['save','export','results','machine','task','overhead','minutes','rate','unit','evidence'])nodes['#bench-'+id]={value:'',innerHTML:''};
+const store=new Map();let notice='',exported,clicked=false;
+const ctx={document:{querySelector:id=>nodes[id],createElement:()=>({click(){clicked=true}})},localStorage:{getItem:k=>store.get(k),setItem:(k,v)=>store.set(k,v)},Blob,URL:{createObjectURL:b=>{exported=b;return 'blob:test'},revokeObjectURL(){}},setTimeout(){},toast:s=>notice=s,esc:s=>String(s)};
+vm.createContext(ctx);vm.runInContext(fs.readFileSync(__dirname+'/web/compare.js','utf8'),ctx);vm.runInContext('bindHardwareCompare()',ctx);
+nodes['#bench-save'].onclick();assert.match(notice,/请填写/);assert.equal(store.size,0);
+for(const [id,value] of Object.entries({machine:'TEST/G4',task:'test only',overhead:'10',minutes:'20',rate:'6',unit:'CU',evidence:'synthetic functional test'}))nodes['#bench-'+id].value=value;
+nodes['#bench-save'].onclick();let rows=JSON.parse(store.get('jasper-hardware-benchmarks-v1'));assert.equal(rows.length,1);assert.equal(rows[0].total,30);assert.equal(rows[0].cost,3);
+vm.runInContext('bindHardwareCompare()',ctx);assert.match(nodes['#bench-results'].innerHTML,/3.000 CU/);
+nodes['#bench-overhead'].value='-1';nodes['#bench-save'].onclick();assert.equal(JSON.parse(store.get('jasper-hardware-benchmarks-v1')).length,1);
+nodes['#bench-export'].onclick();assert.ok(clicked);exported.text().then(text=>{assert.equal(JSON.parse(text)[0].cost,3);console.log('Benchmark validation, save, reload, calculation and JSON export passed (isolated storage).')});

@@ -1,0 +1,47 @@
+name: GC Labs CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-15]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install google-colab-cli aiohttp
+      - name: Compile macOS native AVFoundation helper (macOS only)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p vendor/bin
+          swiftc -parse-as-library -target arm64-apple-macos13.0 -O \
+            -framework AVFoundation -framework CoreMedia -framework CoreGraphics \
+            -framework ImageIO -framework UniformTypeIdentifiers \
+            macos/MediaTool.swift -o vendor/bin/gclabs-media
+      - name: Run Python safety, workflow & privacy audit suite
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python -B -m unittest -v test_safety test_console test_gclabs test_workflows test_v040 test_v050
+      - name: Run Node UI state & modular regression suite
+        run: |
+          node test_console_ui.cjs
+          node test_runtime_ui.cjs
+          node test_live_status.cjs
+          node test_compare.cjs
+          node test_editor_ui.cjs
+          node test_progress_ui.cjs
+          node test_disclosure_ui.cjs
+          node test_v040_ui.cjs
+          node test_v050_ui.cjs

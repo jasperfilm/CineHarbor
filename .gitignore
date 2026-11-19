@@ -1,0 +1,20 @@
+/data/
+/backups/
+/build/
+/releases/
+/vendor/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Local handover, migration & private acceptance snapshots
+/工作交接.txt
+/研究与验收.md
+/登录GitHub授权.command
+/reports/*.png
+/reports/*.jpg
+/reports/g4-e2e/
+/reports/macmini-migration/
+/reports/macmini-*.json
+/reports/build-cleanup.json
+/reports/cleanup-data-check.json

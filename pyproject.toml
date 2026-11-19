@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gc-labs"
+version = "0.5.0"
+description = "Local-first AI film & ComfyUI workstation powered by your own Google Colab 96GB G4 runtime"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+authors = [
+  { name = "GC Labs Contributors" }
+]
+keywords = ["comfyui", "google-colab", "ai-video", "storyboard", "local-first", "filmmaking"]
+dependencies = [
+  "google-colab-cli>=0.7.0",
+  "aiohttp>=3.9.0",
+]
+
+[project.scripts]
+gclabs = "gclabs_cli:main"
+
+[tool.setuptools]
+py-modules = [
+  "server",
+  "console",
+  "gclabs_cli",
+  "account_login",
+  "comfy_local_bridge",
+  "mobile_monitor",
+  "model_presets",
+  "timeline_export",
+  "workflow_converter",
+  "workflow_library",
+  "workspace_backup",
+]
