@@ -4,6 +4,8 @@
 
 [中文说明](#中文说明) · [实测全流程演示 / Live Production Tour](#实测全流程演示--10-step-live-g4-production-tour) · [English Overview](#english-overview) · [Quick Start](#快速开始--quick-start)
 
+![GC Labs v0.5.0 — Turn 96GB Colab G4 Into Your Local-First AI Film Studio](assets/showcase/gc-labs-x-cover-en-5x2.png)
+
 ![Neon Horizon — Qwen Image 2512 Full-Precision BF16 Keyframe](assets/showcase/neon-horizon-keyframe-qwen2512-bf16.png)
 *▲ Live 96GB Colab G4 full-precision showcase project **"Neon Horizon · 星际信使"**: `Qwen Image 2512 BF16` (`1920×1088` keyframe) + `ACE-Step 1.5` (15s original soundtrack) + `MiniMax H3 BF16` (2 frame-chained `1080P` shots) → [**Watch / Download 10s 1080P Showcase Short Film (`neon-horizon-showcase-1080p.mp4`)**](assets/showcase/neon-horizon-showcase-1080p.mp4).*
 
