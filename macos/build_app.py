@@ -26,7 +26,7 @@ binary = contents / 'MacOS'
 cli = Path.home() / '.local/bin/colab'
 import os
 # Preserve the venv executable path: resolving its symlink loses the CLI site-packages.
-sdk_python = Path(os.environ.get('GC_LABS_SDK_PYTHON') or cli.read_text().splitlines()[0][2:]).absolute()
+sdk_python = Path(os.environ.get('CINEHARBOR_SDK_PYTHON') or os.environ.get('GC_LABS_SDK_PYTHON') or cli.read_text().splitlines()[0][2:]).absolute()
 info = json.loads(subprocess.check_output([str(sdk_python), '-B', '-c', 'import sys,sysconfig,json;print(json.dumps({"prefix":sys.base_prefix,"site":sysconfig.get_path("purelib")}))'], text=True))
 
 frontend_zip = root / 'vendor/comfy_frontend.zip'

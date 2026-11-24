@@ -1,4 +1,4 @@
-name: GC Labs CI
+name: CineHarbor CI
 
 on:
   push:

@@ -1,7 +1,7 @@
 var L=(typeof window!=="undefined"?window:globalThis).GCLabsI18n||{text:x=>x,html:(s,...v)=>s.reduce((a,p,i)=>a+p+(i<v.length?v[i]:""),""),service:x=>x,message:(_k,f)=>f,select:()=>"",bind:()=>{}};
 /* Core UI state, transport adapter (GCLabsCore), and slot registry (zero string monkey-patching). */
 let data,live,verified,selected,tab='shots',modelKind='all',statusRequest=null,runtimeBusy=false,liveReceivedAt=0,aboutOpen=false,projectFileBusy=false;
-const PRODUCT=window.GCLabsBrand||{display_name:'GC Labs',version:'1.0.0',publisher:'GachaFrame'};
+const PRODUCT=window.GCLabsBrand||{display_name:'CineHarbor',version:'1.0.0',publisher:'GachaFrame'};
 const manager=location.pathname==='/manager';
 const $=s=>document.querySelector(s);
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

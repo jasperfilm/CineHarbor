@@ -79,4 +79,4 @@ assert.match(asmInsp,/id="export-rough-mp4"/);
 assert.match(asmInsp,/id="export-fcpxml"/);
 assert.match(asmInsp,/id="export-capcut"/);
 
-console.log('GC Labs 0.4.0 modular UI, batch queue, step progress, frame chaining, template converter and rough-cut assembly UI passed.');
+console.log('CineHarbor 0.4.0 modular UI, batch queue, step progress, frame chaining, template converter and rough-cut assembly UI passed.');

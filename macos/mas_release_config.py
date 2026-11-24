@@ -38,16 +38,26 @@ def validate_profile(profile, bundle_id, now=None):
     return ent
 
 
+def _first(env, *names):
+    for name in names:
+        value = env.get(name, '')
+        if isinstance(value, str):
+            value = value.strip()
+        if value:
+            return value
+    return ''
+
+
 def load_config(env, decode=None):
-    bundle_id = env.get('GC_LABS_BUNDLE_ID', '').strip()
+    bundle_id = _first(env, 'CINEHARBOR_BUNDLE_ID', 'GC_LABS_BUNDLE_ID')
     if not re.fullmatch(r'[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+', bundle_id):
-        raise ValueError('Set GC_LABS_BUNDLE_ID explicitly to the existing App Store Connect Bundle ID.')
-    declaration = env.get('GC_LABS_NONEXEMPT_ENCRYPTION', '').lower()
+        raise ValueError('Set CINEHARBOR_BUNDLE_ID explicitly to the existing App Store Connect Bundle ID. GC_LABS_BUNDLE_ID is still accepted.')
+    declaration = _first(env, 'CINEHARBOR_NONEXEMPT_ENCRYPTION', 'GC_LABS_NONEXEMPT_ENCRYPTION').lower()
     if declaration not in ('true', 'false', 'defer'):
-        raise ValueError('Set GC_LABS_NONEXEMPT_ENCRYPTION explicitly after the encryption assessment, or defer for a local candidate with no declaration; there is no default declaration.')
-    path = Path(env.get('GC_LABS_MAS_PROFILE', '')).expanduser()
+        raise ValueError('Set CINEHARBOR_NONEXEMPT_ENCRYPTION explicitly after the encryption assessment, or defer for a local candidate with no declaration; there is no default declaration. GC_LABS_NONEXEMPT_ENCRYPTION is still accepted.')
+    path = Path(_first(env, 'CINEHARBOR_MAS_PROFILE', 'GC_LABS_MAS_PROFILE')).expanduser()
     if not path.is_file():
-        raise ValueError('Set GC_LABS_MAS_PROFILE to an existing matching distribution profile.')
+        raise ValueError('Set CINEHARBOR_MAS_PROFILE to an existing matching distribution profile. GC_LABS_MAS_PROFILE is still accepted.')
     if decode is None:
         decode = lambda p: plistlib.loads(subprocess.check_output(['security', 'cms', '-D', '-i', str(p)]))
     profile = decode(path)

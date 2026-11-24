@@ -18,7 +18,7 @@ parser.add_argument('--port', type=int, default=8767)
 parser.add_argument('--frontend', default=str(Path(__file__).resolve().parent / 'vendor/comfy_frontend.zip'))
 args = parser.parse_args()
 
-cache_root = Path(os.environ.get('GC_LABS_CACHE', '/tmp'))
+cache_root = Path(os.environ.get('CINEHARBOR_CACHE') or os.environ.get('GC_LABS_CACHE') or '/tmp')
 static = cache_root / 'comfy_frontend'
 view_cache = cache_root / 'view_cache'
 static.mkdir(parents=True, exist_ok=True)

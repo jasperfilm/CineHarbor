@@ -24,14 +24,24 @@ CineHarbor（原 GC Labs）是一款面向 macOS 的本地优先视频制作工�
 
 内置工作流模板还覆盖 Wan 2.2、LTX 2.5、Qwen Image、Qwen Image Edit 和 ACE-Step。模板提供工作流，实际生成取决于当前运行时的模型文件、节点及算力。
 
+完整精度预设目前是 6 套：Wan 2.2 I2V FP16、LTX 2.5 22B BF16、Qwen Image 2512 BF16、Qwen Image Edit 2511 BF16、ACE-Step 1.5，以及 ACE-Step 1.5 XL。
+
 ![Build 32 的模型目录](assets/screenshots/04-model-catalog.jpg)
 
 ![可导入的 ComfyUI 模板](assets/screenshots/05-workflow-templates.jpg)
 
 ![剪辑与导出](assets/screenshots/03-edit-and-export.jpg)
 
+## 浏览器模式（macOS、Linux、Windows）
+
+`python -B gclabs_cli.py` 会启动同一个本机服务，并在默认浏览器打开工作台。Linux 和 Windows 用这个方式；Mac 上不想打包 App 时也可以用。安装为可编辑包后，命令 `cineharbor` 与兼容命令 `gclabs` 作用相同。
+
+`--port` 默认 8766，`--page studio` 打开分镜台，`--no-browser` 不自动打开浏览器，`--data-dir` 指定数据目录。环境变量 `CINEHARBOR_DATA` 优先；未设置时仍接受原来的 `GC_LABS_DATA`。
+
+已有数据目录保持不变：macOS 为 `~/Library/Application Support/Jasper Workstation`，Windows 为 `%APPDATA%\GC Labs`，Linux 为 `~/.local/share/gc-labs`。
+
 ## 从源码开始
 
-在 Apple Silicon Mac 上准备 macOS 13 或更新系统、Python 3.13 和 Xcode 命令行工具。《[英文说明](README.md#get-started)》列出了本地启动与构建步骤。云端功能使用自己的 Google Colab 账号，机型供应与费用遵循 [Google Colab 的规则](https://research.google.com/colaboratory/faq.html)。退出应用后，已启动的云端运行时仍可能继续运行。
+从源码运行，包括上面的浏览器启动器，需要 Python 3.12 或更新版本，与 `google-colab-cli` 的要求一致。打包原生 macOS App 时，在 Apple Silicon 上准备 macOS 13 或更新系统、Xcode 命令行工具和 CPython 3.13，因为安装包会拷贝这份 3.13 运行时。《[英文说明](README.md#get-started)》列出了本地启动与构建步骤。云端功能使用自己的 Google Colab 账号，机型供应与费用遵循 [Google Colab 的规则](https://research.google.com/colaboratory/faq.html)。退出应用后，已启动的云端运行时仍可能继续运行。
 
 源码版含工作流模板、许可及说明。模型权重需按上游许可取得。联系支持可使用 contact@gachaframe.com。

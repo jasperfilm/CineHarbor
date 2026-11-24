@@ -1,4 +1,4 @@
-"""GC Labs 0.4.0 comprehensive offline test suite:
+"""CineHarbor 0.4.0 comprehensive offline test suite:
 - Open-source privacy & zero-monkey-patch architecture audit
 - Core/Shell capabilities & health 0.4.0
 - FIFO Batch Queue, queue cancellation & safe /interrupt (no GPU released)

@@ -8,15 +8,15 @@ from mas_release_config import load_config, app_entitlements, find_cert
 CONFIG = load_config(os.environ)
 BUNDLE_ID = CONFIG.bundle_id
 PRODUCT = json.loads((Path(__file__).resolve().parents[1] / 'assets/branding/product.json').read_text())
-VERSION = os.environ.get('GC_LABS_VERSION', PRODUCT['version'])
-BUILD_NUMBER = os.environ.get('GC_LABS_BUILD', PRODUCT['build'])
+VERSION = os.environ.get('CINEHARBOR_VERSION') or os.environ.get('GC_LABS_VERSION') or PRODUCT['version']
+BUILD_NUMBER = os.environ.get('CINEHARBOR_BUILD') or os.environ.get('GC_LABS_BUILD') or PRODUCT['build']
 
 root = Path(__file__).resolve().parents[1]
 
 
 profile_certs = {hashlib.sha1(cert).hexdigest().upper() for cert in CONFIG.profile['DeveloperCertificates']}
-app_cert = find_cert(('Apple Distribution:', '3rd Party Mac Developer Application:'), os.environ.get('GC_LABS_MAS_APP_CERT'), profile_certs)
-pkg_cert = find_cert(('3rd Party Mac Developer Installer:',), os.environ.get('GC_LABS_MAS_PKG_CERT'))
+app_cert = find_cert(('Apple Distribution:', '3rd Party Mac Developer Application:'), os.environ.get('CINEHARBOR_MAS_APP_CERT') or os.environ.get('GC_LABS_MAS_APP_CERT'), profile_certs)
+pkg_cert = find_cert(('3rd Party Mac Developer Installer:',), os.environ.get('CINEHARBOR_MAS_PKG_CERT') or os.environ.get('GC_LABS_MAS_PKG_CERT'))
 
 # First stage standard bundle via build_app.py --stage-only into /tmp/gc-labs-build/GC Labs.app
 subprocess.run([sys.executable, '-B', str(root / 'macos/build_app.py'), '--stage-only'], check=True)

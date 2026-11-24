@@ -28,6 +28,8 @@ Use **Media Library** and **Reference Cards** to reuse visual references across 
 
 The workflow library includes Wan 2.2, LTX 2.5, Qwen Image, Qwen Image Edit, and ACE-Step templates. A template defines a workflow. The actual model files, installed nodes, and compute still need to be available in the selected runtime.
 
+Six full-precision presets ship with those templates: Wan 2.2 I2V FP16, LTX 2.5 22B BF16, Qwen Image 2512 BF16, Qwen Image Edit 2511 BF16, ACE-Step 1.5, and ACE-Step 1.5 XL.
+
 ![Build 32 model catalog showing MiniMax H3, LTX and Wan](assets/screenshots/04-model-catalog.jpg)
 
 ![Built-in ComfyUI workflow templates and the canvas or API JSON import](assets/screenshots/05-workflow-templates.jpg)
@@ -38,13 +40,27 @@ Use **Edit & Deliver** to assemble your chosen takes with sound and subtitles, t
 
 ![Edit & Deliver with timeline, audio and export controls](assets/screenshots/03-edit-and-export.jpg)
 
+## Browser mode (macOS, Linux, and Windows)
+
+`gclabs_cli.py` starts the same loopback server and opens it in the default browser. Use this on Linux and Windows, or on a Mac when you are not building the app.
+
+```bash
+python -B gclabs_cli.py
+```
+
+After `pip install -e .`, `cineharbor` does the same thing. The `gclabs` command name still works.
+
+`--port` defaults to 8766. `--page studio` opens the shot board instead of Colab Control. `--no-browser` skips opening a window. `--data-dir` chooses the workspace folder. `CINEHARBOR_DATA` is the environment override, and an existing `GC_LABS_DATA` value is still read when `CINEHARBOR_DATA` is unset.
+
+The launcher keeps the current data folders so existing projects open in place: `~/Library/Application Support/Jasper Workstation` on macOS, `%APPDATA%\GC Labs` on Windows, and `~/.local/share/gc-labs` on Linux.
+
 ## Get started
 
-For the macOS build, use Apple Silicon, macOS 13 or later, Python 3.13, and Xcode command-line tools.
+Running from source, including the browser launcher above, needs Python 3.12 or newer. That matches `google-colab-cli`, which requires 3.12. Building the native macOS app needs Apple Silicon, macOS 13 or later, Xcode command-line tools, and CPython 3.13, because that build copies the 3.13 runtime into the app.
 
 1. Install the [official Google Colab CLI](https://github.com/googlecolab/google-colab-cli) for cloud use and the local bridge dependencies listed in [requirements-local.lock](macos/requirements-local.lock).
-2. Run `python -B server.py` from the source directory and open [the local workspace](http://127.0.0.1:8766). You can create a project and review workflows before allocating a GPU.
-3. For a native development build, set `GC_LABS_SDK_PYTHON` to the Python executable in your CLI environment and supply the separately licensed ComfyUI frontend 1.59.1 archive as `vendor/comfy_frontend.zip`. See [component source references](assets/licenses/component-sources.json). Run `python -B macos/build_app.py --stage-only` to stage the app.
+2. Run `python -B server.py` from the source directory and open [the local workspace](http://127.0.0.1:8766). You can create a project and review workflows before allocating a GPU. `python -B gclabs_cli.py` is the cross-platform equivalent and opens the browser for you.
+3. For a native development build, set `CINEHARBOR_SDK_PYTHON` to the Python 3.13 executable in your CLI environment. `GC_LABS_SDK_PYTHON` is still accepted. Supply the separately licensed ComfyUI frontend 1.59.1 archive as `vendor/comfy_frontend.zip`. See [component source references](assets/licenses/component-sources.json). Run `python -B macos/build_app.py --stage-only` to stage the app.
 
 Cloud tasks use your own eligible paid Google Colab service. G4 availability and compute charges depend on your account and [Google Colab's limits](https://research.google.com/colaboratory/faq.html). Closing CineHarbor does not stop the runtime. Use **Save and shut down GPU** when your work is finished.
 

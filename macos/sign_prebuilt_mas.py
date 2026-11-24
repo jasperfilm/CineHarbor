@@ -17,7 +17,7 @@ def main():
         raise ValueError('Output already exists; do not replace an existing candidate.')
     allowed = {hashlib.sha1(c).hexdigest().upper() for c in config.profile['DeveloperCertificates']}
     signer = find_cert(('Apple Distribution:', '3rd Party Mac Developer Application:'), allowed_hashes=allowed)
-    installer = find_cert(('3rd Party Mac Developer Installer:',), os.environ.get('GC_LABS_MAS_PKG_CERT'))
+    installer = find_cert(('3rd Party Mac Developer Installer:',), os.environ.get('CINEHARBOR_MAS_PKG_CERT') or os.environ.get('GC_LABS_MAS_PKG_CERT'))
     contents = app/'Contents'
     info = plistlib.loads((contents/'Info.plist').read_bytes())
     if info['CFBundleIdentifier'] not in ('com.jasper.workstation', config.bundle_id):

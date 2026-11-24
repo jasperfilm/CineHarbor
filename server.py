@@ -8,9 +8,20 @@ ROOT = Path(os.environ.get('JASPER_WORKSTATION_ROOT', Path(__file__).resolve().p
 # Use built-in MIME tables: an App Sandbox must not read host Apache configuration.
 mimetypes.knownfiles = []
 mimetypes.init(files=[])
-PRODUCT = json.loads((ROOT/'assets/branding/product.json').read_text()) if (ROOT/'assets/branding/product.json').is_file() else {'version':'1.0.0','display_name':'GC Labs'}
+
+def _env(*names):
+    for name in names:
+        value = os.environ.get(name)
+        if value:
+            return value
+    return ''
+
+
+PRODUCT = json.loads((ROOT/'assets/branding/product.json').read_text()) if (ROOT/'assets/branding/product.json').is_file() else {'version':'1.0.0','display_name':'CineHarbor'}
 VERSION = PRODUCT['version']
-DATA = Path(os.environ.get('GC_LABS_DATA') or os.environ.get('JASPER_WORKSTATION_DATA') or (ROOT / 'data'))
+# CINEHARBOR_DATA is the current override. GC_LABS_DATA remains for existing setups.
+# JASPER_WORKSTATION_DATA is the path the installed Mac app already passes.
+DATA = Path(_env('CINEHARBOR_DATA', 'GC_LABS_DATA', 'JASPER_WORKSTATION_DATA') or (ROOT / 'data'))
 WEB = ROOT / 'web'
 ASSETS = DATA / 'assets'
 DATA.mkdir(parents=True, exist_ok=True)
@@ -31,17 +42,28 @@ PORT = int(os.environ.get('JASPER_WORKSTATION_PORT', '8766'))
 SOURCE = Path(os.environ.get('JASPER_MEDIA_ROOT') or (DATA / 'external-media'))
 
 
+COLAB_CLI_MISSING = '尚未安装 Google Colab CLI。请先安装官方 Colab 命令行工具，再核对云端状态。'
+
+
 def sdk_python():
-    bundled = os.environ.get('GC_LABS_PYTHON')
+    bundled = _env('CINEHARBOR_PYTHON', 'GC_LABS_PYTHON')
     if bundled:
         return bundled
-    first = CLI.read_text().splitlines()[0]
+    try:
+        first = CLI.read_text().splitlines()[0]
+    except OSError:
+        raise RuntimeError(COLAB_CLI_MISSING) from None
     return first[2:] if first.startswith('#!') else sys.executable
 
 
 def cli_command(args):
-    entry = os.environ.get('GC_LABS_CLI_ENTRY')
+    entry = _env('CINEHARBOR_CLI_ENTRY', 'GC_LABS_CLI_ENTRY')
     return [sdk_python(), entry, *args] if entry else [str(CLI), *args]
+
+
+def _colab_cli_missing_output(text):
+    lowered = text.lower()
+    return "no module named 'colab_cli'" in lowered or 'no module named "colab_cli"' in lowered
 
 
 def now():
@@ -65,12 +87,17 @@ def cli(args, timeout=25):
     env['NO_COLOR'] = '1'
     env['TERM'] = 'dumb'
     env['PYTHONDONTWRITEBYTECODE'] = '1'
-    p = subprocess.run(cli_command(args), capture_output=True, text=True, timeout=timeout, env=env, stdin=subprocess.DEVNULL)
+    try:
+        p = subprocess.run(cli_command(args), capture_output=True, text=True, timeout=timeout, env=env, stdin=subprocess.DEVNULL)
+    except OSError:
+        raise RuntimeError(COLAB_CLI_MISSING) from None
     text = p.stdout + p.stderr
     text = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', text)
     if p.returncode:
         if any(x in text.lower() for x in ('authorization code', 'to authorize', 'no valid default credentials', 'defaultcredentialserror', 'eof when reading', 'invalid_grant', 'invalidgrant', 'refresherror', 'invalid_scope')):
             raise RuntimeError('尚未登录或授权已失效。请在管理台点击Google登录。')
+        if _colab_cli_missing_output(text):
+            raise RuntimeError(COLAB_CLI_MISSING)
         raise RuntimeError(text[-3000:])
     return text
 
@@ -308,7 +335,7 @@ def export_shot(shot, d):
             'nbformat': 4, 'nbformat_minor': 5,
             'metadata': {'colab': {'name': (shot.get('title') or 'workflow') + '.ipynb'}, 'kernelspec': {'display_name': 'Python 3', 'language': 'python', 'name': 'python3'}},
             'cells': [
-                {'cell_type': 'markdown', 'metadata': {}, 'source': ['# ' + str(shot.get('title') or 'GC Labs 工作流任务') + '\n选择 G4 运行时，挂载云盘后依次执行环境准备与真实推理。结果核验后请执行云盘备份释放。']},
+                {'cell_type': 'markdown', 'metadata': {}, 'source': ['# ' + str(shot.get('title') or 'CineHarbor 工作流任务') + '\n选择 G4 运行时，挂载云盘后依次执行环境准备与真实推理。结果核验后请执行云盘备份释放。']},
                 cell('from google.colab import drive\ndrive.mount("/content/drive")'),
                 cell('CONTROL = ' + repr(payload) + '\n' + lib_src + '\n' + common + '\nprint(setup())'),
                 cell('print(generate())')
@@ -712,7 +739,11 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 return self.reply(refresh())
             except Exception as e:
-                return self.reply({'error': str(e)}, 502)
+                detail = str(e)
+                lowered = detail.lower()
+                if detail == COLAB_CLI_MISSING or (isinstance(e, FileNotFoundError) and 'colab' in lowered) or "no module named 'colab_cli'" in lowered or 'no module named "colab_cli"' in lowered:
+                    detail = COLAB_CLI_MISSING
+                return self.reply({'error': detail}, 502)
         if path == '/api/verified':
             record = DATA / 'verified_state.json'
             return self.reply(json.loads(record.read_text()) if record.exists() else {'gpu': '尚未验证', 'ram_gib': '—', 'torch': '—', 'cuda': '—', 'comfy_revision': '', 'backup_path': '尚未配置', 'backup_status': '尚未验证', 'video_inference_status': '尚未验证'})
@@ -1391,12 +1422,12 @@ if __name__ == '__main__':
     try:
         httpd = ThreadingHTTPServer(('127.0.0.1', PORT), Handler)
     except OSError:
-        if os.environ.get('GC_LABS_DYNAMIC_PORT') == '1':
+        if _env('CINEHARBOR_DYNAMIC_PORT', 'GC_LABS_DYNAMIC_PORT') == '1':
             httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
             PORT = httpd.server_port
         else:
             raise
-    port_file = os.environ.get('GC_LABS_PORT_FILE')
+    port_file = _env('CINEHARBOR_PORT_FILE', 'GC_LABS_PORT_FILE')
     if port_file:
         Path(port_file).write_text(json.dumps({'port': PORT, 'version': VERSION}))
     print(f'Local: http://127.0.0.1:{PORT}/studio', flush=True)

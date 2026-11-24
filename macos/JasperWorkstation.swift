@@ -19,7 +19,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKNa
         makeMenu(); window.subtitle = "by GachaFrame · \(n("Video workspace")) · \(appVersion)"
     }
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
-    let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "GC Labs"
+    let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "CineHarbor"
     var base = URL(string: "http://127.0.0.1:8766")!
     let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("Jasper Workstation", isDirectory: true)
     var config: [String: String] = [:]
@@ -112,9 +112,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKNa
             var env = ProcessInfo.processInfo.environment
             env["PYTHONDONTWRITEBYTECODE"] = "1"
             env["JASPER_WORKSTATION_ROOT"] = code.path; env["JASPER_WORKSTATION_DATA"] = support.path
+            let cliEntry = code.appendingPathComponent("runtime/colab_entry.py").path
+            env["CINEHARBOR_PYTHON"] = python
             env["GC_LABS_PYTHON"] = python
-            env["GC_LABS_CLI_ENTRY"] = code.appendingPathComponent("runtime/colab_entry.py").path
+            env["CINEHARBOR_CLI_ENTRY"] = cliEntry
+            env["GC_LABS_CLI_ENTRY"] = cliEntry
+            env["CINEHARBOR_DYNAMIC_PORT"] = "1"
             env["GC_LABS_DYNAMIC_PORT"] = "1"
+            env["CINEHARBOR_PORT_FILE"] = portFile.path
             env["GC_LABS_PORT_FILE"] = portFile.path
             if env["APP_SANDBOX_CONTAINER_ID"] != nil || (Bundle.main.object(forInfoDictionaryKey: "GCLabsSandboxed") as? Bool == true) {
                 let sandboxCfg = support.appendingPathComponent("config")
