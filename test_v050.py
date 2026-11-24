@@ -13,6 +13,7 @@ import server
 from console import Console
 from model_presets import list_presets
 import gclabs_cli
+import mobile_monitor
 
 
 class PresetsAndCLITests(unittest.TestCase):
@@ -196,10 +197,13 @@ class V050StudioAndGuardrailsHTTP(unittest.TestCase):
 
     def test_mobile_readonly_monitor_security_and_qr_svg(self):
         (self.d / 'live_status.json').write_text(json.dumps({'email': 'director@example.com', 'balance': 881.72, 'rate': 0.0, 'active': 0, 'runtime_state': 'idle', 'checked_at': 'now'}))
-        # Isolate this real HTTP test from the shared desktop monitor port.
-        monitor = server.get_monitor()
-        start = monitor.start
-        with patch.object(monitor, 'start', side_effect=lambda: start(preferred_port=0)):
+        # Exercise the real HTTP handler without exposing the test server to the LAN.
+        monitor_http_server = mobile_monitor.ThreadingHTTPServer
+        with (
+            patch.object(mobile_monitor, '_detect_lan_ips', return_value=['127.0.0.1']),
+            patch.object(mobile_monitor, 'ThreadingHTTPServer',
+                         side_effect=lambda _address, handler: monitor_http_server(('127.0.0.1', 0), handler)),
+        ):
             st = self.api('/api/monitor/toggle', {'enabled': True})
         self.assertTrue(st['enabled'])
         self.assertIn('<svg', st['qr_svg'])
