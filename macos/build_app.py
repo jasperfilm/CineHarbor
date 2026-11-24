@@ -90,6 +90,9 @@ if (extra / 'aiohttp').is_dir():
 elif not (resources / 'Python/lib/python3.13/site-packages/aiohttp').is_dir():
     raise RuntimeError('先按 macos/requirements-local.lock 安装本地桥接依赖到 vendor/python-extra')
 
+from sanitize_runtime import sanitize
+sanitize(resources / 'Python', info['prefix'])
+
 # Check the actual relocated runtime before signing or replacing the installed app.
 subprocess.run([
     str(resources / 'Python/bin/python3.13'), '-B', '-c',

@@ -2,7 +2,9 @@
 
 CineHarbor（原 GC Labs）是一款面向 macOS 的本地优先视频制作工作台。从写分镜、整理参考素材，到连接自己的 Google Colab 生成镜头，再回到 Mac 选片、剪辑和导出。
 
-[English](README.md) · [Build 32 版本说明](https://github.com/jasperfilm/GC-Labs/releases/tag/v1.2.12-b32-h3)
+[English](README.md) · [Build 32 版本说明](https://github.com/jasperfilm/CineHarbor/releases/tag/v1.2.12-b32-h3) · [下载 Apple Silicon 安装包](https://github.com/jasperfilm/CineHarbor/releases/download/v1.2.12-b32-h3/CineHarbor-1.2.12-Build32-arm64.dmg)
+
+需要 macOS 13 或更新版本。此 GitHub 开发版采用临时签名，尚未通过 Apple 公证。
 
 ![CineHarbor 分镜和镜头设置](assets/screenshots/01-project-and-shot-board.jpg)
 
@@ -14,6 +16,8 @@ CineHarbor（原 GC Labs）是一款面向 macOS 的本地优先视频制作工�
 4. **剪辑和导出**。在本机整理镜头顺序和入出点，加入配乐和字幕，导出 MP4。
 5. **保存并释放算力**。完成后可把成果备份到自己的 Google Drive，校验通过后再释放由 CineHarbor 管理的运行时。
 
+![本地素材与参考卡](assets/screenshots/02-media-and-reference-cards.jpg)
+
 ## 模型支持
 
 **GitHub 开发版为 1.2.12 Build 32。** 这一版内置 MiniMax H3 图生视频适配，可从自己的 Drive 恢复兼容的 BF16 权重备份。恢复流程需要配套模型清单。使用前请核对 [MiniMax H3 原始许可](assets/licenses/models/MiniMax-H3-LICENSE.txt)。
@@ -23,8 +27,6 @@ CineHarbor（原 GC Labs）是一款面向 macOS 的本地优先视频制作工�
 ![Build 32 的模型目录](assets/screenshots/04-model-catalog.jpg)
 
 ![可导入的 ComfyUI 模板](assets/screenshots/05-workflow-templates.jpg)
-
-![本地素材与参考卡](assets/screenshots/02-media-and-reference-cards.jpg)
 
 ![剪辑与导出](assets/screenshots/03-edit-and-export.jpg)
 
