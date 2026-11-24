@@ -1,0 +1,20 @@
+{
+  "name": "prosemirror-keymap",
+  "version": "1.2.3",
+  "notices": [
+    {
+      "file": "frontend/prosemirror-keymap_1.2.3/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git://github.com/prosemirror/prosemirror-keymap.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/prosemirror-keymap/-/prosemirror-keymap-1.2.3.tgz",
+  "integrity": "sha512-4HucRlpiLd1IPQQXNqeo81BGtkY8Ai5smHhKW9jjPKRc2wQIxksg7Hl1tTI2IfT2B/LgX6bfYvXxEpJl7aKYKw==",
+  "archive_sha256": "3131823ce73eaf3487cada22c85b76349da02c114dee3de696f4c1c3c645ca8c",
+  "status": "notice_text_present"
+}

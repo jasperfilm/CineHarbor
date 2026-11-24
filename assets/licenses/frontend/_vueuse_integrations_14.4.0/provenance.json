@@ -1,0 +1,21 @@
+{
+  "name": "@vueuse/integrations",
+  "version": "14.4.0",
+  "notices": [
+    {
+      "file": "frontend/_vueuse_integrations_14.4.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "0f844b1160603552a01662ac2999c14e5fb4df487e65619b9ed4406e43eb3c0b"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/vueuse/vueuse.git",
+    "type": "git",
+    "directory": "packages/integrations"
+  },
+  "tarball": "https://registry.npmjs.org/@vueuse/integrations/-/integrations-14.4.0.tgz",
+  "integrity": "sha512-oJz9qTgczvA7L1nXQFRU7h8tQbOCoiceqvMMhT9XYMyOGTqLJ2rEa09PON+nD2t48sZUfeOmg4eaWJXV4sZb/w==",
+  "archive_sha256": "8eeb4273da30ea0b9fbc2845d92f79cb6b42d06d3b2cf2b9bc7457673f278c3b",
+  "status": "notice_text_present"
+}

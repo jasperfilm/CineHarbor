@@ -1,0 +1,21 @@
+{
+  "name": "@tiptap/extension-underline",
+  "version": "3.31.0",
+  "notices": [
+    {
+      "file": "frontend/_tiptap_extension-underline_3.31.0/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "https://github.com/ueberdosis/tiptap",
+    "type": "git",
+    "directory": "packages/extension-underline"
+  },
+  "tarball": "https://registry.npmjs.org/@tiptap/extension-underline/-/extension-underline-3.31.0.tgz",
+  "integrity": "sha512-B4VK5nu0UdKl7OiMvIcjDPMYmhe8+v1B763Is/GzPSJOMstUHRqAqPx2AsPla6A4UGuZwTx//ajVa5QAGionZQ==",
+  "archive_sha256": "bd2da48052556d67a0c89e7712eec38b8fcc3c8d9b1c753873832e0f82519416",
+  "status": "notice_text_present"
+}

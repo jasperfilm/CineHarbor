@@ -33,7 +33,7 @@ def prune(root,keep=(),installer=None):
   current=Path(installer).resolve()
   for folder in (root/'releases',root/'backups/releases'):
    if not folder.exists():continue
-   for file in folder.glob('GC-Labs-*-arm64-beta.dmg'):
+   for file in [*folder.glob('GC-Labs-*-arm64-beta.dmg'),*folder.glob('CineHarbor-*-arm64-beta.dmg')]:
     if file.resolve()!=current:
      delete(file);meta=file.with_suffix(file.suffix+'.json')
      if meta.exists():delete(meta)

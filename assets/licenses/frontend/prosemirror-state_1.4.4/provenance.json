@@ -1,0 +1,20 @@
+{
+  "name": "prosemirror-state",
+  "version": "1.4.4",
+  "notices": [
+    {
+      "file": "frontend/prosemirror-state_1.4.4/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git://github.com/prosemirror/prosemirror-state.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/prosemirror-state/-/prosemirror-state-1.4.4.tgz",
+  "integrity": "sha512-6jiYHH2CIGbCfnxdHbXZ12gySFY/fz/ulZE333G6bPqIZ4F+TXo9ifiR86nAHpWnfoNjOb3o5ESi7J8Uz1jXHw==",
+  "archive_sha256": "ad3eb60bd6db8e74b2576dc0b7c2800d6def362e0e990c9fb108fc4b724ee651",
+  "status": "notice_text_present"
+}

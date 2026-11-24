@@ -1,0 +1,21 @@
+{
+  "name": "@comfyorg/comfyui-electron-types",
+  "version": "0.6.2",
+  "notices": [
+    {
+      "file": "frontend/_comfyorg_comfyui-electron-types_0.6.2/upstream-LICENSE.txt",
+      "source_url": "https://raw.githubusercontent.com/Comfy-Org/electron/aa394bd3ec694a704292d99226d9f4e733494775/LICENSE",
+      "source_commit": "aa394bd3ec694a704292d99226d9f4e733494775",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    }
+  ],
+  "license": "GPL-3.0-only",
+  "source": {
+    "url": "git+https://github.com/comfy-org/electron.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@comfyorg/comfyui-electron-types/-/comfyui-electron-types-0.6.2.tgz",
+  "integrity": "sha512-r3By5Wbizq8jagUrhtcym79HYUTinsvoBnYkFFWbUmrURBWIaC0HduFVkRkI1PNdI76piW+JSOJJnw00YCVXeg==",
+  "archive_sha256": "a202e1f506b0bf1c84b29a55682a228c5bc445d0d350daba7bdad6a61401ef79",
+  "status": "notice_text_present_repository_root"
+}

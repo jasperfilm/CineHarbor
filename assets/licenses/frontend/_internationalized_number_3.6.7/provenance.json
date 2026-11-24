@@ -1,0 +1,20 @@
+{
+  "name": "@internationalized/number",
+  "version": "3.6.7",
+  "notices": [
+    {
+      "file": "frontend/_internationalized_number_3.6.7/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "7dfe6526888bac51759c99f9a51262ba2711a8c12a067f2181609dd9a4066b84"
+    }
+  ],
+  "license": "Apache-2.0",
+  "source": {
+    "url": "git+https://github.com/adobe/react-spectrum.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@internationalized/number/-/number-3.6.7.tgz",
+  "integrity": "sha512-3ji1fcrT+FPAK86UqEhB/psHixYo6niWPJtt7+qRaYFynt/BaJG8GhAPimtWUpEiVSTq8ZM8L5psMxGquiB/Vg==",
+  "archive_sha256": "e01574d8dad7aa00389c9305c3d95496c96df043f0063273682af0e9399c7b99",
+  "status": "notice_text_present"
+}

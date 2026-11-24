@@ -1,0 +1,20 @@
+{
+  "name": "zwitch",
+  "version": "2.0.4",
+  "notices": [
+    {
+      "file": "frontend/zwitch_2.0.4/1-license.txt",
+      "upstream_path": "package/license",
+      "sha256": "ca4662cb5d1b738fbe5350c0d5485ba11773b4b7208974082ae6e129a52d631d"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/wooorm/zwitch.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/zwitch/-/zwitch-2.0.4.tgz",
+  "integrity": "sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==",
+  "archive_sha256": "2c162e000f5fb5a816987d6f8ad7aad295203f777a5992d514ae4660778a51a4",
+  "status": "notice_text_present"
+}

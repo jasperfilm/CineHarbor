@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gc-labs"
-version = "0.5.0"
-description = "Local-first AI film & ComfyUI workstation powered by your own Google Colab 96GB G4 runtime"
+version = "1.2.12"
+description = "Local-first video production workspace connecting shot planning, user-owned cloud resources and third-party model workflows"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.11"

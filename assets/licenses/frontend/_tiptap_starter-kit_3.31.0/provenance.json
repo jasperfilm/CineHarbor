@@ -1,0 +1,21 @@
+{
+  "name": "@tiptap/starter-kit",
+  "version": "3.31.0",
+  "notices": [
+    {
+      "file": "frontend/_tiptap_starter-kit_3.31.0/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "https://github.com/ueberdosis/tiptap",
+    "type": "git",
+    "directory": "packages/starter-kit"
+  },
+  "tarball": "https://registry.npmjs.org/@tiptap/starter-kit/-/starter-kit-3.31.0.tgz",
+  "integrity": "sha512-P80nhDEsBf6EMTaRb/ld3BaQW7iqITPR6BiIjOjbO3QDivCz/rGDKSS6q4ngsXfXOpSBc/clo/g0OyAdA8+Q4Q==",
+  "archive_sha256": "ecbd70960f4fd30d5a81c9e803e04451e1d2892c4e3e33c4c5f07f82a3bd970e",
+  "status": "notice_text_present"
+}

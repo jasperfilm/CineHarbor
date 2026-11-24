@@ -1,0 +1,21 @@
+{
+  "name": "@tanstack/vue-virtual",
+  "version": "3.13.32",
+  "notices": [
+    {
+      "file": "frontend/_tanstack_vue-virtual_3.13.32/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "a405ee70c632bb938acb7ac5f210e814409b3760ea9d2329d8ed8ffcfd11a0e7"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/TanStack/virtual.git",
+    "type": "git",
+    "directory": "packages/vue-virtual"
+  },
+  "tarball": "https://registry.npmjs.org/@tanstack/vue-virtual/-/vue-virtual-3.13.32.tgz",
+  "integrity": "sha512-E8OCutx7QnwZdvpJijz0Q2PHsYDWBWjnGr3TvgWiqxTU35jB1kVhtkd93scRV7tTFuId2tg3x2iFiw+IE4evjQ==",
+  "archive_sha256": "24c3de1c0e26a0f12bbf4a073d1494b9ce8ea45c11d048f052938125392f4866",
+  "status": "notice_text_present"
+}

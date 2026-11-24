@@ -1,0 +1,20 @@
+{
+  "name": "semver",
+  "version": "7.8.5",
+  "notices": [
+    {
+      "file": "frontend/semver_7.8.5/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b"
+    }
+  ],
+  "license": "ISC",
+  "source": {
+    "url": "git+https://github.com/npm/node-semver.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/semver/-/semver-7.8.5.tgz",
+  "integrity": "sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==",
+  "archive_sha256": "d85045d4300d7d57c891336b95df532e73f34c22ffcd222452b6d08b9d127d5d",
+  "status": "notice_text_present"
+}

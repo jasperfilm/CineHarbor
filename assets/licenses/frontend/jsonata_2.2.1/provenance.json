@@ -1,0 +1,20 @@
+{
+  "name": "jsonata",
+  "version": "2.2.1",
+  "notices": [
+    {
+      "file": "frontend/jsonata_2.2.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "b8918d8758f30711632d30ab2f838b574b55b3fe3f05c54268a80683779bf6b8"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/jsonata-js/jsonata.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/jsonata/-/jsonata-2.2.1.tgz",
+  "integrity": "sha512-xd1uwUrKeIcJbsWhaoS3qAX4Ea8m0Mw0G5nlnAQvPT7TbZ5qaPdzBVTQia9KfyuyQm+nenfyjvzUDTRYHsC2sw==",
+  "archive_sha256": "a071d8840d37b4541c2efecb225023f825c983b43968c08d9f96dc1baaa33b5d",
+  "status": "notice_text_present"
+}

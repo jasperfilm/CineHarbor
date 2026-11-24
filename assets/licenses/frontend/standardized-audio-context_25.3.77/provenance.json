@@ -1,0 +1,20 @@
+{
+  "name": "standardized-audio-context",
+  "version": "25.3.77",
+  "notices": [
+    {
+      "file": "frontend/standardized-audio-context_25.3.77/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "8d1fa516b18bd6ed3fb06ad3f8d95c41d465f3762ccb66d433b12ee08750a382"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/standardized-audio-context.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/standardized-audio-context/-/standardized-audio-context-25.3.77.tgz",
+  "integrity": "sha512-Ki9zNz6pKcC5Pi+QPjPyVsD9GwJIJWgryji0XL9cAJXMGyn+dPOf6Qik1AHei0+UNVcc4BOCa0hWLBzlwqsW/A==",
+  "archive_sha256": "c7abf5424894176630950a32bccb70d9ddd4445da35259d6f7da7773932db0ef",
+  "status": "notice_text_present"
+}

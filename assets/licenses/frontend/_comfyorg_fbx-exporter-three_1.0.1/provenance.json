@@ -1,0 +1,20 @@
+{
+  "name": "@comfyorg/fbx-exporter-three",
+  "version": "1.0.1",
+  "notices": [
+    {
+      "file": "frontend/_comfyorg_fbx-exporter-three_1.0.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "956420696101ac11daff15d701ee0dc9834c68834d92bfddfbbd11c8ad7cd4b6"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/Comfy-Org/fbx-exporter-three.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@comfyorg/fbx-exporter-three/-/fbx-exporter-three-1.0.1.tgz",
+  "integrity": "sha512-fQ1zBsgmmwfio6iEi91hRiFCr946yEgqR2DGh/UMismaLyUohiKGOJL/OnJQnW3+yne/PXxVoYgcortyumsO5w==",
+  "archive_sha256": "5eb5f969d8d74ed183c6eeae772ff62addb1471eb6645438776d83c765924600",
+  "status": "notice_text_present"
+}

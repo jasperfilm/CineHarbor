@@ -1,0 +1,20 @@
+{
+  "name": "multi-buffer-data-view",
+  "version": "6.0.27",
+  "notices": [
+    {
+      "file": "frontend/multi-buffer-data-view_6.0.27/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "04238a17c611b988a3ef5934e6c247acd4a344c837f60b223f3d9ffb57aa4dde"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/multi-buffer-data-view.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/multi-buffer-data-view/-/multi-buffer-data-view-6.0.27.tgz",
+  "integrity": "sha512-hqbVIRFskEUX3PmHxGPGFOcLU93va4yfYkBBg4c1U0wK1Z/pDfIbYDexbIIWI+vtrXWkQAStCQ4drcQ1ooakiA==",
+  "archive_sha256": "6f5d5535c87c4c6e98a3321b6fc885075e938f609db34a7465bb2079421f183e",
+  "status": "notice_text_present"
+}

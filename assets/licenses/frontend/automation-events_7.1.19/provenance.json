@@ -1,0 +1,20 @@
+{
+  "name": "automation-events",
+  "version": "7.1.19",
+  "notices": [
+    {
+      "file": "frontend/automation-events_7.1.19/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "04238a17c611b988a3ef5934e6c247acd4a344c837f60b223f3d9ffb57aa4dde"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/automation-events.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/automation-events/-/automation-events-7.1.19.tgz",
+  "integrity": "sha512-cD+TLhJTI0q4AI3ktd353lrGZiVa9AchowSDzQzzGjSoYe22js4vlS32VUtWuaulghi1Yq0KYNWKk9wWuGymPA==",
+  "archive_sha256": "9a851d5d2800bc0d0f830aae7053e2a7b75ffe5f898b4748b655d4ed8f5ad345",
+  "status": "notice_text_present"
+}

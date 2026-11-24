@@ -1,0 +1,20 @@
+{
+  "name": "rxjs-interop",
+  "version": "2.0.0",
+  "notices": [
+    {
+      "file": "frontend/rxjs-interop_2.0.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "d6202b71f322eebf38ef19242e4e27a2c036cd8afe4c3e4bd4316e08c2229863"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/cartant/rxjs-interop.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/rxjs-interop/-/rxjs-interop-2.0.0.tgz",
+  "integrity": "sha512-ASEq9atUw7lualXB+knvgtvwkCEvGWV2gDD/8qnASzBkzEARZck9JAyxmY8OS6Nc1pCPEgDTKNcx+YqqYfzArw==",
+  "archive_sha256": "6d55c49a226a1512d2efff866f3f993ec147473a545915311b1484080539227d",
+  "status": "notice_text_present"
+}

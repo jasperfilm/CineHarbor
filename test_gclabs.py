@@ -44,7 +44,7 @@ class GenerationRecords(unittest.TestCase):
  record=Guards.record
  def prepare(self):
   assets=self.data/'assets';assets.mkdir();self.assetpatch=patch.object(server,'ASSETS',assets);self.assetpatch.start();self.addCleanup(self.assetpatch.stop)
-  image=self.data/'ref.png';image.write_bytes(b'reference');d=server.load();d['assets']=[{'id':'ref','file':'ref.png','path':str(image),'kind':'image'}];d['shots']=[{'id':'shot'}];d['jobs']=[{'id':'job','shot':'shot','state':'prepared','config':{'model':'h3','reference':'ref'}}];server.save(d)
+  image=self.data/'ref.png';image.write_bytes(b'reference');d=server.load();d['assets']=[{'id':'ref','file':'ref.png','path':str(image),'kind':'image'}];d['shots']=[{'id':'shot'}];d['jobs']=[{'id':'job','shot':'shot','state':'prepared','config':{'model':'workflow','reference':'ref','recipe':{'kind':'video'}}}];server.save(d)
  def test_explicit_validation_rejection_can_retry(self):
   self.prepare();d=self.record('generate')
   def reject(record,*args):record['not_submitted']=True;raise RuntimeError('Rejected before queue')
@@ -77,7 +77,9 @@ class BackupImport(unittest.TestCase):
   buf=io.BytesIO()
   with zipfile.ZipFile(buf,'w') as z:
    z.writestr('workspace.json',json.dumps(d));z.writestr('assets/a.png',b'reference')
-   if extra:z.writestr(extra,b'x')
+   if isinstance(extra,dict):
+    for name,blob in extra.items():z.writestr(name,blob)
+   elif extra:z.writestr(extra,b'x')
   return buf.getvalue()
  def test_import_keeps_original_and_archives_jobs(self):
   from workspace_backup import import_project
@@ -96,6 +98,19 @@ class BackupImport(unittest.TestCase):
   from workspace_backup import import_project
   result=import_project(server,self.archive(lambda d:d['assets'].append({'id':'outside','file':'missing.png','path':'/private/file','kind':'image'})))
   self.assertEqual(result['missing_external_assets'],1);self.assertEqual(len(server.load()['assets']),1)
+ def test_reference_bindings_survive_backup_import(self):
+  from workspace_backup import import_project
+  def refs(d):
+   d['assets'].append({'id':'voice','file':'voice.m4a','name':'voice','kind':'audio'})
+   d['assets'].append({'id':'video','file':'v.mp4','name':'video','kind':'video'})
+   d['elements']=[{'id':'char','tag':'阿岚','kind':'character','asset_id':'asset','voice_asset_id':'voice','voice_profile':'轻声、温暖'}]
+   d['shots']=[{'id':'old-shot','title':'S1','duration':5,'resolution':'1080P','model':'h3','reference':'asset','end_reference':'asset','elements':['char'],'qc_strip_file':'old-strip.jpg','versions':[{'reference':'asset','end_reference':'asset','elements':['char']}]}]
+   d['assembly']={'clips':[{'shot_id':'old-shot','asset_id':'video','start':1,'end':3}],'audio_asset_id':'voice','target_aspect':'16:9','burn_subtitles':True,'ducking':True}
+  import_project(server,self.archive(refs,extra={'assets/voice.m4a':b'voice','assets/v.mp4':b'video'}));d=server.load();shot=d['shots'][0];el=d['elements'][0]
+  self.assertNotEqual(shot['end_reference'],'asset');self.assertEqual(shot['reference'],shot['end_reference']);self.assertNotIn('qc_strip_file',shot)
+  self.assertEqual(shot['elements'],[el['id']]);self.assertEqual(shot['versions'][0]['end_reference'],shot['end_reference']);self.assertEqual(shot['versions'][0]['elements'],[el['id']])
+  self.assertEqual(next(a for a in d['assets'] if a['id']==el['voice_asset_id'])['kind'],'audio');self.assertEqual(el['voice_profile'],'轻声、温暖');self.assertEqual(el['voice_reference_mode'],'reference_only')
+  self.assertEqual(d['assembly']['clips'][0]['shot_id'],shot['id']);self.assertNotEqual(d['assembly']['clips'][0]['asset_id'],'video');self.assertEqual(d['assembly']['audio_asset_id'],el['voice_asset_id']);self.assertEqual(d['assembly']['clips'][0]['start'],1);self.assertTrue(d['assembly']['burn_subtitles'])
 class LocalBridgeCleanup(unittest.TestCase):
  def test_unrelated_process_is_not_killed(self):
   from types import SimpleNamespace

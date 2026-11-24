@@ -1,0 +1,20 @@
+{
+  "name": "@comfyorg/quad-wireframe-three",
+  "version": "0.1.0",
+  "notices": [
+    {
+      "file": "frontend/_comfyorg_quad-wireframe-three_0.1.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "956420696101ac11daff15d701ee0dc9834c68834d92bfddfbbd11c8ad7cd4b6"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/Comfy-Org/quad-wireframe-three.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@comfyorg/quad-wireframe-three/-/quad-wireframe-three-0.1.0.tgz",
+  "integrity": "sha512-RJ0FrWZ/Dpg+3qgQHWVSVN1h1qPYSILY0phYESstX2bh/Vd32LmFSRl02i0iyJ2rAEI31w1KFJAYKJXzHoiBgA==",
+  "archive_sha256": "0637296972928790a06e31478951278815aafd9628e3f6675008584eeeed1472",
+  "status": "notice_text_present"
+}

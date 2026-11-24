@@ -1,0 +1,20 @@
+{
+  "name": "extendable-media-recorder",
+  "version": "9.2.38",
+  "notices": [
+    {
+      "file": "frontend/extendable-media-recorder_9.2.38/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "04238a17c611b988a3ef5934e6c247acd4a344c837f60b223f3d9ffb57aa4dde"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/extendable-media-recorder.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/extendable-media-recorder/-/extendable-media-recorder-9.2.38.tgz",
+  "integrity": "sha512-HD5IqjYtSmwr6p0pTd6AG3fEYmILOrURguEqyoSCQvTtS426OwijJqnbCOtg7/UzgN9Rrdin24rziEkz+OX8cQ==",
+  "archive_sha256": "de194daa7b778b54cc8d5074ba0aaa63755b7764257505e4ad4c2841abaabb36",
+  "status": "notice_text_present"
+}

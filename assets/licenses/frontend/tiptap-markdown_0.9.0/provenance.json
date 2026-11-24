@@ -1,0 +1,20 @@
+{
+  "name": "tiptap-markdown",
+  "version": "0.9.0",
+  "notices": [
+    {
+      "file": "frontend/tiptap-markdown_0.9.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "c52376ee55360e7eff75df0c4fc2cce07dd3fbb55933736da09d5371f7f0aaba"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/aguingand/tiptap-markdown.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/tiptap-markdown/-/tiptap-markdown-0.9.0.tgz",
+  "integrity": "sha512-dKLQ9iiuGNgrlGVjrNauF/UBzWu4LYOx5pkD0jNkmQt/GOwfCJsBuzZTsf1jZ204ANHOm572mZ9PYvGh1S7tpQ==",
+  "archive_sha256": "f19844557f29b88692713b04f3907bc4d124b073dd28fb3459cf26427bf02fec",
+  "status": "notice_text_present"
+}

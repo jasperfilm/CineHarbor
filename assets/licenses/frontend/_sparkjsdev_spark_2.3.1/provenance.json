@@ -1,0 +1,20 @@
+{
+  "name": "@sparkjsdev/spark",
+  "version": "2.3.1",
+  "notices": [
+    {
+      "file": "frontend/_sparkjsdev_spark_2.3.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "51829693e5dccd9ca1daa093991faac3aaa93238eb8fd5f5cb4130af85791d64"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/sparkjsdev/spark.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@sparkjsdev/spark/-/spark-2.3.1.tgz",
+  "integrity": "sha512-K+SyIbkO/dx1TLLudK8Jp3/noS13z/kdNPo6OK2waxQaGy81HBmKGnNBT/t/K9Ew3dsIXmWqsJXxGfmAu1T5Jg==",
+  "archive_sha256": "63b7ee3c9e253f43071ba50c74d2fcd3768852ef4dcf3c75e1983af70263bd5b",
+  "status": "notice_text_present"
+}

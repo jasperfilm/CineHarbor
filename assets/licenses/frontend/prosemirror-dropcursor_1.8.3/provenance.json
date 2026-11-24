@@ -1,0 +1,20 @@
+{
+  "name": "prosemirror-dropcursor",
+  "version": "1.8.3",
+  "notices": [
+    {
+      "file": "frontend/prosemirror-dropcursor_1.8.3/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-dropcursor.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/prosemirror-dropcursor/-/prosemirror-dropcursor-1.8.3.tgz",
+  "integrity": "sha512-FoYbsJR8gK+DGlqhNoE29Loa38eIZPzQRIb1VMaDNBoo4OLP6vVof/jR8qFY/6XvUd6Dhug8MDCHl2a/h8RTfQ==",
+  "archive_sha256": "cb91fb2971ed4b93a68eb6d036c0a1ae8f9211c465579a5ac107aa7bd09b97f6",
+  "status": "notice_text_present"
+}

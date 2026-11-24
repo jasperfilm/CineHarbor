@@ -1,0 +1,21 @@
+{
+  "name": "vee-validate",
+  "version": "4.15.1",
+  "notices": [
+    {
+      "file": "frontend/vee-validate_4.15.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "a6d9a0b6255a6c3e0bce3d1033c31e6f2fbb00f53340d621958cb95d795832d0"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/logaretm/vee-validate.git",
+    "type": "git",
+    "directory": "packages/vee-validate"
+  },
+  "tarball": "https://registry.npmjs.org/vee-validate/-/vee-validate-4.15.1.tgz",
+  "integrity": "sha512-DkFsiTwEKau8VIxyZBGdO6tOudD+QoUBPuHj3e6QFqmbfCRj1ArmYWue9lEp6jLSWBIw4XPlDLjFIZNLdRAMSg==",
+  "archive_sha256": "8914cb60ba01bd41c80ebc116368fae9a56c1ff8d6b13ddb98523eba2bbd4cc8",
+  "status": "notice_text_present"
+}

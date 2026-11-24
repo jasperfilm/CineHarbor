@@ -1,0 +1,20 @@
+{
+  "name": "punycode.js",
+  "version": "2.3.1",
+  "notices": [
+    {
+      "file": "frontend/punycode.js_2.3.1/1-LICENSE-MIT.txt",
+      "upstream_path": "package/LICENSE-MIT.txt",
+      "sha256": "483acb265f182907d1caf6cff9c16c96f31325ed23792832cc5d8b12d5f88c8a"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/mathiasbynens/punycode.js.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/punycode.js/-/punycode.js-2.3.1.tgz",
+  "integrity": "sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==",
+  "archive_sha256": "8768d89aa6359164220014ba575e1464e3ddff11bedff1cc268e39a21f7324a8",
+  "status": "notice_text_present"
+}

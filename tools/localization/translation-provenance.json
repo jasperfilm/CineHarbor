@@ -1,0 +1,14 @@
+{
+  "source": "Fixed application UI and policy copy only; no user projects, credentials, prompts, scripts or media transmitted.",
+  "draft_method": "Google Translate web UI for English/Japanese/Korean; edited terminology and authored critical messages; Foundation ICU for Traditional Chinese.",
+  "review": "Draft localization; native-speaker editorial review pending.",
+  "default": "en",
+  "languages": [
+    "en",
+    "zh-Hans",
+    "zh-Hant",
+    "ja",
+    "ko"
+  ],
+  "model_download": "Developer-only local model transfer was stopped before completion; no model bundled or Colab resources allocated."
+}

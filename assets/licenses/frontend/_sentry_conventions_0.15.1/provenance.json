@@ -1,0 +1,20 @@
+{
+  "name": "@sentry/conventions",
+  "version": "0.15.1",
+  "notices": [
+    {
+      "file": "frontend/_sentry_conventions_0.15.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "6c459083310e285797954222cc75bb33a56c04512d4f07c8b1b80258f99b0278"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/getsentry/sentry-conventions.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@sentry/conventions/-/conventions-0.15.1.tgz",
+  "integrity": "sha512-ZLP8bRdMON3prWE2tJyImuYscCxdcJeIPIhrOs/rgyFm3C1nCh1B6gdvPj3AZ5zW08oSFFCsq7T+tYEW3h8MNA==",
+  "archive_sha256": "2ec6bceb5fcfde959c7bcca2abfdf1a9d03170b4f431eff411fb975a4b4e6ad0",
+  "status": "notice_text_present"
+}

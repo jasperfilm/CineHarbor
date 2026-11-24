@@ -1,0 +1,20 @@
+{
+  "name": "reka-ui",
+  "version": "2.11.0",
+  "notices": [
+    {
+      "file": "frontend/reka-ui_2.11.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "120a7305524d383f5a0fe2078009dddbe0d10bf951a6644156472cc6602c6039"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/unovue/reka-ui.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/reka-ui/-/reka-ui-2.11.0.tgz",
+  "integrity": "sha512-ilkpm4bIAol4jwzm4tpm3WVcffyGOpqksNZL1k1qO9QmIwAA+q8jroxjkUGLEn/GddfdExFfvofWfQiKZszUeQ==",
+  "archive_sha256": "ac1fa69772bf88616019dfca833e67d11108d81cbd7faca69768c8fa1db2ee78",
+  "status": "notice_text_present"
+}

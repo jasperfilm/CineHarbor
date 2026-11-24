@@ -1,0 +1,46 @@
+{
+  "ComfyUI_frontend": {
+    "version": "1.59.1",
+    "commit": "cded88fdffbb78f191fc8e454e7f2cfa5016ee43",
+    "archive_sha256": "2bd4836bd33c4bae27926702cd958a07198cacad858bff152a97a553a32f778a",
+    "corresponding_source": "https://github.com/Comfy-Org/ComfyUI_frontend/tree/cded88fdffbb78f191fc8e454e7f2cfa5016ee43",
+    "build": "pnpm install --frozen-lockfile; pnpm build:dist (localhost distribution); see upstream source build files",
+    "local_changes": "Original archive preserved. Local extraction applies comfy_frontend_policy.py to disable optional upstream Sentry reporting. See CineHarbor-frontend-modifications.txt and the readable bridge implementation."
+  },
+  "fonts": [
+    {
+      "file": "Inter-OFL-1.1.txt",
+      "source_url": "https://raw.githubusercontent.com/rsms/inter/66647c0bbbe41a850d79d9c76fb13add3378940f/LICENSE.txt",
+      "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a",
+      "detail": "Inter4.001 git66647c0bb embedded font name table; family/copyright/licenseURL read from shipped files."
+    },
+    {
+      "file": "PrimeIcons-MIT.txt",
+      "source_url": "https://registry.npmjs.org/primeicons/-/primeicons-7.0.0.tgz",
+      "sha256": "140e5886a54d897d852dbf7eeffd2c464467eddfcb04374241f90c61658493bd",
+      "detail": {
+        "package": "primeicons",
+        "version": "7.0.0",
+        "matched_font_files": [
+          "assets/primeicons-MpK4pl85.ttf",
+          "assets/primeicons-WjwUDZjB.woff",
+          "assets/primeicons-C6QP2o4f.woff2"
+        ],
+        "package_license": "MIT"
+      }
+    },
+    {
+      "file": "MaterialDesignIcons-LICENSE.txt",
+      "source_url": "https://registry.npmjs.org/@mdi/font/-/font-7.4.47.tgz",
+      "sha256": "f3bc8715bad84b26396bb42d2abd11f919cf58163be158eab79ecbaabf84cdf2",
+      "detail": {
+        "package": "@mdi/font",
+        "version": "7.4.47",
+        "matched_font_files": [
+          "fonts/materialdesignicons-webfont.woff2"
+        ],
+        "package_license": "Apache-2.0"
+      }
+    }
+  ]
+}

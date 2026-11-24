@@ -1,0 +1,20 @@
+{
+  "name": "@sentry/core",
+  "version": "10.65.0",
+  "notices": [
+    {
+      "file": "frontend/_sentry_core_10.65.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "f3df0b92efcd9d8cc0de5a36c151569a12a647d65b851abbb696ef7b13dee10b"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git://github.com/getsentry/sentry-javascript.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@sentry/core/-/core-10.65.0.tgz",
+  "integrity": "sha512-3aqtmM5NgNGo45BNaaBzi0LPQZAw//NEL4HKS5fXm12pJMa4KEkze8DEKnkTEIrGnWaOJKamecHKlnNg/Mqf/Q==",
+  "archive_sha256": "51189d43c8f623054321247ec7a4e43f9587c7835715ce9eecba066769bec5bf",
+  "status": "notice_text_present"
+}

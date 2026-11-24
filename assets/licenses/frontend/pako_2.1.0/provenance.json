@@ -1,0 +1,20 @@
+{
+  "name": "pako",
+  "version": "2.1.0",
+  "notices": [
+    {
+      "file": "frontend/pako_2.1.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "a04665b3b2de56c66730c1f720f528175739e4104f79073614aa611da1e85539"
+    }
+  ],
+  "license": "(MIT AND Zlib)",
+  "source": {
+    "url": "git+https://github.com/nodeca/pako.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/pako/-/pako-2.1.0.tgz",
+  "integrity": "sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==",
+  "archive_sha256": "49fedc8866b4abfc8e71dc7fe75ad4ef1ff1ac9601b0642cff88ee5bf2338709",
+  "status": "notice_text_present"
+}

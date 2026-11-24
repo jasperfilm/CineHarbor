@@ -1,0 +1,22 @@
+{
+  "name": "@firebase/app",
+  "version": "0.13.2",
+  "notices": [
+    {
+      "file": "frontend/_firebase_app_0.13.2/upstream-LICENSE.txt",
+      "source_url": "https://raw.githubusercontent.com/firebase/firebase-js-sdk/3c759f0c0c5e5e164a51d8b9c89655d54047bed0/LICENSE",
+      "source_commit": "3c759f0c0c5e5e164a51d8b9c89655d54047bed0",
+      "sha256": "065e45b5674f9bf76670496e5472611b3fbd87fbeaf99336725430a9909cb687"
+    }
+  ],
+  "license": "Apache-2.0",
+  "source": {
+    "url": "git+https://github.com/firebase/firebase-js-sdk.git",
+    "type": "git",
+    "directory": "packages/app"
+  },
+  "tarball": "https://registry.npmjs.org/@firebase/app/-/app-0.13.2.tgz",
+  "integrity": "sha512-jwtMmJa1BXXDCiDx1vC6SFN/+HfYG53UkfJa6qeN5ogvOunzbFDO3wISZy5n9xgYFUrEP6M7e8EG++riHNTv9w==",
+  "archive_sha256": "31b1b9d3580bbbd7d0f3825a874df62ab46cfcf2bf52a40730cffd21eb54f0ab",
+  "status": "notice_text_present_repository_root"
+}

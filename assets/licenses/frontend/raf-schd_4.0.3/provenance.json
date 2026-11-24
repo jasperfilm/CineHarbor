@@ -1,0 +1,20 @@
+{
+  "name": "raf-schd",
+  "version": "4.0.3",
+  "notices": [
+    {
+      "file": "frontend/raf-schd_4.0.3/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "38ff7cd93bdf484156099500e01fa2d2b463477e189dc516250af4c9652e744f"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/alexreardon/raf-schd.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/raf-schd/-/raf-schd-4.0.3.tgz",
+  "integrity": "sha512-tQkJl2GRWh83ui2DiPTJz9wEiMN20syf+5oKfB03yYP7ioZcJwsIK8FjrtLwH1m7C7e+Tt2yYBlrOpdT+dyeIQ==",
+  "archive_sha256": "1ee5567174227510fc775e6db8288a709dabb155df3b9f9ba36c6c5771b9c8a5",
+  "status": "notice_text_present"
+}

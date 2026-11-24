@@ -1,0 +1,20 @@
+{
+  "name": "property-information",
+  "version": "7.2.0",
+  "notices": [
+    {
+      "file": "frontend/property-information_7.2.0/1-license.txt",
+      "upstream_path": "package/license",
+      "sha256": "5d0698266086f217bb11ea0499d33453e401fe479fb9126ad04e625e63d3557b"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/wooorm/property-information.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/property-information/-/property-information-7.2.0.tgz",
+  "integrity": "sha512-IAtzIB6sUiWaJYrX9smp3V46pBGbBeLFRGdh25kg1334VcBlD8HzhPeNIWQH9zhGmo2itIe25EHt9dQP7G5hmg==",
+  "archive_sha256": "22ab7ee8774c8c3c90086f2fec7d2d4cca7c16ac795596ae16cf326c763606c7",
+  "status": "notice_text_present"
+}

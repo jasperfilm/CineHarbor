@@ -1,0 +1,21 @@
+{
+  "name": "@floating-ui/vue",
+  "version": "2.0.1",
+  "notices": [
+    {
+      "file": "frontend/_floating-ui_vue_2.0.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "46c97b198a78dc0befc1a823ba7bcdf993726a887d0215edcce575a61b947115"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/floating-ui/floating-ui.git",
+    "type": "git",
+    "directory": "packages/vue"
+  },
+  "tarball": "https://registry.npmjs.org/@floating-ui/vue/-/vue-2.0.1.tgz",
+  "integrity": "sha512-043dyEKD9TDSfz080YH2vobubgg+NIo/9Fw4RAl7sEMpD8Am1DNrrSTl/GpMBjyGHoD/FbJY2QLawY+HSQsEIA==",
+  "archive_sha256": "93effa0f3a2d9a900be3f6ddb911a089a69adfa6279b5feb22768f8050e89e0e",
+  "status": "notice_text_present"
+}

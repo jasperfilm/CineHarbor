@@ -1,0 +1,20 @@
+{
+  "name": "@stripe/stripe-js",
+  "version": "9.12.1",
+  "notices": [
+    {
+      "file": "frontend/_stripe_stripe-js_9.12.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "f5ecc63f26b1bf790f68fd8e4a84376385b19b9246100dc93a5b6ba9bf17f964"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "https://github.com/stripe/stripe-js.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@stripe/stripe-js/-/stripe-js-9.12.1.tgz",
+  "integrity": "sha512-KLXPvjA0BfS4dQnW+ddHjwtIXMnIfKYxqmeNMmQCfKjvYog0cSG+Z7ZvK4RH1+bV90GC07nUztWDRWmJLi5HZQ==",
+  "archive_sha256": "2ad6907242dd284d3f7ba3af05e4db4cdd2ef76fb6aa78dd3bbcd3199408d35c",
+  "status": "notice_text_present"
+}

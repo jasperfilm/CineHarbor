@@ -1,0 +1,20 @@
+{
+  "name": "uuid",
+  "version": "11.1.1",
+  "notices": [
+    {
+      "file": "frontend/uuid_11.1.1/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "beaa6b04fb82e41dd2ad679e19e27953afb5999b1abbb455b6564e78ebfeb332"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/uuidjs/uuid.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/uuid/-/uuid-11.1.1.tgz",
+  "integrity": "sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==",
+  "archive_sha256": "82739fc18cf288807d2314f6f52fe8887c6359751569a8252572f16abb151141",
+  "status": "notice_text_present"
+}

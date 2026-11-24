@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "description": "Developer-only localization migration parser",
+  "devDependencies": {
+    "acorn": "8.19.0"
+  }
+}

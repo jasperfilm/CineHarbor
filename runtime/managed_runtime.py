@@ -208,19 +208,33 @@ def prepare_models():
         expected = item.get('sha256') or (old.get('sha256') if old.get('url') == item['url'] else None)
         dst.parent.mkdir(parents=True, exist_ok=True)
         cached.parent.mkdir(parents=True, exist_ok=True)
+        cached_verified = False
         if expected and dst.exists() and digest(dst) == expected:
             event('verifying', '复用已核验模型 ' + item['file'])
             sha = expected
-        elif expected and cached.exists() and digest(cached) == expected:
-            _reclaim_ephemeral_space(cached.stat().st_size, [x['file'] for x in files])
-            if shutil.disk_usage('/content').free < cached.stat().st_size + 8 * 2 ** 30:
+        elif expected and cached.exists():
+            csize = cached.stat().st_size
+            _reclaim_ephemeral_space(csize, [x['file'] for x in files])
+            if shutil.disk_usage('/content').free < csize + 8 * 2 ** 30:
                 raise RuntimeError('恢复模型的临时磁盘不足。')
             part = dst.with_name(f"{dst.name}.{os.getpid()}.partial")
-            shutil.copyfile(cached, part)
-            if digest(part) != expected:
+            h = hashlib.sha256()
+            copied = 0
+            last = 0
+            with cached.open('rb') as src, part.open('wb') as stream:
+                for block in iter(lambda: src.read(16 * 1024 * 1024), b''):
+                    stream.write(block)
+                    h.update(block)
+                    copied += len(block)
+                    if time.time() - last > 2:
+                        event('restoring', item['file'], bytes_done=copied, bytes_total=csize)
+                        last = time.time()
+            if h.hexdigest() != expected:
+                part.unlink(missing_ok=True)
                 raise RuntimeError('恢复校验失败；保留源文件。')
             part.replace(dst)
             sha = expected
+            cached_verified = True
         else:
             event('downloading', '下载官方模型 ' + item['file'])
             try:
@@ -251,7 +265,7 @@ def prepare_models():
                 if done != size or (expected and sha != expected):
                     raise RuntimeError('模型长度或哈希不符，未启用下载文件。')
                 part.replace(dst)
-        if not cached.exists() or digest(cached) != sha:
+        if not cached_verified and (not cached.exists() or digest(cached) != sha):
             event('backing_up', '持久备份模型 ' + item['file'])
             part = cached.with_name(f"{cached.name}.{os.getpid()}.partial")
             shutil.copyfile(dst, part)
@@ -523,6 +537,12 @@ def generate(resume=False):
                 name = 'jasper_' + job + ref['suffix']
                 (ROOT / 'input').mkdir(exist_ok=True)
                 (ROOT / 'input' / name).write_bytes(base64.b64decode(ref['base64']))
+            end_ref = CONTROL.get('end_reference')
+            end_name = None
+            if end_ref:
+                end_name = 'jasper_end_' + job + end_ref['suffix']
+                (ROOT / 'input').mkdir(exist_ok=True)
+                (ROOT / 'input' / end_name).write_bytes(base64.b64decode(end_ref['base64']))
             if config.get('model') == 'workflow':
                 timing = config['recipe'].get('timing', {'fps': 24, 'frame_multiple': 4, 'frame_offset': 1})
                 fps = timing['fps']
@@ -535,6 +555,8 @@ def generate(resume=False):
                     values['negative_prompt'] = config['negative_prompt']
                 if name:
                     values['reference'] = name
+                if end_name:
+                    values['end_reference'] = end_name
                 graph = materialize(config['recipe'], values)
                 remote_validate(graph, request('/object_info'))
                 for node in graph.values():
@@ -548,18 +570,23 @@ def generate(resume=False):
                 ]
                 if any(not p.exists() for p in required):
                     raise RuntimeError('完整BF16模型缺失，请先恢复模型。')
+                audio_vae = ROOT / 'models/vae/minimax_h3_audio_vae_fp32.safetensors'
+                use_audio = audio_vae.exists() and not config.get('mute_native_audio')
 
                 def node(kind, **inputs):
                     return {'class_type': kind, 'inputs': inputs}
 
                 frames = max(5, round(float(config['duration']) * 24))
                 frames += (5 - frames % 17) % 17
+                i2v_inputs = dict(clip=['2', 0], vae=['3', 0], first_frame=['5', 0], prompt=config['prompt'], width=width, height=height, length=frames)
+                if end_name:
+                    i2v_inputs['last_frame'] = ['5b', 0]
                 graph = {
                     '1': node('UNETLoader', unet_name=required[0].name, weight_dtype='default'),
                     '2': node('CLIPLoader', clip_name=required[1].name, type='minimax', device='default'),
                     '3': node('VAELoader', vae_name=required[2].name),
                     '5': node('LoadImage', image=name),
-                    '6': node('MiniMaxH3ImageToVideo', clip=['2', 0], vae=['3', 0], first_frame=['5', 0], prompt=config['prompt'], width=width, height=height, length=frames),
+                    '6': node('MiniMaxH3ImageToVideo', **i2v_inputs),
                     '8': node('BasicScheduler', model=['1', 0], scheduler='simple', steps=20, denoise=1.0),
                     '9': node('BasicGuider', model=['1', 0], conditioning=['6', 0]),
                     '10': node('RandomNoise', noise_seed=int(config['seed'])),
@@ -569,6 +596,12 @@ def generate(resume=False):
                     '15': node('CreateVideo', images=['13', 0], fps=24, bit_depth=8),
                     '16': node('SaveVideo', video=['15', 0], filename_prefix='jasper/' + job, format='auto', codec='auto')
                 }
+                if end_name:
+                    graph['5b'] = node('LoadImage', image=end_name)
+                if use_audio:
+                    graph['4'] = node('VAELoader', vae_name=audio_vae.name)
+                    graph['14'] = node('VAEDecodeAudio', samples=['12', 0], vae=['4', 0])
+                    graph['15']['inputs']['audio'] = ['14', 0]
             (out / 'workflow_api.json').write_text(json.dumps(graph, indent=2))
             (out / 'config.json').write_text(json.dumps(config, ensure_ascii=False, indent=2))
             answer = request('/prompt', {'prompt': graph, 'client_id': job})
@@ -578,7 +611,12 @@ def generate(resume=False):
             event('submitted', '已提交真实推理任务', prompt_id=pid)
 
         while time.time() - started < 21600:
-            history = request('/history/' + pid)
+            try:
+                history = request('/history/' + pid)
+            except (OSError, TimeoutError, urllib.error.URLError):
+                event('reconnecting', '状态查询暂时超时，保留原任务继续跟踪，不重新提交', prompt_id=pid)
+                time.sleep(5)
+                continue
             if pid in history:
                 result = history[pid]
                 (out / 'history.json').write_text(json.dumps(result))
@@ -600,12 +638,17 @@ def generate(resume=False):
                         raise RuntimeError('采样已按指令安全中断；GPU 会话保留。')
                     raise RuntimeError('推理结束但没有实际输出文件')
                 return {'prompt_id': pid, 'outputs': outputs, 'elapsed': time.time() - started}
-            q = request('/queue')
+            try:
+                q = request('/queue')
+            except (OSError, TimeoutError, urllib.error.URLError):
+                event('reconnecting', '队列查询暂时超时，保留原任务继续跟踪，不重新提交', prompt_id=pid)
+                time.sleep(5)
+                continue
             running = any(row[1] == pid for row in q.get('queue_running', []))
             pending = any(row[1] == pid for row in q.get('queue_pending', []))
             if not running and not pending:
                 raise RuntimeError('任务已不在队列且未产生输出（可能已手动中断）；保留ID，GPU未关闭。')
-            event('sampling' if running else 'waiting', '采样运行中' if running else '等待队列', prompt_id=pid, elapsed=time.time() - started)
+            event('running' if running else 'waiting', '云端工作流执行中：正在加载模型、采样或编码。' if running else '等待队列', prompt_id=pid, elapsed=time.time() - started)
             time.sleep(5)
         raise TimeoutError('跟踪达到6小时；任务未自动取消，保留ID可恢复跟踪')
     finally:

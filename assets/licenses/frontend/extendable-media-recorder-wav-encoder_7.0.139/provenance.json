@@ -1,0 +1,20 @@
+{
+  "name": "extendable-media-recorder-wav-encoder",
+  "version": "7.0.139",
+  "notices": [
+    {
+      "file": "frontend/extendable-media-recorder-wav-encoder_7.0.139/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "04238a17c611b988a3ef5934e6c247acd4a344c837f60b223f3d9ffb57aa4dde"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/extendable-media-recorder-wav-encoder.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/extendable-media-recorder-wav-encoder/-/extendable-media-recorder-wav-encoder-7.0.139.tgz",
+  "integrity": "sha512-Hl9NoJCZ7uAPTp6M46pxpgValdQyfNnAD4KbLd1pP9LvyG0zgDPkCXizxSLCViGrJguvsVdB9T3i13R2DjbruA==",
+  "archive_sha256": "93c90253bac144fd7124ff9903951e77c4ebe809472efa748f05dde3e42dc569",
+  "status": "notice_text_present"
+}

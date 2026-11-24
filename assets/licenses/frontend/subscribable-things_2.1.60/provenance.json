@@ -1,0 +1,20 @@
+{
+  "name": "subscribable-things",
+  "version": "2.1.60",
+  "notices": [
+    {
+      "file": "frontend/subscribable-things_2.1.60/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "04238a17c611b988a3ef5934e6c247acd4a344c837f60b223f3d9ffb57aa4dde"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/subscribable-things.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/subscribable-things/-/subscribable-things-2.1.60.tgz",
+  "integrity": "sha512-6gamStlTGrZAHmIMKUxnrZGW1y0b2N3ofQMX/ZrWdYCcNytk/wRyiRB8eGE4Jg+bYFLypoQAb7UpmWjqpiWCKA==",
+  "archive_sha256": "6f50a3a61b5c1a4a83093ee9862ed307ace5e5eb45465373fa7435cd7cd6c94a",
+  "status": "notice_text_present"
+}

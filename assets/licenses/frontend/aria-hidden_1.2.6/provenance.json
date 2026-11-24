@@ -1,0 +1,20 @@
+{
+  "name": "aria-hidden",
+  "version": "1.2.6",
+  "notices": [
+    {
+      "file": "frontend/aria-hidden_1.2.6/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "30f0cfddf483d1128e3610205020f2041a6c5e837aa999e0aa82e5576187d4a9"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/theKashey/aria-hidden.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/aria-hidden/-/aria-hidden-1.2.6.tgz",
+  "integrity": "sha512-ik3ZgC9dY/lYVVM++OISsaYDeg1tb0VtP5uL3ouh1koGOaUMDPpbFIei4JkFimWUFPn90sbMNMXQAIVOlnYKJA==",
+  "archive_sha256": "bb3ff0d0a5b0c4a5ab5e579d79e91fbd41cd1700028ddf91ebd3154b3c13749e",
+  "status": "notice_text_present"
+}

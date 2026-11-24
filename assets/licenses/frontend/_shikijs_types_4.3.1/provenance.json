@@ -1,0 +1,21 @@
+{
+  "name": "@shikijs/types",
+  "version": "4.3.1",
+  "notices": [
+    {
+      "file": "frontend/_shikijs_types_4.3.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "7a9d8d01038aeacf9e5bcdabbddf2a7815200dce9fc1118468cc553e00ae3eee"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/shikijs/shiki.git",
+    "type": "git",
+    "directory": "packages/types"
+  },
+  "tarball": "https://registry.npmjs.org/@shikijs/types/-/types-4.3.1.tgz",
+  "integrity": "sha512-CHFxE0jztBIZRHH6gxXE7DXUCFXjReEGxZ/j0rfSLGKZuwp2xBYycEP14875DSa9KLL/6700oxIq6oO6ef9K2g==",
+  "archive_sha256": "9a23c352fac6a68c70eb4222ab8daa5f7d2292c934ffd693693391fbd610f0d3",
+  "status": "notice_text_present"
+}

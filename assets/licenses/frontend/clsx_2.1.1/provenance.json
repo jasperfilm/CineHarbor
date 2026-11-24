@@ -1,0 +1,20 @@
+{
+  "name": "clsx",
+  "version": "2.1.1",
+  "notices": [
+    {
+      "file": "frontend/clsx_2.1.1/1-license.txt",
+      "upstream_path": "package/license",
+      "sha256": "9a9edad7baae52622bddf3c15b2ef8a33d2c89f2d25408ad13e8a7481c6b0c97"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/lukeed/clsx.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz",
+  "integrity": "sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==",
+  "archive_sha256": "6320104b491ca645120e8f99589ce663ff1fb337ba80066719a011bd95320303",
+  "status": "notice_text_present"
+}

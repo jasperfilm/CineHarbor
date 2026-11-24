@@ -1,0 +1,12 @@
+{
+  "default": "en",
+  "counts": {
+    "en": 1022,
+    "zh-Hans": 1009,
+    "zh-Hant": 1020,
+    "ja": 1020,
+    "ko": 1020
+  },
+  "source_entries": 964,
+  "status": "translation drafts; native speaker review pending"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "tailwind-merge",
+  "version": "2.6.1",
+  "notices": [
+    {
+      "file": "frontend/tailwind-merge_2.6.1/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "d4c70c7ce38cea8778f0aed3fc0bef0a9dbd27f13bd8b6773cbd6d37941971e5"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/dcastil/tailwind-merge.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/tailwind-merge/-/tailwind-merge-2.6.1.tgz",
+  "integrity": "sha512-Oo6tHdpZsGpkKG88HJ8RR1rg/RdnEkQEfMoEk2x1XRI3F1AxeU+ijRXpiVUF4UbLfcxxRGw6TbUINKYdWVsQTQ==",
+  "archive_sha256": "827c1ccb7e97a5442027b5f7c7066f4e42234615261f99af81246adebc457925",
+  "status": "notice_text_present"
+}

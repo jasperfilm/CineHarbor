@@ -1,0 +1,20 @@
+{
+  "name": "idb",
+  "version": "7.1.1",
+  "notices": [
+    {
+      "file": "frontend/idb_7.1.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "873a2f333fda393ec3464f4579209b019d98e97c3bf498b10e85f630162fd708"
+    }
+  ],
+  "license": "ISC",
+  "source": {
+    "url": "git://github.com/jakearchibald/idb.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/idb/-/idb-7.1.1.tgz",
+  "integrity": "sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==",
+  "archive_sha256": "6a0bf2d53fc943a1241735d6f1e40f70c7d968636b80ad58f90d00877e0a7131",
+  "status": "notice_text_present"
+}

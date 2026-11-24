@@ -25,7 +25,7 @@ def start(server,endpoint):
  process=subprocess.Popen([server.sdk_python(),str(server.ROOT/'comfy_local_bridge.py'),'--endpoint',endpoint,'--frontend',str(frontend)],stdout=log,stderr=log,env=env);log.close()
  record={'pid':process.pid,'endpoint':endpoint};(server.DATA/'bridge.json').write_text(json.dumps(record))
  for _ in range(90):
-  if process.poll() is not None:raise RuntimeError('画布连接失败，请查看工作区 bridge.log；GPU未关闭。')
+  if process.poll() is not None:raise RuntimeError('当前 ComfyUI 后端未就绪或连接失败。请先在 Colab 管理启动 ComfyUI 环境后重试；GPU 未关闭。技术记录见 bridge.log。')
   ready=status(server)
   if ready.get('ready'):return ready
   time.sleep(1)

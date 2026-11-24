@@ -1,0 +1,20 @@
+{
+  "name": "recorder-audio-worklet",
+  "version": "6.0.59",
+  "notices": [
+    {
+      "file": "frontend/recorder-audio-worklet_6.0.59/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "04238a17c611b988a3ef5934e6c247acd4a344c837f60b223f3d9ffb57aa4dde"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/recorder-audio-worklet.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/recorder-audio-worklet/-/recorder-audio-worklet-6.0.59.tgz",
+  "integrity": "sha512-ZK0Gsn83AR5SgHjt1QHF1TJiec68W5CIAMIt9DstUGAA/lN/akh9bXUv9txaX3IPcfuDy6khm0W7sron9BjLcw==",
+  "archive_sha256": "30f24c633f69b9c08c021ef95788f84c36abdad677f366ae77dd61f3a0941379",
+  "status": "notice_text_present"
+}

@@ -259,6 +259,7 @@ class Console:
             'job': body.get('job'),
             'config': body.get('config'),
             'reference': body.get('reference'),
+            'end_reference': body.get('end_reference'),
             'prompt_id': body.get('prompt_id'),
             'model_files': body.get('model_files'),
             'custom_nodes': body.get('custom_nodes'),
@@ -395,11 +396,15 @@ class Console:
                         ref = next((a for a in db['assets'] if a['id'] == config['reference']), None)
                         if not ref and (config['model'] == 'h3' or config.get('recipe', {}).get('bindings', {}).get('reference')):
                             raise ValueError('参考素材不存在')
+                        end_ref = next((a for a in db['assets'] if a['id'] == config.get('end_reference')), None) if config.get('end_reference') else None
                         import base64
-                        body.update(config=config, prompt_id=job.get('prompt_id'), reference=None)
+                        body.update(config=config, prompt_id=job.get('prompt_id'), reference=None, end_reference=None)
                         if ref:
                             source = Path(ref.get('path') or self.s.ASSETS / ref['file'])
                             body['reference'] = {'suffix': source.suffix, 'base64': base64.b64encode(source.read_bytes()).decode()}
+                        if end_ref:
+                            end_src = Path(end_ref.get('path') or self.s.ASSETS / end_ref['file'])
+                            body['end_reference'] = {'suffix': end_src.suffix, 'base64': base64.b64encode(end_src.read_bytes()).decode()}
                         d['job_id'] = job['id']
                         self.job_update(job['id'], state='connecting', attempted=True, operation_id=d['id'])
                     if kind == 'models':
@@ -444,29 +449,51 @@ class Console:
                                 })
                                 asset_ids.append(ident)
                             job.update(state='succeeded', message='已下载实际生成结果，待画面验收', results=asset_ids, operation_id=d['id'])
-                            shot = next((s for s in db['shots'] if s['id'] == job['shot']), None)
+                            if job.get('bind_element_id') and asset_ids:
+                                elem = next((e for e in db.get('elements', []) if e['id'] == job['bind_element_id']), None)
+                                if elem:
+                                    elem['asset_id'] = asset_ids[0]
+                            shot = next((s for s in db['shots'] if s['id'] == job.get('shot')), None)
                             if shot and asset_ids:
-                                takes = shot.setdefault('takes', [])
-                                if shot.get('output') and not any(t.get('asset_id') == shot['output'] for t in takes):
-                                    takes.append({'id': uuid.uuid4().hex, 'asset_id': shot['output'], 'seed': shot.get('seed'), 'created': '历史样片'})
-                                for aid in asset_ids:
-                                    takes.insert(0, {
-                                        'id': uuid.uuid4().hex,
-                                        'asset_id': aid,
-                                        'job_id': job['id'],
-                                        'seed': job.get('config', {}).get('seed'),
-                                        'prompt': (job.get('config', {}).get('prompt') or '')[:160],
-                                        'created': self.s.now()
-                                    })
-                                shot['output'] = asset_ids[0]
+                                bind_slot = job.get('bind_slot')
+                                if bind_slot in ('reference', 'end_reference'):
+                                    shot[bind_slot] = asset_ids[0]
+                                else:
+                                    takes = shot.setdefault('takes', [])
+                                    if shot.get('output') and not any(t.get('asset_id') == shot['output'] for t in takes):
+                                        takes.append({'id': uuid.uuid4().hex, 'asset_id': shot['output'], 'seed': shot.get('seed'), 'created': '历史样片'})
+                                    for aid in asset_ids:
+                                        takes.insert(0, {
+                                            'id': uuid.uuid4().hex,
+                                            'asset_id': aid,
+                                            'job_id': job['id'],
+                                            'seed': job.get('config', {}).get('seed'),
+                                            'prompt': (job.get('config', {}).get('prompt') or '')[:160],
+                                            'created': self.s.now()
+                                        })
+                                    shot['output'] = asset_ids[0]
+                                    out_asset = next((a for a in db['assets'] if a['id'] == asset_ids[0]), None)
+                                    if out_asset and out_asset.get('kind') == 'video':
+                                        try:
+                                            from timeline_export import media_tool_binary
+                                            tool = media_tool_binary(self.s.ROOT)
+                                            strip_name = f"qcstrip_{asset_ids[0][:16]}.jpg"
+                                            strip_path = self.s.ASSETS / strip_name
+                                            subprocess.run([str(tool), 'filmstrip', str(self.s.ASSETS / out_asset['file']), str(strip_path), '4'], capture_output=True, timeout=20)
+                                            if strip_path.is_file():
+                                                shot['qc_strip_file'] = strip_name
+                                        except Exception:
+                                            pass
                             self.s.save(db)
             if kind == 'restore' and result.get('verified_files') and result.get('bytes'):
                 d.update(bytes_done=result['bytes'], bytes_total=result['bytes'])
             self.event(d, 'complete', '操作完成', state='succeeded', result=result, finished=time.time())
         except Exception as e:
+            safely_interrupted = d.get('action') in ('generate', 'resume') and '采样已按指令安全中断；GPU 会话保留。' in str(e)
+            message = '采样已按指令安全中断；GPU 会话保留。' if safely_interrupted else str(e)
             if d.get('job_id'):
-                values = {'state': 'interrupted' if d.get('prompt_id') else 'failed', 'message': str(e)}
+                values = {'state': 'interrupted' if d.get('prompt_id') or safely_interrupted else 'failed', 'message': message}
                 if d.get('not_submitted') is True and not d.get('prompt_id'):
                     values.update(attempted=False, state='prepared')
                 self.job_update(d['job_id'], **values)
-            self.event(d, 'failed', str(e), state='failed', finished=time.time())
+            self.event(d, 'interrupted' if safely_interrupted else 'failed', message, state='interrupted' if safely_interrupted else 'failed', finished=time.time())

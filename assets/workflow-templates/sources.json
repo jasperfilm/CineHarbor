@@ -21,6 +21,11 @@
       "file": "image_qwen_Image_2512.json",
       "source": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/79b02f4a79e233c07ec4923e39f40be27448549d/templates/image_qwen_Image_2512.json",
       "sha256": "4ad1265ec0ce1edf397d6a111a757e9d7831b63669e9ce815b9f3de91b335f1a"
+    },
+    {
+      "file": "image_qwen_image_edit_2511.json",
+      "source": "https://raw.githubusercontent.com/Comfy-Org/workflow_templates/79b02f4a79e233c07ec4923e39f40be27448549d/templates/image_qwen_image_edit_2511.json",
+      "sha256": "fd2d7ebc17c80ab1e55f8320babd13a568de94c26b67807dbdf2a74cea18b65b"
     }
   ]
 }

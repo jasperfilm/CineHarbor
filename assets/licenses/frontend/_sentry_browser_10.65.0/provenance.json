@@ -1,0 +1,20 @@
+{
+  "name": "@sentry/browser",
+  "version": "10.65.0",
+  "notices": [
+    {
+      "file": "frontend/_sentry_browser_10.65.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "f3df0b92efcd9d8cc0de5a36c151569a12a647d65b851abbb696ef7b13dee10b"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git://github.com/getsentry/sentry-javascript.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@sentry/browser/-/browser-10.65.0.tgz",
+  "integrity": "sha512-XUDDsx0qxzeIlcOu1fDEqTcDl0eiOqghsgV+ReuuNP4jYjZ9kUQxE3rXWM5mlT1pBi4VaQ4FHqvQZZrRXy+oDw==",
+  "archive_sha256": "fd2e98d6e4204df674c09c5c56f9741c28b78cdca7206068221bc4381d61d686",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "shiki",
+  "version": "4.3.1",
+  "notices": [
+    {
+      "file": "frontend/shiki_4.3.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "7a9d8d01038aeacf9e5bcdabbddf2a7815200dce9fc1118468cc553e00ae3eee"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/shikijs/shiki.git",
+    "type": "git",
+    "directory": "packages/shiki"
+  },
+  "tarball": "https://registry.npmjs.org/shiki/-/shiki-4.3.1.tgz",
+  "integrity": "sha512-oR+qDVi2OjX1tmDpyv+3KviX01KzO6Af+0NNnKnsp9491UEGz2YpxTuJboS/6VhYpTdqzmuJBuiTlrAWWJAssw==",
+  "archive_sha256": "1c2f7e461425a3aa07d047be0bf9964ba055ff6b2995a305cebc2316f073ef37",
+  "status": "notice_text_present"
+}

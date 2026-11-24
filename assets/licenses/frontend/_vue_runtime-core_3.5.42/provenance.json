@@ -1,0 +1,21 @@
+{
+  "name": "@vue/runtime-core",
+  "version": "3.5.42",
+  "notices": [
+    {
+      "file": "frontend/_vue_runtime-core_3.5.42/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/vuejs/core.git",
+    "type": "git",
+    "directory": "packages/runtime-core"
+  },
+  "tarball": "https://registry.npmjs.org/@vue/runtime-core/-/runtime-core-3.5.42.tgz",
+  "integrity": "sha512-9uACtuHs7vJGkm5Bp3xu4xRDLFTIYy5DgxpToVjqGIAhAEKwQfsaLvKINhM6nFVp6bZPRFGdDqd1g52MqKsotA==",
+  "archive_sha256": "693cc24ec3c0c6f2fc58d6866efc9a1d9ef9c340770a591c2d17be66d48a4f65",
+  "status": "notice_text_present"
+}

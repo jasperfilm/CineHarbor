@@ -1,0 +1,21 @@
+{
+  "name": "@shikijs/themes",
+  "version": "4.3.1",
+  "notices": [
+    {
+      "file": "frontend/_shikijs_themes_4.3.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "7a9d8d01038aeacf9e5bcdabbddf2a7815200dce9fc1118468cc553e00ae3eee"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/shikijs/shiki.git",
+    "type": "git",
+    "directory": "packages/themes"
+  },
+  "tarball": "https://registry.npmjs.org/@shikijs/themes/-/themes-4.3.1.tgz",
+  "integrity": "sha512-dgpoJ4WqNi2yTmizQHBJ5zcX6j2lE6icN/0yt4l1kkf16jrY/pwPLoTb1ETsWMz0OBLf9ZNvwmxft+cH+N9qSA==",
+  "archive_sha256": "fc1da587549e3e8f5d402c0ab5a1f40fa6b606c451dce39ed67451b01a1c06b7",
+  "status": "notice_text_present"
+}

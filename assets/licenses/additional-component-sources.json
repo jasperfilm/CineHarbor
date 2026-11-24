@@ -1,0 +1,22 @@
+[
+  {
+    "name": "mediabunny",
+    "version": "1.53.1",
+    "source_url": "https://registry.npmjs.org/mediabunny/-/mediabunny-1.53.1.tgz",
+    "file": "sources/mediabunny-1.53.1.tar.gz",
+    "sha256": "50b6feb9b149f1650a03f257666e549e5c3893b138f398c6d66d9bfafe10a404",
+    "bytes": 2024824,
+    "includes_source_tree": true,
+    "file_count": 283
+  },
+  {
+    "name": "@comfyorg/comfyui-electron-types",
+    "version": "0.6.2",
+    "source_url": "https://registry.npmjs.org/@comfyorg/comfyui-electron-types/-/comfyui-electron-types-0.6.2.tgz",
+    "file": "sources/comfyui-electron-types-0.6.2.tar.gz",
+    "sha256": "a202e1f506b0bf1c84b29a55682a228c5bc445d0d350daba7bdad6a61401ef79",
+    "bytes": 8191,
+    "includes_source_tree": false,
+    "file_count": 3
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "name": "html-void-elements",
+  "version": "3.0.0",
+  "notices": [
+    {
+      "file": "frontend/html-void-elements_3.0.0/1-license.txt",
+      "upstream_path": "package/license",
+      "sha256": "ca4662cb5d1b738fbe5350c0d5485ba11773b4b7208974082ae6e129a52d631d"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/wooorm/html-void-elements.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/html-void-elements/-/html-void-elements-3.0.0.tgz",
+  "integrity": "sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==",
+  "archive_sha256": "301b6ef51a58d296bb3f837c4840211025a7e541f304d4a379e6062e45373530",
+  "status": "notice_text_present"
+}

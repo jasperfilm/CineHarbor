@@ -1,0 +1,20 @@
+{
+  "name": "hast-util-to-html",
+  "version": "9.0.5",
+  "notices": [
+    {
+      "file": "frontend/hast-util-to-html_9.0.5/1-license.txt",
+      "upstream_path": "package/license",
+      "sha256": "dd1081884a92952802f4803110a6bb543acea9a814c786d58605b4c1219b5ebb"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/syntax-tree/hast-util-to-html.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/hast-util-to-html/-/hast-util-to-html-9.0.5.tgz",
+  "integrity": "sha512-OguPdidb+fbHQSU4Q4ZiLKnzWo8Wwsf5bZfbvu7//a9oTYoqD/fWpe96NuHkoS9h0ccGOTe0C4NGXdtS0iObOw==",
+  "archive_sha256": "039bc4739cc0cafde07e0246f885a247451e5061ae983908c1019427691eacc0",
+  "status": "notice_text_present"
+}

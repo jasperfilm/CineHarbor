@@ -118,7 +118,8 @@ class V050StudioAndGuardrailsHTTP(unittest.TestCase):
         # Create shot without explicit reference image, bound to @艾伦
         self.api('/api/shot/new', {})
         shot_id = server.load()['shots'][0]['id']
-        self.api('/api/shot', {'id': shot_id, 'title': 'Mars Walk', 'prompt': 'walking through red dust storm', 'elements': [elem['id']]})
+        workflow = self.api('/api/workflow/convert', {'template':'video_wan2_2_14B_i2v', 'save':True})
+        self.api('/api/shot', {'id': shot_id, 'workflow': workflow['id'], 'title': 'Mars Walk', 'prompt': 'walking through red dust storm', 'elements': [elem['id']]})
 
         # Creating a job automatically injects element snippet & inherits reference image!
         self.api('/api/job', {'shot': shot_id})
@@ -149,8 +150,10 @@ class V050StudioAndGuardrailsHTTP(unittest.TestCase):
         self.assertEqual(shot_after['output'], take2_asset)
 
         # Switch Hero Take back to Take 1
+        cached=server.load();cached['shots'][0]['qc_strip_file']='old-take-strip.jpg';server.save(cached)
         self.api('/api/shot/select-take', {'shot_id': shot_id, 'asset_id': take1_asset})
         self.assertEqual(server.load()['shots'][0]['output'], take1_asset)
+        self.assertNotIn('qc_strip_file',server.load()['shots'][0])
 
     def test_cu_budget_guardrail_pauses_subsequent_queue_without_killing_gpu(self):
         self.api('/api/policy', {'max_minutes': 120, 'max_cu_budget': 10.0})
@@ -181,7 +184,7 @@ class V050StudioAndGuardrailsHTTP(unittest.TestCase):
         with patch.object(server, 'identity', return_value='director@example.com'), \
              patch.object(server, 'refresh', side_effect=lambda: {'balance': next(balances, 88.0), 'runtime_state': 'owned', 'managed_session': {'endpoint': 'g4-ep'}}), \
              patch.object(self.console, 'remote', side_effect=fake_remote):
-            self.api('/api/operations', {'action': 'generate_batch', 'jobs': jobs})
+            self.api('/api/operations', {'action': 'generate_batch', 'jobs': jobs, 'cloud_data_consent': True, 'cloud_data_notice_version': '2026-11-21'})
             for _ in range(40):
                 if not any(o['state'] in ('queued', 'running') for o in self.api('/api/operations')):
                     break
@@ -193,7 +196,11 @@ class V050StudioAndGuardrailsHTTP(unittest.TestCase):
 
     def test_mobile_readonly_monitor_security_and_qr_svg(self):
         (self.d / 'live_status.json').write_text(json.dumps({'email': 'director@example.com', 'balance': 881.72, 'rate': 0.0, 'active': 0, 'runtime_state': 'idle', 'checked_at': 'now'}))
-        st = self.api('/api/monitor/toggle', {'enabled': True})
+        # Isolate this real HTTP test from the shared desktop monitor port.
+        monitor = server.get_monitor()
+        start = monitor.start
+        with patch.object(monitor, 'start', side_effect=lambda: start(preferred_port=0)):
+            st = self.api('/api/monitor/toggle', {'enabled': True})
         self.assertTrue(st['enabled'])
         self.assertIn('<svg', st['qr_svg'])
         token_path = '/m/' + st['primary_url'].split('/m/')[1]

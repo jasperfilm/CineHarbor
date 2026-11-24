@@ -1,0 +1,30 @@
+{
+  "name": "dompurify",
+  "version": "3.4.13",
+  "notices": [
+    {
+      "file": "frontend/dompurify_3.4.13/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "file": "frontend/dompurify_3.4.13/2-license_header.txt",
+      "upstream_path": "package/src/license_header",
+      "sha256": "5803fa925ae1703b9c752921c95a321570e6cabf06fcf2de895ddaf1687cebef"
+    },
+    {
+      "file": "frontend/dompurify_3.4.13/3-LICENSE-MPL.txt",
+      "upstream_path": "package/LICENSE-MPL",
+      "sha256": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85"
+    }
+  ],
+  "license": "(MPL-2.0 OR Apache-2.0)",
+  "source": {
+    "url": "git://github.com/cure53/DOMPurify.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.13.tgz",
+  "integrity": "sha512-2vmYIoqjze2d+kakP8S/nS5shfsl587kzwEjcGlTdiksUVgFHnFCsLYDVj/JNqJVOQZGSYBTmuycv0PodwmnMQ==",
+  "archive_sha256": "2a0647141c748404c9958cf12079c3fdb79cf9a7faaa87c8fac034a3b1275ab2",
+  "status": "notice_text_present"
+}

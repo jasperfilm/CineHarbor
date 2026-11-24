@@ -1,0 +1,20 @@
+{
+  "name": "cva",
+  "version": "1.0.0-beta.4",
+  "notices": [
+    {
+      "file": "frontend/cva_1.0.0-beta.4/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "0ccbf956cffc8dcf515809433cb5242ee67c94513d46e48c261d68d0880de406"
+    }
+  ],
+  "license": "Apache-2.0",
+  "source": {
+    "url": "git+https://github.com/joe-bell/cva.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/cva/-/cva-1.0.0-beta.4.tgz",
+  "integrity": "sha512-F/JS9hScapq4DBVQXcK85l9U91M6ePeXoBMSp7vypzShoefUBxjQTo3g3935PUHgQd+IW77DjbPRIxugy4/GCQ==",
+  "archive_sha256": "8bca18f0a84587ac7b0a61146b55e947b0658d60f464baa729c00ca6b7c845a7",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "prosemirror-markdown",
+  "version": "1.13.5",
+  "notices": [
+    {
+      "file": "frontend/prosemirror-markdown_1.13.5/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-markdown.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/prosemirror-markdown/-/prosemirror-markdown-1.13.5.tgz",
+  "integrity": "sha512-ac8trNQ01ybKDRTcfUc56LZufG3oYyU4N25qSXgp8dS0U4JtzzCj7oQlKu5v09VSmS5IseYoQ2yDkTbo7f7D8Q==",
+  "archive_sha256": "ec94445a59d1e14d3d53e6f1b008c8a2b55e9e48e0879a927c57d66a8a15572e",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "orderedmap",
+  "version": "2.1.1",
+  "notices": [
+    {
+      "file": "frontend/orderedmap_2.1.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "869c30f368eb08735e779027b9f4bc9fea2f39624351856aebe42741f0bc0884"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/marijnh/orderedmap.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/orderedmap/-/orderedmap-2.1.1.tgz",
+  "integrity": "sha512-TvAWxi0nDe1j/rtMcWcIj94+Ffe6n7zhow33h40SKxmsmozs6dz/e+EajymfoFcHd7sxNn8yHM8839uixMOV6g==",
+  "archive_sha256": "9ad98abe6ac4156daef2232d7c1d2c8b3681545604c54f7f3754e791f12c168d",
+  "status": "notice_text_present"
+}

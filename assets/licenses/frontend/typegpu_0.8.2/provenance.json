@@ -1,0 +1,20 @@
+{
+  "name": "typegpu",
+  "version": "0.8.2",
+  "notices": [
+    {
+      "file": "frontend/typegpu_0.8.2/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "abfe140e29a001c90ded00cf8a8f418cf3f35cb6252c148c7dd4406fa07e2337"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/software-mansion/TypeGPU.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/typegpu/-/typegpu-0.8.2.tgz",
+  "integrity": "sha512-wkMJWhJE0pSkw2G/FesjqjbtHkREyOKu1Zmyj19xfmaX5+65YFwgfQNKSK8CxqN4kJkP7JFelLDJTSYY536TYg==",
+  "archive_sha256": "34c0a5d468b3d02f97fed4fed66c3ab16da5a8eb2b4635269590f34b6e943360",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "wwobjloader2",
+  "version": "6.2.1",
+  "notices": [
+    {
+      "file": "frontend/wwobjloader2_6.2.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "09453b18dbdc9265528947040dbf5efa5e0c08dc560a004db5cdb8bcc34fea9a"
+    }
+  ],
+  "license": null,
+  "source": {
+    "url": "git+https://github.com/kaisalmen/WWOBJLoader.git",
+    "type": "git",
+    "directory": "packages/objloader2"
+  },
+  "tarball": "https://registry.npmjs.org/wwobjloader2/-/wwobjloader2-6.2.1.tgz",
+  "integrity": "sha512-/v/sfUX0PMQAI8souzCs6xsO9LR3RyL+ujnOiS/1pngUlakKyHYC5XMQvu77pTeWzY3rzNyt5Q/bg5O3RukA+g==",
+  "archive_sha256": "6beef5efa1a06690df2014d26c759c3707fb3a0273ab7c760b23f81e07044cea",
+  "status": "notice_text_present"
+}

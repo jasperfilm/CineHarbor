@@ -1,0 +1,20 @@
+{
+  "name": "axios",
+  "version": "1.18.1",
+  "notices": [
+    {
+      "file": "frontend/axios_1.18.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "82761059eaedacb3356803aea8a170d8298609f91b14fc32ee1bfb40d690183c"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/axios/axios.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/axios/-/axios-1.18.1.tgz",
+  "integrity": "sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==",
+  "archive_sha256": "0c9c4ae1c7d2c65168676039b7d7d80912a4644459b4885036088201b2b3e21a",
+  "status": "notice_text_present"
+}

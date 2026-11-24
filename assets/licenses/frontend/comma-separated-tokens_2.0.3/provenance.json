@@ -1,0 +1,20 @@
+{
+  "name": "comma-separated-tokens",
+  "version": "2.0.3",
+  "notices": [
+    {
+      "file": "frontend/comma-separated-tokens_2.0.3/1-license.txt",
+      "upstream_path": "package/license",
+      "sha256": "ca4662cb5d1b738fbe5350c0d5485ba11773b4b7208974082ae6e129a52d631d"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/wooorm/comma-separated-tokens.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/comma-separated-tokens/-/comma-separated-tokens-2.0.3.tgz",
+  "integrity": "sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==",
+  "archive_sha256": "88123eefbb07a6048efa112653c80f4a0ac2e993bd1388c00273e14de29ec886",
+  "status": "notice_text_present"
+}

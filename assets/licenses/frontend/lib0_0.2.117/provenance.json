@@ -1,0 +1,20 @@
+{
+  "name": "lib0",
+  "version": "0.2.117",
+  "notices": [
+    {
+      "file": "frontend/lib0_0.2.117/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "5446db1e43fe52faf3faab7e9959fe3762ac11bdc61c0945934c498affd52d73"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/dmonad/lib0.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/lib0/-/lib0-0.2.117.tgz",
+  "integrity": "sha512-DeXj9X5xDCjgKLU/7RR+/HQEVzuuEUiwldwOGsHK/sfAfELGWEyTcf0x+uOvCvK3O2zPmZePXWL85vtia6GyZw==",
+  "archive_sha256": "2faf96b28d5a471edef86cc0cc108c0464c27bd13acb266d6e663d52577b9f7e",
+  "status": "notice_text_present"
+}

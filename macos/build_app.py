@@ -4,13 +4,18 @@ No credentials, model weights, user projects or machine configuration are bundle
 from pathlib import Path
 import json, plistlib, shutil, subprocess, sys
 
-VERSION = '0.5.0'
-BUILD_NUMBER = '10'
+PRODUCT = json.loads((Path(__file__).resolve().parents[1] / 'assets/branding/product.json').read_text())
+VERSION = PRODUCT['version']
+BUILD_NUMBER = PRODUCT['build']
+DISPLAY_NAME = PRODUCT['display_name']
 root = Path(__file__).resolve().parents[1]
-app = Path.home() / 'Applications/GC Labs.app'
+subprocess.run([sys.executable, str(root / 'tools/localization/pack.py')], check=True)
+(root / 'web/brand.js').write_text('// Generated from assets/branding/product.json.\nwindow.GCLabsBrand=Object.freeze(' + json.dumps(PRODUCT, ensure_ascii=False) + ');\n')
+app = Path.home() / 'Applications' / (DISPLAY_NAME + '.app')
+legacy_app = Path.home() / 'Applications/GC Labs.app'
 commands = subprocess.check_output(['ps', '-axo', 'command='], text=True).splitlines()
-if any(line.strip().startswith(str(app / 'Contents/MacOS/JasperWorkstation')) or (line.strip().startswith(str(app / 'Contents/Resources/Python/bin/python3.13')) and '/backend/server.py' in line) for line in commands):
-    raise RuntimeError('请先退出GC Labs并完成当前后台任务，再替换应用包；未改动已安装版本。')
+if '--stage-only' not in sys.argv and any(line.strip().startswith(str(bundle / 'Contents/MacOS/JasperWorkstation')) or (line.strip().startswith(str(bundle / 'Contents/Resources/Python/bin/python3.13')) and '/backend/server.py' in line) for line in commands for bundle in (app, legacy_app)):
+    raise RuntimeError(f'请先退出{DISPLAY_NAME}并完成当前后台任务，再替换应用包；未改动已安装版本。')
 
 stage = Path('/tmp/gc-labs-build/GC Labs.app')
 contents = stage / 'Contents'
@@ -19,8 +24,10 @@ backend = resources / 'backend'
 binary = contents / 'MacOS'
 
 cli = Path.home() / '.local/bin/colab'
-sdk_python = Path(cli.read_text().splitlines()[0][2:]).resolve()
-info = json.loads(subprocess.check_output([str(sdk_python), '-c', 'import sys,sysconfig,json;print(json.dumps({"prefix":sys.base_prefix,"site":sysconfig.get_path("purelib")}))'], text=True))
+import os
+# Preserve the venv executable path: resolving its symlink loses the CLI site-packages.
+sdk_python = Path(os.environ.get('GC_LABS_SDK_PYTHON') or cli.read_text().splitlines()[0][2:]).absolute()
+info = json.loads(subprocess.check_output([str(sdk_python), '-B', '-c', 'import sys,sysconfig,json;print(json.dumps({"prefix":sys.base_prefix,"site":sysconfig.get_path("purelib")}))'], text=True))
 
 frontend_zip = root / 'vendor/comfy_frontend.zip'
 if not frontend_zip.is_file():
@@ -37,13 +44,20 @@ binary.mkdir(parents=True)
 backend.mkdir(parents=True)
 
 backend_modules = [
-    'server.py', 'console.py', 'comfy_local_bridge.py', 'workspace_backup.py',
+    'server.py', 'console.py', 'comfy_local_bridge.py', 'comfy_frontend_policy.py', 'workspace_backup.py', 'license_resources.py',
+    'comfy_project_store.py', 'comfy_project_bridge.py',
+    'comfy_asset_transfer.py', 'comfy_verified_media.py',
     'account_login.py', 'workflow_library.py', 'workflow_converter.py', 'timeline_export.py',
-    'model_presets.py', 'mobile_monitor.py', 'gclabs_cli.py'
+    'model_presets.py', 'model_terms.py', 'mobile_monitor.py', 'gclabs_cli.py', 'drama_studio.py', 'storyboard_handoff.py'
 ]
 for name in backend_modules:
     shutil.copy2(root / name, backend / name)
 
+(backend / 'assets/branding').mkdir(parents=True)
+shutil.copy2(root / 'assets/branding/product.json', backend / 'assets/branding/product.json')
+shutil.copy2(root / 'assets/branding/native-locales.json', resources / 'NativeLocales.json')
+shutil.copytree(root / 'assets/licenses', resources / 'Licenses')
+shutil.copy2(root / 'macos/PrivacyInfo.xcprivacy', resources / 'PrivacyInfo.xcprivacy')
 shutil.copytree(root / 'assets/workflow-templates', backend / 'assets/workflow-templates')
 shutil.copytree(root / 'web', backend / 'web')
 (backend / 'runtime').mkdir()
@@ -59,6 +73,7 @@ dev_media_bin.parent.mkdir(parents=True, exist_ok=True)
 subprocess.run([
     'swiftc', '-parse-as-library', '-target', 'arm64-apple-macos13.0', '-O',
     '-framework', 'AVFoundation', '-framework', 'CoreMedia', '-framework', 'CoreGraphics',
+    '-framework', 'CoreText', '-framework', 'AppKit', '-framework', 'QuartzCore',
     '-framework', 'ImageIO', '-framework', 'UniformTypeIdentifiers',
     str(root / 'macos/MediaTool.swift'), '-o', str(dev_media_bin)
 ], check=True)
@@ -75,10 +90,25 @@ if (extra / 'aiohttp').is_dir():
 elif not (resources / 'Python/lib/python3.13/site-packages/aiohttp').is_dir():
     raise RuntimeError('先按 macos/requirements-local.lock 安装本地桥接依赖到 vendor/python-extra')
 
+# Check the actual relocated runtime before signing or replacing the installed app.
+subprocess.run([
+    str(resources / 'Python/bin/python3.13'), '-B', '-c',
+    'import colab_cli.cli, aiohttp; from colab_cli.runtime import ColabRuntime'
+], check=True)
+
+from license_inventory import collect as collect_python_licenses
+license_inventory = collect_python_licenses(resources / 'Python', resources / 'Licenses')
+if license_inventory['missing_notices']:
+    raise RuntimeError('Missing dependency license notices: ' + ', '.join(license_inventory['missing_notices']))
+
 (resources / 'THIRD_PARTY_NOTICES.txt').write_text(
-    f'GC Labs {VERSION}\n\nIncludes CPython (PSF license) and google-colab-cli (Apache-2.0), with their dependencies.\n'
-    'Original licenses and package metadata are retained in Python/lib/python3.13/site-packages and Python/LICENSE*.\n'
-    'Google Colab is a Google service. GC Labs is an independent local-first client.\n\n'
+    f'{DISPLAY_NAME} {VERSION}\n\nIncludes CPython (PSF license) and google-colab-cli (Apache-2.0), with their dependencies.\n'
+    'See Licenses/python-components.json, Licenses/python/ and Licenses/CPython-LICENSE.txt for original notices.\n'
+    'Google Colab is a Google service. This is an independent local-first client.\n'
+    'Includes the separately licensed ComfyUI frontend 1.59.1 (GPL-3.0-only), commit cded88fdffbb78f191fc8e454e7f2cfa5016ee43.\n'
+    'See Licenses/ComfyUI-frontend-GPL-3.0.txt and https://github.com/Comfy-Org/ComfyUI_frontend/tree/cded88fdffbb78f191fc8e454e7f2cfa5016ee43 for its version and corresponding source reference.\n\n'
+    'html2text is separately licensed GPL-3.0-or-later; see its exact-version notice under Licenses/python/.\n'
+    'Font and workflow-template licenses and source provenance are in Licenses/.\n\n'
     + subprocess.check_output([
         str(resources / 'Python/bin/python3.13'), '-B', '-c',
         'import importlib.metadata as m; print("\\n".join(sorted(d.metadata["Name"]+"=="+d.version for d in m.distributions())))'
@@ -89,16 +119,20 @@ with (contents / 'Info.plist').open('wb') as f:
     plistlib.dump({
         'CFBundleExecutable': 'JasperWorkstation',
         'CFBundleIdentifier': 'com.jasper.workstation',
-        'CFBundleName': 'GC Labs',
-        'CFBundleDisplayName': 'GC Labs',
+        'CFBundleName': DISPLAY_NAME,
+        'CFBundleDisplayName': DISPLAY_NAME,
         'CFBundlePackageType': 'APPL',
+        'CFBundleDevelopmentRegion': 'en',
+        'CFBundleLocalizations': PRODUCT.get('supported_locales', ['en']),
         'CFBundleShortVersionString': VERSION,
         'CFBundleVersion': BUILD_NUMBER,
         'CFBundleIconFile': 'AppIcon',
         'LSMinimumSystemVersion': '13.0',
         'NSHighResolutionCapable': True,
+        'NSLocalNetworkUsageDescription': '仅在你启用手机只读监看后，用于同一网络内查看制作进度。',
         'NSAppTransportSecurity': {'NSAllowsLocalNetworking': True},
-        'NSHumanReadableCopyright': f'GC Labs · {VERSION}'
+        'LSApplicationCategoryType': 'public.app-category.video',
+        'NSHumanReadableCopyright': '© 2026 CineHarbor'
     }, f)
 
 subprocess.run([

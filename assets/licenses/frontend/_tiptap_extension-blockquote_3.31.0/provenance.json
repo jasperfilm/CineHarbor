@@ -1,0 +1,21 @@
+{
+  "name": "@tiptap/extension-blockquote",
+  "version": "3.31.0",
+  "notices": [
+    {
+      "file": "frontend/_tiptap_extension-blockquote_3.31.0/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "https://github.com/ueberdosis/tiptap",
+    "type": "git",
+    "directory": "packages/extension-blockquote"
+  },
+  "tarball": "https://registry.npmjs.org/@tiptap/extension-blockquote/-/extension-blockquote-3.31.0.tgz",
+  "integrity": "sha512-E1EcYp28NOEKLkMqf9Z4t/ZjVO5hOX/c5r9nu/sfp5+KePj4TaxGDcruijP5DYJuKxlsZx2lr6/lldiK9KilXw==",
+  "archive_sha256": "fc7953e9695102e8ee7e2ec7716faad3a14d64a837562659357d81b438a63881",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@tanstack/virtual-core",
+  "version": "3.17.4",
+  "notices": [
+    {
+      "file": "frontend/_tanstack_virtual-core_3.17.4/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "a405ee70c632bb938acb7ac5f210e814409b3760ea9d2329d8ed8ffcfd11a0e7"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/TanStack/virtual.git",
+    "type": "git",
+    "directory": "packages/virtual-core"
+  },
+  "tarball": "https://registry.npmjs.org/@tanstack/virtual-core/-/virtual-core-3.17.4.tgz",
+  "integrity": "sha512-nGm5KteqxasUdThLc2izl6dHUqLv0LQj7Nuyo5gYalTPf/U8a9ermvsl7reT+6ioBW1l8WfpP/mcU338nLXpqw==",
+  "archive_sha256": "75f2fdbac59b2d4f621f52d372b58a24c23cba17809722b8b9e5cb38ad9d8d08",
+  "status": "notice_text_present"
+}

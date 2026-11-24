@@ -1,0 +1,20 @@
+{
+  "name": "broker-factory",
+  "version": "3.1.15",
+  "notices": [
+    {
+      "file": "frontend/broker-factory_3.1.15/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "04238a17c611b988a3ef5934e6c247acd4a344c837f60b223f3d9ffb57aa4dde"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/broker-factory.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/broker-factory/-/broker-factory-3.1.15.tgz",
+  "integrity": "sha512-ko+aWvgNuP49meGrdjUu7rC+Y+Wai3cCPxP3xWwHsHfehFjOh5ZQM2yC4gEB2UddeZ/YXhm0K1eG/L6fxym2Og==",
+  "archive_sha256": "e4b19ea8b9544464ae2b82ef42c9f483db12dc5c04548c5c593ce15d4f7eb9f6",
+  "status": "notice_text_present"
+}

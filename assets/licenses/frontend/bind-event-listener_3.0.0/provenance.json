@@ -1,0 +1,20 @@
+{
+  "name": "bind-event-listener",
+  "version": "3.0.0",
+  "notices": [
+    {
+      "file": "frontend/bind-event-listener_3.0.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "490dd02ac5260e46dbb271415ab79572be0e337b0db44d907562279dcfd0e54e"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/alexreardon/bind-event-listener.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/bind-event-listener/-/bind-event-listener-3.0.0.tgz",
+  "integrity": "sha512-PJvH288AWQhKs2v9zyfYdPzlPqf5bXbGMmhmUIY9x4dAUGIWgomO771oBQNwJnMQSnUIXhKu6sgzpBRXTlvb8Q==",
+  "archive_sha256": "80b0b58b7bdb606090e1f347a760b03f2a53446fea958643b6f5f4554cc0ef91",
+  "status": "notice_text_present"
+}

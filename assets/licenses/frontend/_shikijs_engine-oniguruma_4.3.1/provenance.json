@@ -1,0 +1,21 @@
+{
+  "name": "@shikijs/engine-oniguruma",
+  "version": "4.3.1",
+  "notices": [
+    {
+      "file": "frontend/_shikijs_engine-oniguruma_4.3.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "7a9d8d01038aeacf9e5bcdabbddf2a7815200dce9fc1118468cc553e00ae3eee"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/shikijs/shiki.git",
+    "type": "git",
+    "directory": "packages/engine-oniguruma"
+  },
+  "tarball": "https://registry.npmjs.org/@shikijs/engine-oniguruma/-/engine-oniguruma-4.3.1.tgz",
+  "integrity": "sha512-OXyNMzg0pews+msMj4cHeqT4xiYKKvbnn6VbdAXxfoFl3SSx4fJTc8FadECuc5/H9p3BzhNAoAUXKwAu9rWYhg==",
+  "archive_sha256": "e312278f97cbdd19cdbc94155cf0ced9eea533a7cd9db0d9a7d1c09a0a11b19c",
+  "status": "notice_text_present"
+}

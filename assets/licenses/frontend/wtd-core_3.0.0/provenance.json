@@ -1,0 +1,21 @@
+{
+  "name": "wtd-core",
+  "version": "3.0.0",
+  "notices": [
+    {
+      "file": "frontend/wtd-core_3.0.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "6b62f74228c184af6f646f5501287e86c3e046e62dbe98c207f742c95dc4260f"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/kaisalmen/wtd.git",
+    "type": "git",
+    "directory": "packages/wtd"
+  },
+  "tarball": "https://registry.npmjs.org/wtd-core/-/wtd-core-3.0.0.tgz",
+  "integrity": "sha512-LSPfAQ5ULSV5vPhipcjdQvV5xOx25QesYK23jwUOF99xOx6fuulk7CMQerERRwA4uoQooNmRd8AT6IPBwORlWQ==",
+  "archive_sha256": "7276dafa6d5f7ad6177300c26b9789b5408aea439f7353fea0e6ca754688a155",
+  "status": "notice_text_present"
+}

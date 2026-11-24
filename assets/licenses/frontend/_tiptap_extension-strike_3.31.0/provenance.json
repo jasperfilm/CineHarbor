@@ -1,0 +1,21 @@
+{
+  "name": "@tiptap/extension-strike",
+  "version": "3.31.0",
+  "notices": [
+    {
+      "file": "frontend/_tiptap_extension-strike_3.31.0/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "https://github.com/ueberdosis/tiptap",
+    "type": "git",
+    "directory": "packages/extension-strike"
+  },
+  "tarball": "https://registry.npmjs.org/@tiptap/extension-strike/-/extension-strike-3.31.0.tgz",
+  "integrity": "sha512-M1X94ve0TNU7LrHCDn6nKf6vM8PEaKQt3FLTwhTIw5uTbx2Imw+uyRrySDdxLWHY/ul8x17I2w9MVLqK/D+Zvw==",
+  "archive_sha256": "13f686da52cbc8af5daab754388902090f45c8b3ad898e0743162ff97312fbb0",
+  "status": "notice_text_present"
+}

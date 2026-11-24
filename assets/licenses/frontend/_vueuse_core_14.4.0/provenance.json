@@ -1,0 +1,21 @@
+{
+  "name": "@vueuse/core",
+  "version": "14.4.0",
+  "notices": [
+    {
+      "file": "frontend/_vueuse_core_14.4.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "0f844b1160603552a01662ac2999c14e5fb4df487e65619b9ed4406e43eb3c0b"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/vueuse/vueuse.git",
+    "type": "git",
+    "directory": "packages/core"
+  },
+  "tarball": "https://registry.npmjs.org/@vueuse/core/-/core-14.4.0.tgz",
+  "integrity": "sha512-X4WHz1HlCzCBoYXesUkifzzWBAcZgXG8Fi5iNPQg/epdzOB3gu8Fawj3hvuwYR1nGcXGnvxwYYcUC/71++svtQ==",
+  "archive_sha256": "7d2e831eb0aeee5b0c21dd80ce7067da83ef30e152e43b87572788399b4c7b1a",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@vue/runtime-dom",
+  "version": "3.5.42",
+  "notices": [
+    {
+      "file": "frontend/_vue_runtime-dom_3.5.42/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/vuejs/core.git",
+    "type": "git",
+    "directory": "packages/runtime-dom"
+  },
+  "tarball": "https://registry.npmjs.org/@vue/runtime-dom/-/runtime-dom-3.5.42.tgz",
+  "integrity": "sha512-rsCmhiWLaRxGltLwhlCWyYkFn7WAbKRh0q17eZ1A6Dq6eqc2ACQ61IIryxz0LrsvCzHSilLA9JHovVwM8CNE2g==",
+  "archive_sha256": "79af9d3e39d81eff56d37d3b87e3f3d2bfd29f6a88aaffa31cbd6505610d0200",
+  "status": "notice_text_present"
+}

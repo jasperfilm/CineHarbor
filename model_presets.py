@@ -135,6 +135,45 @@ MODEL_PRESETS = [
         }
     },
     {
+        'id': 'qwen_image_edit_2511_bf16',
+        'name': 'Qwen Image Edit 2511 · 完整 BF16 锁脸改镜套件',
+        'kind': 'image',
+        'template': 'image_qwen_image_edit_2511',
+        'approx_gb': 59.4,
+        'precision': 'BF16 + FP32 LoRA',
+        'gated': False,
+        'description': 'Qwen-Image-Edit 2511 完整 40.9GB BF16 编辑主模型 + Qwen2.5-VL-7B + FP32 4步加速 LoRA，支持锁死角色母版五官与服装切换任意分镜景别与机位。',
+        'model_files': [
+            {
+                'file': 'diffusion_models/qwen_image_edit_2511_bf16.safetensors',
+                'url': 'https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI/resolve/main/split_files/diffusion_models/qwen_image_edit_2511_bf16.safetensors',
+                'sha256': ''
+            },
+            {
+                'file': 'text_encoders/qwen_2.5_vl_7b.safetensors',
+                'url': 'https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b.safetensors',
+                'sha256': ''
+            },
+            {
+                'file': 'vae/qwen_image_vae.safetensors',
+                'url': 'https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/vae/qwen_image_vae.safetensors',
+                'sha256': ''
+            },
+            {
+                'file': 'loras/Qwen-Image-Edit-2511-Lightning-4steps-V1.0-fp32.safetensors',
+                'url': 'https://huggingface.co/lightx2v/Qwen-Image-Edit-2511-Lightning/resolve/main/Qwen-Image-Edit-2511-Lightning-4steps-V1.0-fp32.safetensors',
+                'sha256': ''
+            },
+        ],
+        'node_upgrades': {
+            'qwen_image_edit_2511_fp8mixed.safetensors': 'qwen_image_edit_2511_bf16.safetensors',
+            'qwen_image_edit_2511_fp8_e4m3fn.safetensors': 'qwen_image_edit_2511_bf16.safetensors',
+            'qwen_image_edit_2511_int8_convrot.safetensors': 'qwen_image_edit_2511_bf16.safetensors',
+            'qwen_2.5_vl_7b_fp8_scaled.safetensors': 'qwen_2.5_vl_7b.safetensors',
+            'Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors': 'Qwen-Image-Edit-2511-Lightning-4steps-V1.0-fp32.safetensors',
+        }
+    },
+    {
         'id': 'acestep_15_bf16',
         'name': 'ACE-Step 1.5 + 4B 规划器 · 完整精度音乐套件',
         'kind': 'audio',

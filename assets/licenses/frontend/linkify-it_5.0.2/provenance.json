@@ -1,0 +1,20 @@
+{
+  "name": "linkify-it",
+  "version": "5.0.2",
+  "notices": [
+    {
+      "file": "frontend/linkify-it_5.0.2/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "95e3f7f0e81e9b4940cdfaa1956aaff5e4dfd2fb1565041e7c78eb9a606f23e3"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/markdown-it/linkify-it.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/linkify-it/-/linkify-it-5.0.2.tgz",
+  "integrity": "sha512-ONTm2jCMAVZjgQa/Fy1kScXsuOoF5NPTsoFBdE1KVIZ2vAh/r9+Bqo+0jINCBYnavTPQZz38QzFTme79ENoN3Q==",
+  "archive_sha256": "f5169c5e5d837b5229180cb7214102d42f5c963f6932f284b608ef9549e927b4",
+  "status": "notice_text_present"
+}

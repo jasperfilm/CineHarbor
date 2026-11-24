@@ -1,0 +1,20 @@
+{
+  "name": "defu",
+  "version": "6.1.7",
+  "notices": [
+    {
+      "file": "frontend/defu_6.1.7/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/unjs/defu.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/defu/-/defu-6.1.7.tgz",
+  "integrity": "sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ==",
+  "archive_sha256": "c9a6777f6837633e4eba91ed78dbd0be2d27ab0d9c53948dac6b927c819fbcd3",
+  "status": "notice_text_present"
+}

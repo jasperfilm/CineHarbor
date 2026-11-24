@@ -1,0 +1,20 @@
+{
+  "name": "@shikijs/vscode-textmate",
+  "version": "10.0.2",
+  "notices": [
+    {
+      "file": "frontend/_shikijs_vscode-textmate_10.0.2/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "b5cb7ff7859e7d282d98fc43ab081b0dda5dc659dc3385cf65740c759a7e6a6c"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/shikijs/vscode-textmate.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@shikijs/vscode-textmate/-/vscode-textmate-10.0.2.tgz",
+  "integrity": "sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==",
+  "archive_sha256": "2164908fc8d7e4b891faa09953cf345f922ab9359d9c4757e97e2620e6207f34",
+  "status": "notice_text_present"
+}

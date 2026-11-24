@@ -1,0 +1,20 @@
+{
+  "name": "space-separated-tokens",
+  "version": "2.0.2",
+  "notices": [
+    {
+      "file": "frontend/space-separated-tokens_2.0.2/1-license.txt",
+      "upstream_path": "package/license",
+      "sha256": "ca4662cb5d1b738fbe5350c0d5485ba11773b4b7208974082ae6e129a52d631d"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/wooorm/space-separated-tokens.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/space-separated-tokens/-/space-separated-tokens-2.0.2.tgz",
+  "integrity": "sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==",
+  "archive_sha256": "b386cce96593975cebbb054a8e287eb15c2e004cd6ef416f7a26b5c265930b67",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "character-entities-html4",
+  "version": "2.1.0",
+  "notices": [
+    {
+      "file": "frontend/character-entities-html4_2.1.0/1-license.txt",
+      "upstream_path": "package/license",
+      "sha256": "63cb98b3f6abfb3c3592c16f88253c1bdc834087bf52671e8ce5609e4eb693cf"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/wooorm/character-entities-html4.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/character-entities-html4/-/character-entities-html4-2.1.0.tgz",
+  "integrity": "sha512-1v7fgQRj6hnSwFpq1Eu0ynr/CDEw0rXo2B61qXrLNdHZmPKgb7fqS1a2JwF0rISo9q77jDI8VMEHoApn8qDoZA==",
+  "archive_sha256": "a1cdca963945f3fbb4ac4932d4b8e54ceb66aba5a9bfc7254fb87a1f17cd04e6",
+  "status": "notice_text_present"
+}

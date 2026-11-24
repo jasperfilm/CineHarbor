@@ -1,0 +1,21 @@
+{
+  "name": "@shikijs/core",
+  "version": "4.3.1",
+  "notices": [
+    {
+      "file": "frontend/_shikijs_core_4.3.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "7a9d8d01038aeacf9e5bcdabbddf2a7815200dce9fc1118468cc553e00ae3eee"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/shikijs/shiki.git",
+    "type": "git",
+    "directory": "packages/core"
+  },
+  "tarball": "https://registry.npmjs.org/@shikijs/core/-/core-4.3.1.tgz",
+  "integrity": "sha512-ANMDxuaPsNMdDC1m4vfvhlDmJweMwkE5XitTwrq2rWHx5jM+dlm4MmHt2PP6t0uejfR77SuhrhJ0zEijIF/uhA==",
+  "archive_sha256": "5160e043d13674f684a5e1429c13cb226144477ebfc2922015211f6e70be1ab6",
+  "status": "notice_text_present"
+}

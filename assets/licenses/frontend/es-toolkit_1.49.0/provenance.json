@@ -1,0 +1,20 @@
+{
+  "name": "es-toolkit",
+  "version": "1.49.0",
+  "notices": [
+    {
+      "file": "frontend/es-toolkit_1.49.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "51f3674294d988d89dbebd31273baaeb3c697a15482d9699b14d1fded2e132a7"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/toss/es-toolkit.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/es-toolkit/-/es-toolkit-1.49.0.tgz",
+  "integrity": "sha512-G5iZ6Pc/FNRY/soKZHC+TxGDD83rHUDXxzaWhGCX44vAv/tMs56WMusnm/KMNK+luUPsgA9U28cGr4RDlSzL2g==",
+  "archive_sha256": "7d27d8fb061796bbd122ba13730961c09c673650763c9ea1c7c1c83e925ec886",
+  "status": "notice_text_present"
+}

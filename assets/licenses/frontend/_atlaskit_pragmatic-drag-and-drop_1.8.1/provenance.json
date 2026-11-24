@@ -1,0 +1,20 @@
+{
+  "name": "@atlaskit/pragmatic-drag-and-drop",
+  "version": "1.8.1",
+  "notices": [
+    {
+      "file": "frontend/_atlaskit_pragmatic-drag-and-drop_1.8.1/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "c430b34eed4803d6fc5961a2727e5028717e0ef16b606651ab13794aa5712a5f"
+    }
+  ],
+  "license": "Apache-2.0",
+  "source": {
+    "url": "git+https://github.com/atlassian/pragmatic-drag-and-drop.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@atlaskit/pragmatic-drag-and-drop/-/pragmatic-drag-and-drop-1.8.1.tgz",
+  "integrity": "sha512-uXWNPpL8n4OmTVbduH7nq8pk8htqGo/prR5cYEE8sVCPJGAUMWn6lzvWTfI+4VCeQvHiDRODVz4YzH06OVAxhw==",
+  "archive_sha256": "3fe762e0be72842a2fabd168cf738902676742d293bf6bc67f73ba206371e7c0",
+  "status": "notice_text_present"
+}

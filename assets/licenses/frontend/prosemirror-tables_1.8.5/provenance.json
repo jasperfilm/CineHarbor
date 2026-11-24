@@ -1,0 +1,20 @@
+{
+  "name": "prosemirror-tables",
+  "version": "1.8.5",
+  "notices": [
+    {
+      "file": "frontend/prosemirror-tables_1.8.5/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "d1d2046ebbe6362f9ad8fd4d62e9074f2553f289c0e1de895a650f10ba5f4239"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/ProseMirror/prosemirror-tables.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/prosemirror-tables/-/prosemirror-tables-1.8.5.tgz",
+  "integrity": "sha512-V/0cDCsHKHe/tfWkeCmthNUcEp1IVO3p6vwN8XtwE9PZQLAZJigbw3QoraAdfJPir4NKJtNvOB8oYGKRl+t0Dw==",
+  "archive_sha256": "589a633cd06d12c0ab2a210846ea208d3be9dd37f5b068be19f437733f22089b",
+  "status": "notice_text_present"
+}

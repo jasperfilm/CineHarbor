@@ -4,8 +4,12 @@ from pathlib import Path
 from urllib.parse import unquote
 import base64, copy, hashlib, json, mimetypes, os, re, secrets, shutil, subprocess, sys, threading, time, uuid
 
-VERSION = '0.5.0'
 ROOT = Path(os.environ.get('JASPER_WORKSTATION_ROOT', Path(__file__).resolve().parent))
+# Use built-in MIME tables: an App Sandbox must not read host Apache configuration.
+mimetypes.knownfiles = []
+mimetypes.init(files=[])
+PRODUCT = json.loads((ROOT/'assets/branding/product.json').read_text()) if (ROOT/'assets/branding/product.json').is_file() else {'version':'1.0.0','display_name':'GC Labs'}
+VERSION = PRODUCT['version']
 DATA = Path(os.environ.get('GC_LABS_DATA') or os.environ.get('JASPER_WORKSTATION_DATA') or (ROOT / 'data'))
 WEB = ROOT / 'web'
 ASSETS = DATA / 'assets'
@@ -126,7 +130,7 @@ def seed():
         return
     save({
         'schema_version': 2,
-        'project': {'id': uuid.uuid4().hex, 'name': '新项目', 'ratio': '9:16', 'description': '', 'status': 'active'},
+        'project': {'id': uuid.uuid4().hex, 'name': 'New Project', 'ratio': '9:16', 'description': '', 'status': 'active'},
         'assets': [],
         'shots': [],
         'workflows': [],
@@ -206,14 +210,16 @@ def _operation(action, body):
     guarded()
     if action == 'start':
         gpu = body.get('gpu', 'G4')
-        minutes = int(body.get('max_minutes', 240))
-        if gpu != 'G4' or not 5 <= minutes <= 1440:
-            raise ValueError('生产配置锁定G4；提醒须为5–1440分钟，不自动降级')
         if (DATA / 'lease.json').exists():
             raise ValueError('已有开机记录。先核对并处理它，不重复申请。')
         current = refresh()
         if current['active'] != 0 or current.get('runtime_state') == 'unknown':
             raise ValueError('已有运行时或状态未确认，禁止重复开机。')
+        # Read saved settings only when needed, after ownership checks. dict.get
+        # evaluates its default eagerly even when the caller supplied minutes.
+        minutes = int(body['max_minutes'] if 'max_minutes' in body else load().get('policy', {}).get('max_minutes', 240))
+        if gpu != 'G4' or not 5 <= minutes <= 1440:
+            raise ValueError('生产配置锁定G4；提醒须为5–1440分钟，不自动降级')
         lease = {'session': SESSION, 'started': time.time(), 'start_balance': current.get('balance'), 'reminder_at': time.time() + minutes * 60, 'backup_pending': False, 'state': 'allocating'}
         (DATA / 'lease.json').write_text(json.dumps(lease))
         try:
@@ -283,10 +289,15 @@ def export_shot(shot, d):
         if ref:
             source = Path(ref.get('path') or ASSETS / ref['file'])
             ref_payload = {'suffix': source.suffix, 'base64': base64.b64encode(source.read_bytes()).decode()}
-        config = {k: shot.get(k) for k in ('title', 'prompt', 'negative_prompt', 'duration', 'resolution', 'model', 'seed', 'reference', 'workflow')}
+        end_ref = next((a for a in d['assets'] if a['id'] == shot.get('end_reference') and a['kind'] == 'image'), None) if shot.get('end_reference') else None
+        end_ref_payload = None
+        if end_ref:
+            esource = Path(end_ref.get('path') or ASSETS / end_ref['file'])
+            end_ref_payload = {'suffix': esource.suffix, 'base64': base64.b64encode(esource.read_bytes()).decode()}
+        config = {k: shot.get(k) for k in ('title', 'prompt', 'negative_prompt', 'duration', 'resolution', 'model', 'seed', 'reference', 'end_reference', 'workflow')}
         config['ratio'] = d['project']['ratio']
         config['recipe'] = recipe_item
-        payload = {'action': 'generate', 'job': uuid.uuid4().hex, 'config': config, 'reference': ref_payload, 'custom_nodes': recipe_item.get('custom_nodes', []), 'require_h3': False}
+        payload = {'action': 'generate', 'job': uuid.uuid4().hex, 'config': config, 'reference': ref_payload, 'end_reference': end_ref_payload, 'custom_nodes': recipe_item.get('custom_nodes', []), 'require_h3': False}
         lib_src = (ROOT / 'workflow_library.py').read_text()
         common = (ROOT / 'runtime/managed_runtime.py').read_text().split("kind=CONTROL['action'];event")[0]
 
@@ -310,9 +321,11 @@ def export_shot(shot, d):
     if not ref:
         raise ValueError('请先选择一张参考图。')
     source = Path(ref.get('path') or ASSETS / ref['file'])
-    config = {k: shot[k] for k in ('title', 'prompt', 'duration', 'resolution', 'model', 'seed')}
+    end_ref = next((a for a in d['assets'] if a['id'] == shot.get('end_reference') and a['kind'] == 'image'), None) if shot.get('end_reference') else None
+    end_payload = {'suffix': Path(end_ref.get('path') or ASSETS / end_ref['file']).suffix, 'base64': base64.b64encode(Path(end_ref.get('path') or ASSETS / end_ref['file']).read_bytes()).decode()} if end_ref else None
+    config = {k: shot.get(k) for k in ('title', 'prompt', 'duration', 'resolution', 'model', 'seed', 'end_reference')}
     config['ratio'] = d['project']['ratio']
-    payload = {'action': 'restore', 'job': uuid.uuid4().hex, 'config': config, 'reference': {'suffix': source.suffix, 'base64': base64.b64encode(source.read_bytes()).decode()}}
+    payload = {'action': 'restore', 'job': uuid.uuid4().hex, 'config': config, 'reference': {'suffix': source.suffix, 'base64': base64.b64encode(source.read_bytes()).decode()}, 'end_reference': end_payload}
     common = (ROOT / 'runtime/managed_runtime.py').read_text().split("kind=CONTROL['action'];event")[0]
 
     def cell(code):
@@ -329,6 +342,37 @@ def export_shot(shot, d):
             cell('print(generate())')
         ]
     }
+
+
+def record_local_film(project_id, result):
+    """Register a rendered film in its originating project without clobbering live jobs."""
+    source = (DATA / 'exports' / Path(result['file']).name).resolve()
+    if not source.is_file() or not source.is_relative_to((DATA / 'exports').resolve()):
+        raise ValueError('Exported film was not found')
+    with source.open('rb') as stream:
+        digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+    with LOCK:
+        workspace = load()
+        active = workspace['project']['id'] == project_id
+        target = DATA / 'projects' / (project_id + '.json')
+        if not active:
+            if not re.fullmatch(r'[a-zA-Z0-9_-]+', project_id) or not target.is_file():
+                raise ValueError('The source project is unavailable; the exported file is preserved')
+            workspace = json.loads(target.read_text())
+        existing = next((a for a in workspace.get('assets', []) if a.get('path') == str(source)), None)
+        if existing is None:
+            existing = {'id': uuid.uuid4().hex, 'name': source.name, 'file': source.name,
+                        'path': str(source), 'kind': 'video', 'is_local_export': True,
+                        'sha256': digest, 'created': now()}
+            workspace.setdefault('assets', []).append(existing)
+        workspace['project']['latest_export_asset'] = existing['id']
+        if active:
+            save(workspace)
+        else:
+            temporary = target.with_suffix('.tmp')
+            temporary.write_text(json.dumps(workspace, ensure_ascii=False, indent=2))
+            temporary.replace(target)
+    return existing['id']
 
 
 def projects():
@@ -383,6 +427,18 @@ def capabilities():
             'mobile_readonly_monitor',
             'multi_take_gallery',
             'character_scene_elements',
+            'dual_frame_lock',
+            'native_joint_av',
+            'offline_demo_project',
+            'character_keyframe_derivation',
+            'script_to_storyboard',
+            'character_turnaround_3view',
+            'nine_grid_storyboard_slicer',
+            'camera_rig_presets',
+            'voice_timbre_lock',
+            'qc_filmstrip',
+            'subtitle_burn_and_ducking',
+            'srt_and_storyboard_sheet_export',
         ]
     }
 
@@ -406,19 +462,74 @@ def inspection():
 
 def local_backup():
     import zipfile
+    from timeline_export import resolve_asset_file
+    # Freeze the active project and bundle external references too. Never change
+    # the live workspace merely to make a portable copy.
+    workspace = json.loads(json.dumps(load()))
+    # A portable project is not an account or machine-state backup. Keep only
+    # reproducible generation history, never old operations or unrelated projects.
+    workspace['policy'] = {key: value for key, value in workspace.get('policy', {}).items()
+                           if key in ('gpu', 'max_minutes', 'max_cu_budget', 'auto_release')}
+    job_fields = {'id', 'shot', 'title', 'model', 'config', 'shot_snapshot', 'state',
+                  'created', 'updated', 'finished', 'results', 'bind_element_id',
+                  'bind_slot', 'is_nine_grid', 'is_turnaround'}
+    for field in ('jobs', 'historical_jobs'):
+        workspace[field] = [{key: value for key, value in job.items() if key in job_fields}
+                            for job in workspace.get(field, []) if isinstance(job, dict)]
+    secret_fields = {'api_key', 'apikey', 'access_token', 'refresh_token', 'id_token',
+                     'password', 'authorization', 'cookie', 'client_secret', 'private_key'}
+    def omit_secrets(value):
+        if isinstance(value, dict):
+            return {key: omit_secrets(item) for key, item in value.items()
+                    if str(key).lower() not in secret_fields}
+        if isinstance(value, list):
+            return [omit_secrets(item) for item in value]
+        return value
+    workspace = omit_secrets(workspace)
+    final_file = workspace.get('project', {}).get('final_file')
+    if final_file:
+        final_source = Path(final_file)
+        if not final_source.is_file():
+            raise ValueError('成片文件不存在，无法生成完整备份')
+        final_asset = next((a for a in workspace.get('assets', []) if resolve_asset_file(sys.modules[__name__], a).resolve() == final_source.resolve()), None)
+        if final_asset is None:
+            final_asset = {'id': uuid.uuid4().hex, 'name': final_source.name, 'kind': 'video', 'path': str(final_source), 'created': now()}
+            workspace.setdefault('assets', []).append(final_asset)
+        workspace['portable_final_asset_id'] = final_asset['id']
+        workspace['project'].pop('final_file', None)
+    media = {}
+    for asset in workspace.get('assets', []):
+        source = resolve_asset_file(sys.modules[__name__], asset)
+        name = asset.get('file', '')
+        if asset.get('path') or not name or Path(name).name != name:
+            name = hashlib.sha256(str(asset['id']).encode()).hexdigest()[:32] + source.suffix.lower()
+        asset['file'] = name
+        asset.pop('path', None)
+        from comfy_project_store import digest
+        asset['sha256'] = digest(source)
+        media[name] = source
     ident = time.strftime('%Y%m%d_%H%M%S') + '_' + uuid.uuid4().hex[:6]
     dest = DATA / 'exports'
     dest.mkdir(exist_ok=True)
-    file = dest / ('GC_Labs_Workspace_' + ident + '.zip')
-    with zipfile.ZipFile(file, 'w', zipfile.ZIP_DEFLATED) as z:
-        z.writestr('workspace.json', json.dumps(load(), ensure_ascii=False, indent=2))
-        for folder in ['projects', 'operations']:
-            for p in (DATA / folder).glob('*.json') if (DATA / folder).exists() else []:
-                z.write(p, str(p.relative_to(DATA)))
-        for p in ASSETS.glob('*'):
-            if p.is_file():
-                z.write(p, 'assets/' + p.name)
-        z.writestr('README.txt', '工作区记录和导入素材备份。外部引用素材保留原路径；模型权重不在本机备份中。没有账号凭证。')
+    file = dest / ('CineHarbor_Project_' + ident + '.zip')
+    pending = file.with_suffix('.partial')
+    try:
+      with zipfile.ZipFile(pending, 'w', zipfile.ZIP_DEFLATED) as z:
+        z.writestr('workspace.json', json.dumps(workspace, ensure_ascii=False, indent=2))
+        for name, p in media.items():
+            z.write(p, 'assets/' + name)
+        z.writestr('README.txt', 'Active project and its media, including external references. Models and cloud ComfyUI snapshots are separate. Application login files are excluded. Remove secrets manually entered in custom workflows before sharing.')
+      with zipfile.ZipFile(pending) as z:
+        for asset in workspace.get('assets', []):
+            h = hashlib.sha256()
+            with z.open('assets/' + asset['file']) as src:
+                for block in iter(lambda: src.read(1024 * 1024), b''):
+                    h.update(block)
+            if h.hexdigest() != asset['sha256']:
+                raise ValueError('素材在备份期间发生变化，请停止编辑后重试')
+      pending.replace(file)
+    finally:
+      pending.unlink(missing_ok=True)
     return {'file': file.name, 'url': '/exports/' + file.name, 'bytes': file.stat().st_size}
 
 
@@ -440,7 +551,7 @@ def _chain_shot_frame(d, body):
     out_file = ident + '.png'
     out_path = ASSETS / out_file
     frame_info = extract_video_frame(ROOT, video_path, out_path, position=position)
-    pos_label = '首帧' if position == 'first' else '尾帧' if position == 'last' else f'{position}s帧'
+    pos_label = 'first-frame' if position == 'first' else 'last-frame' if position == 'last' else f'frame-{position}s'
     base_title = src_shot['title'] if src_shot else src_asset['name']
     new_asset = {
         'id': ident,
@@ -460,7 +571,7 @@ def _chain_shot_frame(d, body):
         sy = src_shot.get('y', 80) if src_shot else 80
         new_shot = {
             'id': uuid.uuid4().hex,
-            'title': f'{base_title} · 续接镜头',
+            'title': f'{base_title} · continuation',
             'prompt': '',
             'duration': src_shot.get('duration', 5) if src_shot else 5,
             'resolution': src_shot.get('resolution', '1080P') if src_shot else '1080P',
@@ -485,7 +596,7 @@ def _chain_shot_frame(d, body):
         else:
             new_shot = {
                 'id': uuid.uuid4().hex,
-                'title': f'{base_title} · 续接镜头',
+                'title': f'{base_title} · continuation',
                 'prompt': '',
                 'duration': src_shot.get('duration', 5),
                 'resolution': src_shot.get('resolution', '1080P'),
@@ -533,6 +644,9 @@ class Handler(BaseHTTPRequestHandler):
         path = self.path.split('?')[0]
         if path == '/api/capabilities':
             return self.reply(capabilities())
+        if path == '/api/camera-presets':
+            from drama_studio import CAMERA_PRESETS
+            return self.reply(CAMERA_PRESETS)
         if path == '/api/model-presets':
             from model_presets import list_presets
             return self.reply(list_presets())
@@ -554,7 +668,12 @@ class Handler(BaseHTTPRequestHandler):
                 try:
                     fp = resolve_asset_file(sys.modules[__name__], a)
                     meta = probe_media(ROOT, fp)
-                    video_shots.append({'shot_id': s['id'], 'title': s['title'], 'asset_id': a['id'], 'file': a['file'], 'duration': round(float(meta['duration']), 3), 'width': meta['width'], 'height': meta['height'], 'fps': meta['fps'], 'has_audio': meta['has_audio']})
+                    video_shots.append({
+                        'shot_id': s['id'], 'title': s['title'], 'asset_id': a['id'], 'file': a['file'],
+                        'duration': round(float(meta['duration']), 3), 'width': meta['width'], 'height': meta['height'],
+                        'fps': meta['fps'], 'has_audio': meta['has_audio'],
+                        'dialogue': s.get('dialogue', ''), 'subtitle_en': s.get('subtitle_en', '')
+                    })
                 except Exception:
                     continue
             audio_assets = []
@@ -567,7 +686,7 @@ class Handler(BaseHTTPRequestHandler):
                     audio_assets.append({'asset_id': a['id'], 'name': a['name'], 'file': a['file'], 'duration': round(float(meta['duration']), 3)})
                 except Exception:
                     audio_assets.append({'asset_id': a['id'], 'name': a['name'], 'file': a['file'], 'duration': 0.0})
-            return self.reply({'shots': video_shots, 'audios': audio_assets, 'final_file': bool(ws['project'].get('final_file') and Path(ws['project']['final_file']).is_file())})
+            return self.reply({'project_id': ws['project']['id'], 'settings': ws.get('assembly'), 'shots': video_shots, 'audios': audio_assets, 'final_file': bool(ws['project'].get('final_file') and Path(ws['project']['final_file']).is_file())})
         if path == '/api/project/final-media':
             ws = load()
             ff = ws.get('project', {}).get('final_file')
@@ -631,7 +750,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self.reply(export_shot(shot, d)) if shot else self.reply({'error': '任务不存在'}, 404)
             except ValueError as e:
                 return self.reply({'error': str(e)}, 400)
-        if path.startswith('/assets/'):
+        if path.startswith('/licenses/'):
+            from license_resources import resolve_license
+            f = resolve_license(ROOT, unquote(path[len('/licenses/'):]))
+            if f is None:
+                return self.reply({'error': 'not found'}, 404)
+        elif path.startswith('/assets/'):
             name = unquote(Path(path).name)
             ws = load()
             asset = next((a for a in ws['assets'] if a['file'] == name), None)
@@ -718,17 +842,75 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply({'error': '需要本机页面授权'}, 403)
         try:
             length = int(self.headers.get('Content-Length', 0))
+            if self.path == '/api/local-restore-file':
+                if OP_LOCK.locked() or any(x['state'] in ('queued', 'running') for x in CONSOLE.all()):
+                    raise ValueError('请等当前操作结束后导入项目')
+                if not 0 < length <= 100 * 1024 ** 3:
+                    raise ValueError('Invalid project backup size')
+                cache = DATA / 'cache'
+                cache.mkdir(exist_ok=True)
+                archive = cache / ('restore-' + uuid.uuid4().hex + '.zip')
+                try:
+                    with archive.open('xb') as out:
+                        remaining = length
+                        while remaining:
+                            block = self.rfile.read(min(1024 ** 2, remaining))
+                            if not block:
+                                raise ValueError('Project backup upload was interrupted')
+                            out.write(block)
+                            remaining -= len(block)
+                    from workspace_backup import import_project_file
+                    return self.reply(import_project_file(sys.modules[__name__], archive))
+                finally:
+                    archive.unlink(missing_ok=True)
             if length > 140_000_000:
                 raise ValueError('素材请小于100MB')
             b = json.loads(self.rfile.read(length))
             d = load()
             path = self.path
+            if path == '/api/model-terms':
+                from model_terms import describe_config
+                model = b.get('model')
+                name = next((item['name'] for item in MODELS if item['id'] == model), 'ComfyUI workflow')
+                recipe = next((w for w in d.get('workflows', []) if w.get('id') == b.get('workflow')), None)
+                return self.reply(describe_config({'model': model, 'recipe': recipe}, name=name))
+            if path == '/api/storyboard/handoff':
+                from storyboard_handoff import prepare, freeze_assets
+                from runtime.local_bridge import status as bridge_status
+                if any(o['state'] in ('queued', 'running') for o in CONSOLE.all()):
+                    raise ValueError('Wait for current operations before handing off the storyboard.')
+                guarded()
+                current = refresh()
+                bridge = bridge_status(sys.modules[__name__])
+                if current.get('runtime_state') != 'owned' or not bridge.get('ready') or bridge.get('endpoint') != current.get('managed_session', {}).get('endpoint'):
+                    raise ValueError('Connect the owned cloud ComfyUI canvas first. No GPU was allocated.')
+                if b.get('cloud_data_consent') is not True:
+                    raise ValueError('Confirm sending the selected original media, prompts and project context to your runtime.')
+                payload = prepare(d, ASSETS, b.get('shots'), include_assets=True, asset_ids=b.get('assets'))
+                raw = json.dumps(payload, ensure_ascii=False).encode()
+                if len(raw) > 30 * 1024 ** 2:
+                    raise ValueError('Select fewer shots: the handoff metadata exceeds 30 MB.')
+                directory = DATA / 'cache' / 'comfy-handoffs'
+                directory.mkdir(parents=True, exist_ok=True)
+                token = secrets.token_hex(16)
+                record = directory / (token + '.json')
+                try:
+                    freeze_assets(d, ASSETS, payload, directory/token)
+                except Exception:
+                    shutil.rmtree(directory/token, ignore_errors=True)
+                    raise
+                record.write_bytes(raw)
+                record.chmod(0o600)
+                return self.reply({'url': bridge['url'] + '?cineharbor_handoff=' + token, 'shots': len(payload['shots']), 'assets':len(payload['assets']), 'bytes':sum(a['bytes'] for a in payload['assets']), 'queued': False})
             if path == '/api/runtime/interrupt':
                 return self.reply(CONSOLE.interrupt_active())
             if path == '/api/operations/cancel-queued':
                 return self.reply(CONSOLE.cancel_queued(b.get('id')))
             if path.startswith('/api/runtime/') or path == '/api/operations':
-                return self.reply(CONSOLE.start(path.rsplit('/', 1)[1] if path.startswith('/api/runtime/') else b['action'], b), 202)
+                action = path.rsplit('/', 1)[1] if path.startswith('/api/runtime/') else b['action']
+                if action in ('generate', 'generate_batch') and not (b.get('cloud_data_consent') is True and b.get('cloud_data_notice_version') == '2026-11-21'):
+                    raise ValueError('请先阅读云端数据说明并明确同意本次发送到 Google Colab；未提交生成任务。')
+                return self.reply(CONSOLE.start(action, b), 202)
             if path == '/api/local-backup':
                 return self.reply(local_backup())
             if path == '/api/local-restore':
@@ -798,6 +980,7 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError('候选样片素材不存在。')
                 shot['versions'].insert(0, {**{k: v for k, v in shot.items() if k != 'versions'}, 'saved_at': now()})
                 shot['output'] = aid
+                shot.pop('qc_strip_file', None)
                 save(d)
                 return self.reply({'ok': True, 'output': aid})
             if path in ('/api/element', '/api/element/delete'):
@@ -824,20 +1007,142 @@ class Handler(BaseHTTPRequestHandler):
                 asset_ref = b.get('asset_id') or None
                 if asset_ref and not any(a['id'] == asset_ref and a['kind'] == 'image' for a in d['assets']):
                     raise ValueError('关联参考图不存在或不是图像。')
+                voice_ref = b.get('voice_asset_id') or None
+                if voice_ref and not any(a['id'] == voice_ref and a['kind'] == 'audio' for a in d['assets']):
+                    raise ValueError('关联音色样本不存在或不是音频。')
+                voice_prof = str(b.get('voice_profile', '')).strip()[:240]
                 existing = next((e for e in elems if e['id'] == b.get('id')), None)
                 if existing:
                     existing.update(tag=tag, kind=ekind, prompt_snippet=snippet, asset_id=asset_ref)
+                    if 'voice_asset_id' in b:
+                        existing['voice_asset_id'] = voice_ref
+                    if 'voice_profile' in b:
+                        existing['voice_profile'] = voice_prof
                     item = existing
                 else:
-                    item = {'id': uuid.uuid4().hex, 'tag': tag, 'kind': ekind, 'prompt_snippet': snippet, 'asset_id': asset_ref, 'created': now()}
+                    item = {'id': uuid.uuid4().hex, 'tag': tag, 'kind': ekind, 'prompt_snippet': snippet, 'asset_id': asset_ref, 'voice_asset_id': voice_ref, 'voice_profile': voice_prof, 'created': now()}
                     elems.append(item)
                 save(d)
                 return self.reply(item)
+            if path == '/api/script/breakdown':
+                from drama_studio import breakdown_script_to_storyboard
+                return self.reply(breakdown_script_to_storyboard(sys.modules[__name__], d, b))
+            if path == '/api/element/turnaround':
+                from drama_studio import prepare_character_turnaround_job
+                return self.reply(prepare_character_turnaround_job(sys.modules[__name__], d, b))
+            if path == '/api/drama/nine-grid':
+                from drama_studio import prepare_nine_grid_storyboard_job
+                return self.reply(prepare_nine_grid_storyboard_job(sys.modules[__name__], d, b))
+            if path == '/api/drama/slice-grid':
+                from drama_studio import slice_grid_to_shots
+                return self.reply(slice_grid_to_shots(sys.modules[__name__], d, b))
+            if path == '/api/element/extract-voice':
+                from drama_studio import extract_voice_sample_to_element
+                return self.reply(extract_voice_sample_to_element(sys.modules[__name__], d, b))
+            if path == '/api/shot/qc-filmstrip':
+                from drama_studio import generate_shot_qc_filmstrip
+                return self.reply(generate_shot_qc_filmstrip(sys.modules[__name__], d, b))
+            if path == '/api/assembly/storyboard-sheet':
+                from drama_studio import export_storyboard_sheet_png
+                return self.reply(export_storyboard_sheet_png(sys.modules[__name__], d, b))
+            if path == '/api/assembly/srt':
+                from timeline_export import export_srt_subtitles
+                return self.reply(export_srt_subtitles(sys.modules[__name__], d, b))
+            if path == '/api/shot/derive-keyframe':
+                from workflow_library import recipe
+                if d['project'].get('status') == 'completed':
+                    raise ValueError('已结项项目只读，请新建项目。')
+                shot = next((s for s in d['shots'] if s['id'] == b.get('shot_id')), None)
+                if not shot:
+                    raise ValueError('请先选择要派生锁脸首帧的分镜。')
+                bound_elems = [e for e in d.get('elements', []) if e['id'] in (shot.get('elements') or [])]
+                anchor_asset = b.get('anchor_asset') or next((e['asset_id'] for e in bound_elems if e.get('asset_id')), None) or shot.get('reference')
+                if not anchor_asset or not any(a['id'] == anchor_asset and a['kind'] == 'image' for a in d['assets']):
+                    raise ValueError('请先为关联的 @角色/道具卡 绑定定妆参考图，或在分镜中选择首帧参考图。')
+                target_slot = 'end_reference' if b.get('slot') == 'end_reference' else 'reference'
+                angle_prompt = str(b.get('edit_prompt') or shot.get('prompt') or '').strip()
+                if not angle_prompt:
+                    raise ValueError('请填写本镜的景别、机位或动作描述。')
+                wf_name = 'Qwen Image Edit 2511 · 完整 BF16 锁脸分镜配方'
+                wf_edit = next((w for w in d.get('workflows', []) if w.get('name') == wf_name), None)
+                if not wf_edit:
+                    from model_presets import get_preset
+                    preset = get_preset(preset_id='qwen_image_edit_2511_bf16')
+                    def _n(kind, **inputs):
+                        return {'class_type': kind, 'inputs': inputs}
+                    edit_graph = {
+                        '1': _n('UNETLoader', unet_name='qwen_image_edit_2511_bf16.safetensors', weight_dtype='default'),
+                        '2': _n('CLIPLoader', clip_name='qwen_2.5_vl_7b.safetensors', type='qwen_image', device='default'),
+                        '3': _n('VAELoader', vae_name='qwen_image_vae.safetensors'),
+                        '4': _n('ModelSamplingAuraFlow', model=['1', 0], shift=3.1),
+                        '5': _n('CFGNorm', model=['4', 0], strength=1.0),
+                        '6': _n('LoraLoaderModelOnly', model=['5', 0], lora_name='Qwen-Image-Edit-2511-Lightning-4steps-V1.0-fp32.safetensors', strength_model=1.0),
+                        '7': _n('LoadImage', image='anchor.png'),
+                        '8': _n('TextEncodeQwenImageEditPlus', clip=['2', 0], vae=['3', 0], image1=['7', 0], prompt=''),
+                        '9': _n('TextEncodeQwenImageEditPlus', clip=['2', 0], vae=['3', 0], image1=['7', 0], prompt=''),
+                        '10': _n('FluxKontextMultiReferenceLatentMethod', conditioning=['8', 0], reference_latents_method='index_timestep_zero'),
+                        '11': _n('FluxKontextMultiReferenceLatentMethod', conditioning=['9', 0], reference_latents_method='index_timestep_zero'),
+                        '12': _n('EmptySD3LatentImage', width=1920, height=1088, batch_size=1),
+                        '13': _n('KSampler', model=['6', 0], positive=['10', 0], negative=['11', 0], latent_image=['12', 0], seed=1024, steps=4, cfg=1.0, sampler_name='euler', scheduler='simple', denoise=1.0),
+                        '14': _n('VAEDecode', samples=['13', 0], vae=['3', 0]),
+                        '15': _n('SaveImage', images=['14', 0], filename_prefix='GC_Labs_QwenEdit'),
+                    }
+                    wf_edit = recipe({
+                        'name': wf_name,
+                        'kind': 'image',
+                        'graph': edit_graph,
+                        'bindings': {
+                            'reference': [{'node': '7', 'input': 'image'}],
+                            'prompt': [{'node': '8', 'input': 'prompt'}],
+                            'negative_prompt': [{'node': '9', 'input': 'prompt'}],
+                            'width': [{'node': '12', 'input': 'width'}],
+                            'height': [{'node': '12', 'input': 'height'}],
+                            'seed': [{'node': '13', 'input': 'seed'}],
+                        },
+                        'model_files': preset['model_files'] if preset else [],
+                    })
+                    d.setdefault('workflows', []).append(wf_edit)
+                char_hint = ' '.join(f"Keep exact character/prop identity from Picture 1 ({e['tag']}: {e['prompt_snippet']})." for e in bound_elems if e.get('prompt_snippet'))
+                full_edit_prompt = (char_hint + ' ' + angle_prompt).strip()
+                job = {
+                    'id': uuid.uuid4().hex,
+                    'shot': shot['id'],
+                    'bind_slot': target_slot,
+                    'title': f"{shot['title']} · {'锁脸尾帧派生' if target_slot == 'end_reference' else '锁脸首帧派生'}",
+                    'state': 'prepared',
+                    'created': now(),
+                    'config': {
+                        'title': shot['title'],
+                        'prompt': full_edit_prompt,
+                        'negative_prompt': '',
+                        'duration': 5,
+                        'resolution': shot.get('resolution', '1080P'),
+                        'model': 'workflow',
+                        'workflow': wf_edit['id'],
+                        'seed': int(b.get('seed') or shot.get('seed') or 1024),
+                        'reference': anchor_asset,
+                        'ratio': d['project']['ratio'],
+                        'recipe': {k: copy.deepcopy(wf_edit.get(k)) for k in ('id', 'name', 'kind', 'graph', 'bindings', 'model_files', 'custom_nodes', 'timing', 'revision')},
+                    },
+                    'message': '已创建 Qwen Image Edit 2511 BF16 锁脸分镜图任务；生成完成后将自动回填本镜参考图。'
+                }
+                d['jobs'].insert(0, job)
+                save(d)
+                return self.reply({'ok': True, 'job': job, 'workflow_id': wf_edit['id']})
             if path == '/api/shot/chain-frame':
                 return self.reply(_chain_shot_frame(d, b))
             if path == '/api/assembly/render':
                 from timeline_export import render_rough_cut_mp4
-                return self.reply(render_rough_cut_mp4(sys.modules[__name__], d, b))
+                result = render_rough_cut_mp4(sys.modules[__name__], d, b)
+                result['asset_id'] = record_local_film(d['project']['id'], result)
+                return self.reply(result)
+            if path == '/api/assembly/settings':
+                from timeline_export import assembly_settings
+                if d['project'].get('status') == 'completed':
+                    raise ValueError('已结项项目只读。')
+                d['assembly'] = assembly_settings(d, b)
+                save(d)
+                return self.reply({'ok': True, 'settings': d['assembly']})
             if path == '/api/assembly/fcpxml':
                 from timeline_export import export_fcpxml
                 return self.reply(export_fcpxml(sys.modules[__name__], d, b))
@@ -881,14 +1186,34 @@ class Handler(BaseHTTPRequestHandler):
                     items.append(item)
                 save(d)
                 return self.reply(item)
+            if path == '/api/job/archive':
+                if d['project'].get('status') == 'completed':
+                    raise ValueError('Completed projects are read-only.')
+                job = next((j for j in d['jobs'] if j.get('id') == b.get('id')), None)
+                if not job or job.get('state') != 'prepared' or job.get('attempted'):
+                    raise ValueError('Only unsubmitted tasks can be discarded.')
+                if any(op.get('job_id') == job['id'] and op.get('state') in ('queued', 'running') for op in CONSOLE.all()):
+                    raise ValueError('Remove this task from the waiting queue first.')
+                d.setdefault('historical_jobs', []).append(dict(job, state='cancelled'))
+                d['jobs'].remove(job)
+                save(d)
+                return self.reply({'ok': True})
             if path == '/api/shot/delete':
                 if d['project'].get('status') == 'completed':
                     raise ValueError('已结项项目只读。')
                 target = next((s for s in d['shots'] if s['id'] == b.get('id')), None)
                 if not target:
                     raise ValueError('镜头不存在。')
-                if any(j.get('shot') == target['id'] and j.get('state') in ('connecting', 'running') for j in d['jobs']):
+                related = [j for j in d['jobs'] if j.get('shot') == target['id']]
+                related_ids = {j['id'] for j in related}
+                if any(j.get('state') in ('queued', 'connecting', 'running') for j in related) or any(
+                    op.get('job_id') in related_ids and op.get('state') in ('queued', 'running') for op in CONSOLE.all()
+                ):
                     raise ValueError('镜头任务运行中，不能移除。')
+                for job in related:
+                    if job.get('state') == 'prepared' and not job.get('attempted'):
+                        d.setdefault('historical_jobs', []).append(dict(job, state='cancelled'))
+                        d['jobs'].remove(job)
                 d.setdefault('shot_trash', []).append(target)
                 d['shots'].remove(target)
                 save(d)
@@ -955,7 +1280,7 @@ class Handler(BaseHTTPRequestHandler):
             if path == '/api/shot':
                 shot = next(s for s in d['shots'] if s['id'] == b['id'])
                 shot['versions'].insert(0, {**{k: v for k, v in shot.items() if k != 'versions'}, 'saved_at': now()})
-                for k in ('title', 'prompt', 'negative_prompt', 'duration', 'resolution', 'model', 'seed', 'reference', 'x', 'y', 'workflow'):
+                for k in ('title', 'prompt', 'negative_prompt', 'dialogue', 'subtitle_en', 'camera_move', 'shot_scale', 'duration', 'resolution', 'model', 'seed', 'reference', 'end_reference', 'x', 'y', 'workflow'):
                     if k in b:
                         shot[k] = b[k]
                 if 'elements' in b and isinstance(b['elements'], list):
@@ -970,7 +1295,7 @@ class Handler(BaseHTTPRequestHandler):
                 if shot['model'] not in ({m['id'] for m in d['models']} | {'workflow'}):
                     raise ValueError('未知模型')
             elif path == '/api/shot/new':
-                d['shots'].append({'id': uuid.uuid4().hex, 'title': '新镜头', 'prompt': '', 'duration': 5, 'resolution': '1080P', 'model': 'h3', 'seed': 2711, 'reference': None, 'output': None, 'versions': [], 'x': 220 + len(d['shots']) * 340, 'y': 80})
+                d['shots'].append({'id': uuid.uuid4().hex, 'title': 'New shot', 'prompt': '', 'duration': 5, 'resolution': '1080P', 'model': 'h3', 'seed': 2711, 'reference': None, 'end_reference': None, 'output': None, 'versions': [], 'x': 220 + len(d['shots']) * 340, 'y': 80})
             elif path == '/api/asset':
                 ext = Path(b['name']).suffix.lower()
                 if ext not in ('.png', '.jpg', '.jpeg', '.webp', '.mp4', '.webm', '.wav', '.mp3', '.flac', '.ogg', '.m4a'):
@@ -994,7 +1319,10 @@ class Handler(BaseHTTPRequestHandler):
                 bound_elems = [e for e in d.get('elements', []) if e['id'] in (shot.get('elements') or [])]
                 base_prompt = (shot.get('prompt') or '').strip()
                 elem_snippets = [f"[{e['tag']}: {e['prompt_snippet']}]" for e in bound_elems if e.get('prompt_snippet') and e['prompt_snippet'] not in base_prompt]
-                effective_prompt = (' '.join(elem_snippets) + (' ' + base_prompt if base_prompt else '')).strip()
+                voice_snippets = [f"[{e['tag']} vocal timbre: {e['voice_profile']}]" for e in bound_elems if e.get('voice_profile') and e['voice_profile'] not in base_prompt]
+                dial = (shot.get('dialogue') or '').strip()
+                dial_snippet = f'Synchronized expressive lip-sync speech in the original language of this dialogue: "{dial}".' if dial and dial not in base_prompt else ''
+                effective_prompt = ' '.join(x for x in [' '.join(elem_snippets), ' '.join(voice_snippets), base_prompt, dial_snippet] if x).strip()
                 if not effective_prompt:
                     raise ValueError('请先填写提示词')
                 if len(effective_prompt) > 200000:
@@ -1006,9 +1334,13 @@ class Handler(BaseHTTPRequestHandler):
                 needs_reference = shot.get('model') != 'workflow' or bool(recipe_item.get('bindings', {}).get('reference'))
                 if needs_reference and not any(a['id'] == effective_ref and a['kind'] == 'image' for a in d['assets']):
                     raise ValueError('请先选择参考图（或绑定带参考图的角色/场景资产卡）')
-                shot_snapshot = {k: copy.deepcopy(shot.get(k)) for k in ('title', 'prompt', 'negative_prompt', 'duration', 'resolution', 'model', 'seed', 'reference', 'workflow', 'elements')}
+                effective_end_ref = shot.get('end_reference') or None
+                if effective_end_ref and not any(a['id'] == effective_end_ref and a['kind'] == 'image' for a in d['assets']):
+                    raise ValueError('所选尾帧锁死参考图不存在或不是图像。')
+                shot_snapshot = {k: copy.deepcopy(shot.get(k)) for k in ('title', 'prompt', 'negative_prompt', 'dialogue', 'subtitle_en', 'camera_move', 'shot_scale', 'duration', 'resolution', 'model', 'seed', 'reference', 'end_reference', 'workflow', 'elements')}
                 shot_snapshot['prompt'] = effective_prompt
                 shot_snapshot['reference'] = effective_ref
+                shot_snapshot['end_reference'] = effective_end_ref
                 job = {
                     'id': uuid.uuid4().hex,
                     'shot': shot['id'],
@@ -1042,10 +1374,40 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply({'error': str(e)}, 400)
 
 
+def cleanup_local_helpers():
+    # Quit never releases a VM. Dispose only of this backend's owned local
+    # viewer and monitoring listener, including after a cloud lease expires.
+    from runtime.local_bridge import stop
+    stop(sys.modules[__name__])
+    if MONITOR is not None:
+        MONITOR.stop()
+
+
 if __name__ == '__main__':
     seed()
     migrate()
     from console import Console
     CONSOLE = Console(sys.modules[__name__])
+    try:
+        httpd = ThreadingHTTPServer(('127.0.0.1', PORT), Handler)
+    except OSError:
+        if os.environ.get('GC_LABS_DYNAMIC_PORT') == '1':
+            httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+            PORT = httpd.server_port
+        else:
+            raise
+    port_file = os.environ.get('GC_LABS_PORT_FILE')
+    if port_file:
+        Path(port_file).write_text(json.dumps({'port': PORT, 'version': VERSION}))
     print(f'Local: http://127.0.0.1:{PORT}/studio', flush=True)
-    ThreadingHTTPServer(('127.0.0.1', PORT), Handler).serve_forever()
+    import signal
+    def exit_local_backend(_signal, _frame):
+        raise SystemExit(0)
+    signal.signal(signal.SIGTERM, exit_local_backend)
+    try:
+        httpd.serve_forever()
+    finally:
+        try:
+            cleanup_local_helpers()
+        finally:
+            httpd.server_close()

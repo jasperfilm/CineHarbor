@@ -1,0 +1,20 @@
+{
+  "name": "entities",
+  "version": "4.5.0",
+  "notices": [
+    {
+      "file": "frontend/entities_4.5.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "cb992345949ccd6e8394b2cd6c465f7b897c864f845937dbf64e8997f389e164"
+    }
+  ],
+  "license": "BSD-2-Clause",
+  "source": {
+    "url": "git://github.com/fb55/entities.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/entities/-/entities-4.5.0.tgz",
+  "integrity": "sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==",
+  "archive_sha256": "6b0c60f7351a0b65bb1fc8dbb9299f09e7ecf6d89103d0651bf369e6f463a632",
+  "status": "notice_text_present"
+}

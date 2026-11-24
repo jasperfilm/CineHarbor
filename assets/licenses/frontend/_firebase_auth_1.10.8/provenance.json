@@ -1,0 +1,22 @@
+{
+  "name": "@firebase/auth",
+  "version": "1.10.8",
+  "notices": [
+    {
+      "file": "frontend/_firebase_auth_1.10.8/upstream-LICENSE.txt",
+      "source_url": "https://raw.githubusercontent.com/firebase/firebase-js-sdk/3c759f0c0c5e5e164a51d8b9c89655d54047bed0/LICENSE",
+      "source_commit": "3c759f0c0c5e5e164a51d8b9c89655d54047bed0",
+      "sha256": "065e45b5674f9bf76670496e5472611b3fbd87fbeaf99336725430a9909cb687"
+    }
+  ],
+  "license": "Apache-2.0",
+  "source": {
+    "url": "git+https://github.com/firebase/firebase-js-sdk.git",
+    "type": "git",
+    "directory": "packages/auth"
+  },
+  "tarball": "https://registry.npmjs.org/@firebase/auth/-/auth-1.10.8.tgz",
+  "integrity": "sha512-GpuTz5ap8zumr/ocnPY57ZanX02COsXloY6Y/2LYPAuXYiaJRf6BAGDEdRq1BMjP93kqQnKNuKZUTMZbQ8MNYA==",
+  "archive_sha256": "6ce3f866016cd392b5dd9b812373dbf6e07ad92195881917094d5a66de3269bf",
+  "status": "notice_text_present_repository_root"
+}

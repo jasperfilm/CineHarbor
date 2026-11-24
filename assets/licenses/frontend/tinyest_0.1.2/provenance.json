@@ -1,0 +1,20 @@
+{
+  "name": "tinyest",
+  "version": "0.1.2",
+  "notices": [
+    {
+      "file": "frontend/tinyest_0.1.2/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "abfe140e29a001c90ded00cf8a8f418cf3f35cb6252c148c7dd4406fa07e2337"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/software-mansion/TypeGPU.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/tinyest/-/tinyest-0.1.2.tgz",
+  "integrity": "sha512-aHRmouyowIq1P5jrTF+YK6pGX+WuvFtSCLbqk91yHnU3SWQRIcNIamZLM5XF6lLqB13AWz0PGPXRff2QGDsxIg==",
+  "archive_sha256": "ed62d0019cb396d6a761c65e8a83f2cf8c17ced048a958b183f51d67de6adc3d",
+  "status": "notice_text_present"
+}

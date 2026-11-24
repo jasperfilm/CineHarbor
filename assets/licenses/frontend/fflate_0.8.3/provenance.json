@@ -1,0 +1,20 @@
+{
+  "name": "fflate",
+  "version": "0.8.3",
+  "notices": [
+    {
+      "file": "frontend/fflate_0.8.3/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/101arrowz/fflate.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/fflate/-/fflate-0.8.3.tgz",
+  "integrity": "sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==",
+  "archive_sha256": "38c2cd824402407b43153c782274aec2ea83ea688e4aa0b743c5f2c305857d92",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "posthog-js",
+  "version": "1.402.3",
+  "notices": [
+    {
+      "file": "frontend/posthog-js_1.402.3/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "a4a2a1ca3b22fe608ea29144452418e4a91f11ca44666a8a91cb72ec0a70f6ee"
+    }
+  ],
+  "license": "(Apache-2.0 AND MIT)",
+  "source": {
+    "url": "https://github.com/PostHog/posthog-js",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/posthog-js/-/posthog-js-1.402.3.tgz",
+  "integrity": "sha512-MCn4O9wJc1BGBbb820MlmYifDb6EhFBFhfR1K9294gfgFRcxin+NSlypswVBdt1ZO4XD/P7EPmwApyVX/EYlUw==",
+  "archive_sha256": "f6775bcf3b6c6d2044b50a1503e180ef372e64ef28baf9b8d2a772b186494ac4",
+  "status": "notice_text_present"
+}

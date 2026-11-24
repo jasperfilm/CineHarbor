@@ -1,0 +1,21 @@
+{
+  "name": "linkifyjs",
+  "version": "4.3.3",
+  "notices": [
+    {
+      "file": "frontend/linkifyjs_4.3.3/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "58e6f3677452cca096ce5328ebf7de37a1406bbeeb2f263c1b2ededc8c7d0228"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/nfrasser/linkifyjs.git",
+    "type": "git",
+    "directory": "packages/linkifyjs"
+  },
+  "tarball": "https://registry.npmjs.org/linkifyjs/-/linkifyjs-4.3.3.tgz",
+  "integrity": "sha512-P8aEP5U/D1/IlTY2OeYsErdwh9bGuLE30NcXtKEjgdHcahveQoQwM2yZNsioQHsWFz0P7KKudisbrzCgR0sDHg==",
+  "archive_sha256": "112278d64bbbeae926fbbecb1931cb44ecce1e1332e7737be7ba7fc495f15191",
+  "status": "notice_text_present"
+}

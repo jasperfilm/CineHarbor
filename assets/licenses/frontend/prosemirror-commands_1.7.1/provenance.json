@@ -1,0 +1,20 @@
+{
+  "name": "prosemirror-commands",
+  "version": "1.7.1",
+  "notices": [
+    {
+      "file": "frontend/prosemirror-commands_1.7.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git://github.com/prosemirror/prosemirror-commands.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/prosemirror-commands/-/prosemirror-commands-1.7.1.tgz",
+  "integrity": "sha512-rT7qZnQtx5c0/y/KlYaGvtG411S97UaL6gdp6RIZ23DLHanMYLyfGBV5DtSnZdthQql7W+lEVbpSfwtO8T+L2w==",
+  "archive_sha256": "0364d5f139d69f8ac958a69ff7bf74501fc7ab03ce248d227c9e5410151a9e95",
+  "status": "notice_text_present"
+}

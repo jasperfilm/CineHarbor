@@ -1,0 +1,20 @@
+{
+  "name": "prosemirror-gapcursor",
+  "version": "1.4.1",
+  "notices": [
+    {
+      "file": "frontend/prosemirror-gapcursor_1.4.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git://github.com/prosemirror/prosemirror-gapcursor.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/prosemirror-gapcursor/-/prosemirror-gapcursor-1.4.1.tgz",
+  "integrity": "sha512-pMdYaEnjNMSwl11yjEGtgTmLkR08m/Vl+Jj443167p9eB3HVQKhYCc4gmHVDsLPODfZfjr/MmirsdyZziXbQKw==",
+  "archive_sha256": "961e88b82ce7f434cc781ba644a82810461cf9ba3993834f654384c493998eba",
+  "status": "notice_text_present"
+}

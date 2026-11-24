@@ -164,7 +164,7 @@ class BatchQueueInterruptAndMediaHTTP(unittest.TestCase):
         with urllib.request.urlopen(req, timeout=30) as r:
             return json.load(r)
 
-    def _make_sample_mp4_and_wav(self):
+    def _make_sample_mp4_and_wav(self, fps=12):
         """Create a real valid 1-second MP4 and WAV using native macOS sips + gclabs-media / existing sample."""
         wav_path = self.d / 'tone.wav'
         with wave.open(str(wav_path), 'w') as w:
@@ -174,13 +174,14 @@ class BatchQueueInterruptAndMediaHTTP(unittest.TestCase):
             w.writeframes(b''.join(struct.pack('<h', int(3000 * math.sin(2 * math.pi * 330 * i / 24000))) for i in range(24000)))
 
         # Generate a tiny synthetic MP4 via Swift AVAssetWriter so test has zero external media dependency
-        mp4_path = self.d / 'tiny.mp4'
+        mp4_path = self.d / f'tiny-{fps}.mp4'
         swift_gen = self.d / 'gen_mp4.swift'
         swift_gen.write_text("""
 import Foundation
 import AVFoundation
 import CoreVideo
 let out = URL(fileURLWithPath: CommandLine.arguments[1])
+let fps = Int(CommandLine.arguments[2])!
 let writer = try! AVAssetWriter(outputURL: out, fileType: .mp4)
 let settings: [String: Any] = [AVVideoCodecKey: AVVideoCodecType.h264, AVVideoWidthKey: 320, AVVideoHeightKey: 568]
 let input = AVAssetWriterInput(mediaType: .video, outputSettings: settings)
@@ -192,7 +193,7 @@ let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sour
 writer.add(input)
 writer.startWriting()
 writer.startSession(atSourceTime: .zero)
-for f in 0..<12 {
+for f in 0..<fps {
     while !input.isReadyForMoreMediaData { Thread.sleep(forTimeInterval: 0.005) }
     var pb: CVPixelBuffer?
     CVPixelBufferPoolCreatePixelBuffer(nil, adaptor.pixelBufferPool!, &pb)
@@ -206,7 +207,7 @@ for f in 0..<12 {
         }
     }
     CVPixelBufferUnlockBaseAddress(pb!, [])
-    adaptor.append(pb!, withPresentationTime: CMTime(value: Int64(f), timescale: 12))
+    adaptor.append(pb!, withPresentationTime: CMTime(value: Int64(f), timescale: Int32(fps)))
 }
 input.markAsFinished()
 let sem = DispatchSemaphore(value: 0)
@@ -214,12 +215,20 @@ writer.finishWriting { sem.signal() }
 sem.wait()
 """)
         subprocess.run(['swiftc', '-target', 'arm64-apple-macos13.0', '-framework', 'AVFoundation', '-framework', 'CoreVideo', '-framework', 'CoreMedia', str(swift_gen), '-o', str(self.d / 'gen_mp4')], check=True)
-        subprocess.run([str(self.d / 'gen_mp4'), str(mp4_path)], check=True)
+        subprocess.run([str(self.d / 'gen_mp4'), str(mp4_path), str(fps)], check=True)
         return mp4_path, wav_path
+
+    @unittest.skipUnless(__import__('sys').platform == 'darwin', 'Native AVFoundation test runs on macOS')
+    def test_last_frame_at_24_30_60_fps(self):
+        from timeline_export import extract_video_frame
+        for fps in (24, 30, 60):
+            clip, _ = self._make_sample_mp4_and_wav(fps)
+            frame = extract_video_frame(server.ROOT, clip, self.d / f'last-{fps}.png', 'last')
+            self.assertAlmostEqual(frame['timestamp'], 1 - 1/fps, delta=0.001)
 
     def test_capabilities_and_template_convert_endpoint(self):
         cap = self.api('/api/capabilities')
-        self.assertIn(cap['version'], ('0.4.0', '0.5.0'))
+        self.assertEqual(cap['version'], server.PRODUCT['version'])
         if __import__('sys').platform == 'darwin':
             self.assertTrue(cap['media_engine'])
         self.assertIn('batch_queue', cap['features'])
@@ -254,7 +263,7 @@ sem.wait()
             return {'local_files': [str(out)]}
 
         with patch.object(server, 'identity', return_value='creator@example.com'), patch.object(self.console, 'remote', side_effect=fake_remote):
-            batch_res = self.api('/api/operations', {'action': 'generate_batch', 'jobs': job_ids})
+            batch_res = self.api('/api/operations', {'action': 'generate_batch', 'jobs': job_ids, 'cloud_data_consent': True, 'cloud_data_notice_version': '2026-11-21'})
             self.assertEqual(batch_res['queued_count'], 3)
             time.sleep(0.15)
             # Cancel the 3rd queued job before Shot 1 finishes

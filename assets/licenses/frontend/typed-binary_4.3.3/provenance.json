@@ -1,0 +1,20 @@
+{
+  "name": "typed-binary",
+  "version": "4.3.3",
+  "notices": [
+    {
+      "file": "frontend/typed-binary_4.3.3/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "17fd2977635e3561f3ed368c7bb6829bfdaf5962c4859d799d1592ce53dd0c52"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/iwoplaza/typed-binary.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/typed-binary/-/typed-binary-4.3.3.tgz",
+  "integrity": "sha512-W2hLsSzt3k/tg38gDE4Fn/QiwcoqGuUHBc2cb3mXuH7KcYxe/GM57vzW14s2/bawB4R5knGgGq8Xb57vsaJ4Sg==",
+  "archive_sha256": "8a45edeadbda796ae55ef9fe200a75ac0b9db6871338d52876c0a3e08c899d74",
+  "status": "notice_text_present"
+}

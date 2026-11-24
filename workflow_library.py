@@ -3,7 +3,7 @@ import copy, json, re, uuid
 from pathlib import PurePosixPath
 from urllib.parse import urlparse
 
-BINDINGS = {'prompt', 'negative_prompt', 'seed', 'width', 'height', 'frames', 'duration', 'reference', 'fps'}
+BINDINGS = {'prompt', 'negative_prompt', 'seed', 'width', 'height', 'frames', 'duration', 'reference', 'end_reference', 'fps'}
 ID = re.compile(r'^[A-Za-z0-9_:\-]{1,100}$')
 NODE_DIR_RE = re.compile(r'^[A-Za-z0-9_.\-]{1,80}$')
 SHA40_RE = re.compile(r'^[0-9a-f]{40}$')
@@ -68,12 +68,44 @@ def infer_bindings(graph):
         'seconds': 'duration', 'duration': 'duration',
         'fps': 'fps', 'frame_rate': 'fps'
     }
+    pos_nodes = set()
+    neg_nodes = set()
+    end_img_nodes = set()
+
+    def trace_cond(start_id, bucket):
+        cur = start_id
+        for _ in range(4):
+            if not cur or cur not in graph or cur in bucket or graph[cur].get('class_type') == 'ConditioningZeroOut':
+                break
+            bucket.add(cur)
+            nxt = graph[cur].get('inputs', {}).get('conditioning')
+            cur = nxt[0] if isinstance(nxt, list) and len(nxt) == 2 and isinstance(nxt[0], str) else ''
+
+    for node in graph.values():
+        inp = node.get('inputs', {})
+        pos_link = inp.get('positive') or inp.get('conditioning')
+        if node.get('class_type') in ('KSampler', 'KSamplerAdvanced', 'BasicGuider', 'CFGGuider', 'LTXVDualCFGGuider') and isinstance(pos_link, list) and len(pos_link) == 2 and isinstance(pos_link[0], str):
+            trace_cond(pos_link[0], pos_nodes)
+        neg_link = inp.get('negative')
+        if isinstance(neg_link, list) and len(neg_link) == 2 and isinstance(neg_link[0], str):
+            trace_cond(neg_link[0], neg_nodes)
+        last_link = inp.get('last_frame')
+        if isinstance(last_link, list) and len(last_link) == 2 and isinstance(last_link[0], str):
+            end_img_nodes.add(last_link[0])
+    pure_neg_nodes = neg_nodes - pos_nodes
     for ident, node in graph.items():
         for key, value in node['inputs'].items():
             if isinstance(value, (list, dict)):
                 continue
-            bind = 'reference' if node['class_type'] == 'LoadImage' and key == 'image' else aliases.get(key)
-            if bind == 'prompt' and ('negative' in node.get('_meta', {}).get('title', '').lower() or (isinstance(value, str) and any(w in value for w in ('低质量', '最差质量', 'blurry', 'ugly')))):
+            if node['class_type'] == 'LoadImage' and key == 'image':
+                bind = 'end_reference' if ident in end_img_nodes else 'reference'
+            else:
+                bind = aliases.get(key)
+            if bind == 'prompt' and (
+                ident in pure_neg_nodes
+                or 'negative' in node.get('_meta', {}).get('title', '').lower()
+                or (isinstance(value, str) and any(w in value for w in ('低质量', '最差质量', 'blurry', 'ugly')))
+            ):
                 bind = 'negative_prompt'
             if bind:
                 result.setdefault(bind, []).append({'node': ident, 'input': key})

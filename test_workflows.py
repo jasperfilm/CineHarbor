@@ -102,3 +102,15 @@ class GenericRuntime(unittest.TestCase):
   def is_dir(path):return True if str(path)=='/content/drive/MyDrive' else original(path)
   with patch.object(self.ns['Path'],'is_dir',is_dir),patch.object(self.ns['urllib'].request,'urlopen') as download:result=self.ns['prepare_models']();download.assert_not_called()
   self.assertTrue(result['hash_verified']);manifest=json.loads((self.root/'backup/model_library/manifest.json').read_text());self.assertEqual(manifest['files'][0]['sha256'],sha)
+ def test_history_timeout_retains_existing_prompt_without_submission(self):
+  output=self.root/'ComfyUI/output/existing.mp4';output.parent.mkdir(parents=True);output.write_bytes(b'existing result')
+  calls=[]
+  def request(path,data=None):
+   calls.append(path)
+   if path=='/prompt':raise AssertionError('An uncertain task must never be resubmitted')
+   if len(calls)==1:raise TimeoutError('temporarily busy')
+   return {'saved-prompt':{'outputs':{'1':{'videos':[{'filename':'existing.mp4'}]}},'status':{'status_str':'success'}}}
+  self.ns.update(CONTROL={'job':'existing-job','prompt_id':'saved-prompt','config':{}},request=request,_start_ws_progress_watcher=lambda *a:None)
+  with patch.object(self.ns['time'],'sleep'):
+   result=self.ns['generate'](True)
+  self.assertEqual(result['outputs'],[str(output.resolve())]);self.assertEqual(calls,['/history/saved-prompt']*2)

@@ -1,0 +1,20 @@
+{
+  "name": "w3c-keyname",
+  "version": "2.2.8",
+  "notices": [
+    {
+      "file": "frontend/w3c-keyname_2.2.8/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "869c30f368eb08735e779027b9f4bc9fea2f39624351856aebe42741f0bc0884"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/marijnh/w3c-keyname.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/w3c-keyname/-/w3c-keyname-2.2.8.tgz",
+  "integrity": "sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==",
+  "archive_sha256": "05d21484026d1f2dd842c843181e391e66d60f1d5dff292d562c3f40302dab36",
+  "status": "notice_text_present"
+}

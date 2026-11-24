@@ -16,6 +16,17 @@ class Operations(unittest.TestCase):
   d=self.record('start')
   with patch.object(server,'guarded'),patch.object(server,'operation') as op:self.c.run(d,{'gpu':'T4'})
   self.assertEqual(d['state'],'failed');op.assert_not_called()
+ def test_requested_interrupt_is_distinct_from_an_unexpected_failure(self):
+  marker='RuntimeError: 采样已按指令安全中断；GPU 会话保留。'
+  for error,expected in [(marker,'interrupted'),('network lost','failed'),('interrupt connection timed out','failed')]:
+   d=self.record('generate');d.update(prompt_id='p1')
+   db={'jobs':[{'id':'j1','state':'prepared','config':{'model':'workflow','reference':None}}],'assets':[]}
+   with patch.object(server,'guarded'),patch.object(server,'load',return_value=db),patch.object(self.c,'job_update') as update,patch.object(self.c,'remote',side_effect=RuntimeError(error)):
+    self.c.run(d,{'job':'j1'})
+   self.assertEqual(d['state'],expected)
+   if expected=='interrupted':
+    self.assertEqual(d['message'],'采样已按指令安全中断；GPU 会话保留。')
+    self.assertEqual(update.call_args.kwargs['state'],'interrupted')
  def test_backup_failure_prevents_release(self):
   d=self.record('stop')
   with patch.object(server,'guarded'),patch.object(self.c,'remote',side_effect=RuntimeError('hash mismatch')),patch.object(server,'_operation') as op:self.c.run(d,{'backup_confirmed':True})
@@ -81,6 +92,31 @@ class HTTP(unittest.TestCase):
   with zipfile.ZipFile(self.d/'exports'/r['file']) as z:self.assertEqual(set(z.namelist()),{'workspace.json','README.txt'})
  def test_project_path_rejected(self):
   with self.assertRaises(urllib.error.HTTPError):self.req('/api/project/select',{'id':'../../secrets'})
+ def test_assembly_settings_persist_across_project_switches(self):
+  key={'X-Local-Key':server.KEY}
+  self.req('/api/project/new',{'name':'Assembly QA'},key).close()
+  d=server.load();pid=d['project']['id'];d['assets']=[{'id':'v','kind':'video','file':'v.mp4'},{'id':'a','kind':'audio','file':'a.mp3'}];d['shots']=[{'id':'s','duration':5}];server.save(d)
+  payload={'clips':[{'shot_id':'s','asset_id':'v','start':1,'end':4,'mute_source_audio':True,'dialogue':'回家了。'}],'audio_asset_id':'a','audio_start':2,'target_aspect':'16:9','burn_subtitles':True,'ducking':True}
+  with self.req('/api/assembly/settings',payload,key) as response:saved=json.load(response)['settings']
+  self.assertEqual(json.loads(self.db.read_text())['assembly'],saved)
+  with self.assertRaises(urllib.error.HTTPError):self.req('/api/assembly/settings',dict(payload,audio_asset_id='missing'),key)
+  self.assertEqual(server.load()['assembly'],saved)
+  self.req('/api/project/new',{'name':'Other'},key).close();self.assertNotIn('assembly',server.load())
+  self.req('/api/project/select',{'id':pid},key).close();self.assertEqual(server.load()['assembly'],saved)
+  with self.assertRaises(urllib.error.HTTPError):self.req('/api/assembly/settings',dict(payload,audio_start=float('nan')),key)
+ def test_queued_shot_cannot_be_deleted_or_task_archived(self):
+  d=server.load();d['project']['status']='active';d['shots']=[{'id':'shot','title':'Queued shot'}];d['jobs']=[{'id':'job','shot':'shot','state':'prepared'}];server.save(d)
+  op={'id':'queue','created':1,'state':'queued','action':'generate','job_id':'job'};server.CONSOLE.write(op)
+  for path in ('/api/shot/delete','/api/job/archive'):
+   with self.assertRaises(urllib.error.HTTPError):self.req(path,{'id':'shot' if path.endswith('/delete') else 'job'})
+  self.assertEqual(len(server.load()['shots']),1);self.assertEqual(len(server.load()['jobs']),1)
+  op['state']='interrupted';server.CONSOLE.write(op);self.req('/api/job/archive',{'id':'job'}).close()
+  saved=server.load();self.assertEqual(saved['jobs'],[]);self.assertEqual(saved['historical_jobs'][0]['state'],'cancelled')
+ def test_deleting_shot_archives_its_unsubmitted_tasks(self):
+  d=server.load();d['project']['status']='active';d['shots']=[{'id':'shot','title':'Unused shot'}];d['jobs']=[{'id':'job','shot':'shot','state':'prepared'}];server.save(d)
+  self.req('/api/shot/delete',{'id':'shot'}).close();saved=server.load()
+  self.assertEqual(saved['shots'],[]);self.assertEqual(saved['jobs'],[]);self.assertEqual(saved['shot_trash'][0]['id'],'shot')
+  self.assertEqual(saved['historical_jobs'][0]['id'],'job')
 class Recipes(unittest.TestCase):
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.d=Path(self.tmp.name)

@@ -1,0 +1,21 @@
+{
+  "name": "@tiptap/extension-horizontal-rule",
+  "version": "3.31.0",
+  "notices": [
+    {
+      "file": "frontend/_tiptap_extension-horizontal-rule_3.31.0/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "https://github.com/ueberdosis/tiptap",
+    "type": "git",
+    "directory": "packages/extension-horizontal-rule"
+  },
+  "tarball": "https://registry.npmjs.org/@tiptap/extension-horizontal-rule/-/extension-horizontal-rule-3.31.0.tgz",
+  "integrity": "sha512-RTKLnuEmGJOlxzLOmKo85hstXfuLlg+zQSKAggdD6BrSTDR5fdPZXnZTb/gDCo6chCR5BoKHu7Xv1spnPzRmEw==",
+  "archive_sha256": "82853acc8d0430a421980368f26db7f80cbf31d28726f7b2795c1e4b8dda2671",
+  "status": "notice_text_present"
+}

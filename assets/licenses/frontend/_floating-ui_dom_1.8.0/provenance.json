@@ -1,0 +1,21 @@
+{
+  "name": "@floating-ui/dom",
+  "version": "1.8.0",
+  "notices": [
+    {
+      "file": "frontend/_floating-ui_dom_1.8.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "0e4c9a9b6c71019cbbea3bdc20b01223110a9035700f9c960c8fcbf78c2325ce"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/floating-ui/floating-ui.git",
+    "type": "git",
+    "directory": "packages/dom"
+  },
+  "tarball": "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.8.0.tgz",
+  "integrity": "sha512-yXSrzeHZBTZadLOlfyhCkJHNeLJnHRnRInwdZ40L7ZiaAtrBwoYlsDrX3v5zB1Utk7CLfzcOVnVVWoXEky7Ceg==",
+  "archive_sha256": "b9511cc8fd8898c7c67143ff8dd93a3d427108632c801a546ae72ab1df3cd6a5",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "media-encoder-host",
+  "version": "9.0.30",
+  "notices": [
+    {
+      "file": "frontend/media-encoder-host_9.0.30/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "04238a17c611b988a3ef5934e6c247acd4a344c837f60b223f3d9ffb57aa4dde"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/media-encoder-host.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/media-encoder-host/-/media-encoder-host-9.0.30.tgz",
+  "integrity": "sha512-LOmX7zW5SjvpeFA6lPPsp8wg+f0G39lqcf40kZkFTkSI4n/Rh2CJsPS/IhxRngMAcEDepiIvoXLrqetsOq4eSw==",
+  "archive_sha256": "896e24d91dbaefc2db029708d020bcd7922050852adde3d58159785811bc791c",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "prosemirror-view",
+  "version": "1.42.1",
+  "notices": [
+    {
+      "file": "frontend/prosemirror-view_1.42.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "ef0b452ced6304db2ce78ca66de1fc7b97bab05bc1750c95df359ed3fe1d65c8"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://code.haverbeke.berlin/prosemirror/prosemirror-view.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/prosemirror-view/-/prosemirror-view-1.42.1.tgz",
+  "integrity": "sha512-rRqzZnRgkyh69XoOMrfFJHwauHscLBmHbq772kwbic1ymQAM8gXjzEbJse5j1ep2UO2HRIAQL0bY3kZ/RoqjVw==",
+  "archive_sha256": "d7f580cb13a417ba2d69538a9d812964d22f8213b546b35cc3d99d925665d8b9",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "mdurl",
+  "version": "2.0.0",
+  "notices": [
+    {
+      "file": "frontend/mdurl_2.0.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "6b6a356c4337e2446841f30f3cdf7e7023af8c5260b5e347c0f987b9f6aa2644"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/markdown-it/mdurl.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/mdurl/-/mdurl-2.0.0.tgz",
+  "integrity": "sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==",
+  "archive_sha256": "8e0ccb320730dad17981e2a4cc97f34f072366442d000de97070fd1ea21321b5",
+  "status": "notice_text_present"
+}

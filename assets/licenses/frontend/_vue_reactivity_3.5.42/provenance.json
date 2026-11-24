@@ -1,0 +1,21 @@
+{
+  "name": "@vue/reactivity",
+  "version": "3.5.42",
+  "notices": [
+    {
+      "file": "frontend/_vue_reactivity_3.5.42/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/vuejs/core.git",
+    "type": "git",
+    "directory": "packages/reactivity"
+  },
+  "tarball": "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.5.42.tgz",
+  "integrity": "sha512-TzNNfKpb7hDxbQltwAut8VDQA5YP+BuRlxntHUuRjyKwlMvmAPbs3unhCvieijifY6vFfVBwsS7wG/C7uq+bEQ==",
+  "archive_sha256": "6d2b0aff8390816f99b9160a757ce33ef2c883dc8d2e8bb92f67b76a0a36e31c",
+  "status": "notice_text_present"
+}

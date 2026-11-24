@@ -1,0 +1,20 @@
+{
+  "name": "vue",
+  "version": "3.5.42",
+  "notices": [
+    {
+      "file": "frontend/vue_3.5.42/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/vuejs/core.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/vue/-/vue-3.5.42.tgz",
+  "integrity": "sha512-4RyHQTbQvOPs3MfvUO1Sg0YRrKNnA0mAVtvpd12Tg1fKDN7OHBUl1IqSn8zGJjK9nI3NkNp8cgTpVrSZC5TTcA==",
+  "archive_sha256": "f0eba09abfc441bc0108b44259376d6857fede9b0adf5d408e8807d5b4b49d6b",
+  "status": "notice_text_present"
+}

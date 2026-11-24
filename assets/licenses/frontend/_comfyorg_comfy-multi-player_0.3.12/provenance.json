@@ -1,0 +1,20 @@
+{
+  "name": "@comfyorg/comfy-multi-player",
+  "version": "0.3.12",
+  "notices": [
+    {
+      "file": "frontend/_comfyorg_comfy-multi-player_0.3.12/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "145c62d7d3215de61ef99aeeb571ba1f189b9eb9fb3fa948420643ea547878e4"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/Comfy-Org/comfy-multi-player.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@comfyorg/comfy-multi-player/-/comfy-multi-player-0.3.12.tgz",
+  "integrity": "sha512-sXG+bNZphYl0uBE2iEm7X4wi6BlX79sxYHCA4wOZKiVJK005PMmfFUYAR2HKSIgcRrS2OhuXHCXrjk6sKbf/7w==",
+  "archive_sha256": "ea90327b1ee9d3a3b9efd557ec4442f4ec767c7c6ba682dd211d5bf7eca8694b",
+  "status": "notice_text_present"
+}

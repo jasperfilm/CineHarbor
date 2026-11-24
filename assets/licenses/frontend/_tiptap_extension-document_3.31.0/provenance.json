@@ -1,0 +1,21 @@
+{
+  "name": "@tiptap/extension-document",
+  "version": "3.31.0",
+  "notices": [
+    {
+      "file": "frontend/_tiptap_extension-document_3.31.0/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "https://github.com/ueberdosis/tiptap",
+    "type": "git",
+    "directory": "packages/extension-document"
+  },
+  "tarball": "https://registry.npmjs.org/@tiptap/extension-document/-/extension-document-3.31.0.tgz",
+  "integrity": "sha512-C2eDFoBlcRAb4sgbc9ZH+mrFFbjIS9VyoERGeDum3QRdqLEKU1h14Th7isHpGQzTvTywhXQxqXC64mgeSGXLsA==",
+  "archive_sha256": "a669adc665f77bfabe376f57a19bd72f676f3ba5910e49b08b1d18c31948fea6",
+  "status": "notice_text_present"
+}

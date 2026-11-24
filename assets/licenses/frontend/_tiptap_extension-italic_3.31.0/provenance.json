@@ -1,0 +1,21 @@
+{
+  "name": "@tiptap/extension-italic",
+  "version": "3.31.0",
+  "notices": [
+    {
+      "file": "frontend/_tiptap_extension-italic_3.31.0/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "c96e5ecb55ac593157ad1d21d1f44a611187f494a0f04c235a1ae692c88d6ba9"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "https://github.com/ueberdosis/tiptap",
+    "type": "git",
+    "directory": "packages/extension-italic"
+  },
+  "tarball": "https://registry.npmjs.org/@tiptap/extension-italic/-/extension-italic-3.31.0.tgz",
+  "integrity": "sha512-8Top75aMS9feCtKYADWOYLrJjx3SGvazETWZdEwDYDGZtEOB7q2+FxcRu2xi+K6Lx9LhzxS9ChULtNdBuRevkQ==",
+  "archive_sha256": "a9aa4b5fd6afc32fdeb84a9c69ce21c0aff0c0044167b8d971ddaf3f0466368b",
+  "status": "notice_text_present"
+}

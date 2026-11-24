@@ -1,0 +1,20 @@
+{
+  "name": "zod-validation-error",
+  "version": "5.0.0",
+  "notices": [
+    {
+      "file": "frontend/zod-validation-error_5.0.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "03cc9a630489a2544b799548a0e8b134f382fe09fa06dc22b339091b28b8f4a8"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git://github.com/causaly/zod-validation-error.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/zod-validation-error/-/zod-validation-error-5.0.0.tgz",
+  "integrity": "sha512-hmk+pkyKq7Q71PiWVSDUc3VfpzpvcRHZ3QPw9yEMVvmtCekaMeOHnbr3WbxfrgEnQTv6haGP4cmv0Ojmihzsxw==",
+  "archive_sha256": "f07dc7d088b6053f5808f84eefe1a357fac14df885b461eecaba3d42c5a5ae1a",
+  "status": "notice_text_present"
+}

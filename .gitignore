@@ -2,6 +2,7 @@
 /backups/
 /build/
 /releases/
+*.pkg
 /vendor/
 __pycache__/
 *.pyc
@@ -18,3 +19,16 @@ __pycache__/
 /reports/macmini-*.json
 /reports/build-cleanup.json
 /reports/cleanup-data-check.json
+
+# Developer-only or generated assets
+/assets/demo-project/
+/assets/showcase/
+.env
+.env.*
+*.dmg
+*.xcarchive/
+*.provisionprofile
+*.p12
+*.p8
+
+.venv/

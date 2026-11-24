@@ -1,0 +1,20 @@
+{
+  "name": "fuse.js",
+  "version": "7.0.0",
+  "notices": [
+    {
+      "file": "frontend/fuse.js_7.0.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "cc807e3caa26cdee316bab2ff6fdb508a2f619b74959fe59e513ef6e61635ebe"
+    }
+  ],
+  "license": "Apache-2.0",
+  "source": {
+    "url": "git+https://github.com/krisk/Fuse.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/fuse.js/-/fuse.js-7.0.0.tgz",
+  "integrity": "sha512-14F4hBIxqKvD4Zz/XjDc3y94mNZN6pRv3U13Udo0lNLCWRBUsrMv2xwcF/y/Z5sV6+FQW+/ow68cHpm4sunt8Q==",
+  "archive_sha256": "2658bfb611cdcd4c566e68c2e761898dcbdaa8353ef72d04a8d9c31861d199c2",
+  "status": "notice_text_present"
+}

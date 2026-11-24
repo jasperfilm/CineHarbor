@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Open-source licenses · CineHarbor</title><link rel="stylesheet" href="/policy.css">
+<script src="/catalogs.js"></script><script src="/i18n.js"></script>
+<style>td{overflow-wrap:anywhere}td a{display:block;margin-bottom:5px}.commit{font-size:12px;overflow-wrap:anywhere}</style>
+<main><span class="eyebrow">CineHarbor</span>
+<h1 data-policy-message="licenses.title">Open-source licenses</h1>
+<p class="lead" data-policy-message="licenses.intro">Third-party components retain their own licenses. Original notices and source references are available below.</p>
+<h2>ComfyUI frontend · 1.59.1</h2>
+<p>GPL-3.0-only · <a href="/licenses/ComfyUI-frontend-GPL-3.0.txt">License</a> · <a href="https://github.com/Comfy-Org/ComfyUI_frontend/tree/cded88fdffbb78f191fc8e454e7f2cfa5016ee43" target="_blank" rel="noopener noreferrer">Corresponding source and build files</a></p>
+<p class="commit">cded88fdffbb78f191fc8e454e7f2cfa5016ee43 · localhost distribution</p>
+<p><a href="/licenses/sources/ComfyUI_frontend-cded88fdffbb78f191fc8e454e7f2cfa5016ee43.tar.gz">Bundled corresponding source and build files (.tar.gz)</a></p>
+<ul><li><a href="/licenses/ComfyUI-third-party-notices.md">ComfyUI third-party notices</a></li>
+<li><a href="/licenses/CineHarbor-frontend-modifications.txt">CineHarbor local frontend modifications</a></li>
+<li><a href="/licenses/LiteGraph-MIT.txt">LiteGraph · MIT</a></li>
+<li><a href="/licenses/ComfyUI-account-core-MIT.txt">ComfyUI account-core · MIT</a></li>
+<li><a href="/licenses/ComfyUI-billing-contract-MIT.txt">ComfyUI billing-contract · MIT</a></li>
+<li><a href="/licenses/ComfyUI-workflow-templates-MIT.txt">Workflow templates · MIT</a></li></ul>
+<h2 data-policy-message="licenses.fonts">Fonts and icons</h2>
+<ul><li><a href="/licenses/Inter-OFL-1.1.txt">Inter 4.001 · SIL Open Font License 1.1</a></li>
+<li><a href="/licenses/MaterialDesignIcons-LICENSE.txt">Material Design Icons 7.4.47 · original license</a></li>
+<li><a href="/licenses/PrimeIcons-MIT.txt">PrimeIcons 7.0.0 · MIT</a></li>
+<li><a href="/licenses/component-sources.json">Source versions and provenance</a></li></ul>
+<h2>CPython</h2><p><a href="/licenses/CPython-LICENSE.txt">PSF and included notices</a></p>
+<h2 data-policy-message="licenses.python">Python dependencies</h2>
+<p id="license-state" role="status"></p><table><thead><tr><th data-policy-message="licenses.component">Component</th><th data-policy-message="licenses.version">Version</th><th data-policy-message="licenses.notice">License notices</th></tr></thead><tbody id="license-rows"></tbody></table>
+<p>html2text · GPL-3.0-or-later · <a href="https://pypi.org/project/html2text/2025.4.15/#files" target="_blank" rel="noopener noreferrer">Exact-version source distribution</a></p>
+<p><a href="/licenses/sources/html2text-2025.4.15.tar.gz">Bundled html2text source (.tar.gz)</a></p>
+<p><a href="/licenses/sources/mediabunny-1.53.1.tar.gz">MediaBunny 1.53.1 source (.tar.gz)</a> · <a href="/licenses/sources/comfyui-electron-types-0.6.2.tar.gz">ComfyUI Electron types 0.6.2 source (.tar.gz)</a></p>
+<footer><a href="/studio" data-policy-message="licenses.back">Back to the workspace</a> · <a href="/terms.html">Terms &amp; Licenses</a></footer>
+</main>
+<script>
+L.policy();document.title=L.message('licenses.title','Open-source licenses')+' · CineHarbor';
+Promise.all(['/licenses/python-components.json','/licenses/frontend-components.json'].map(url=>fetch(url).then(r=>{if(!r.ok)throw Error('Unavailable');return r.json()}))).then(([python,frontend])=>{
+ const components=[...(python.components||[]),...(frontend.packages||[]).map(c=>({...c,license_files:c.notices}))];
+ const rows=document.querySelector('#license-rows');
+ for(const component of components){
+  const row=document.createElement('tr');
+  for(const value of [component.name,component.version]){const cell=document.createElement('td');cell.textContent=value;row.append(cell)}
+  const notices=document.createElement('td');
+  for(const file of component.license_files||[]){const a=document.createElement('a');a.href='/licenses/'+file.file.split('/').map(encodeURIComponent).join('/');a.textContent=file.file.split('/').at(-1);notices.append(a)}
+  row.append(notices);rows.append(row);
+ }
+ document.querySelector('#license-state').textContent=String(components.length)+' '+L.message('licenses.components','components');
+}).catch(()=>{document.querySelector('#license-state').textContent=L.message('licenses.unavailable','The license inventory could not be loaded. Contact support.');});
+</script></html>

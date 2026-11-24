@@ -1,0 +1,20 @@
+{
+  "name": "algoliasearch",
+  "version": "5.56.0",
+  "notices": [
+    {
+      "file": "frontend/algoliasearch_5.56.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "4228dcd9ab9a4b6a635457ebdb937fbce06d8aab61ad16812fb5fd2ff186c88c"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/algolia/algoliasearch-client-javascript.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/algoliasearch/-/algoliasearch-5.56.0.tgz",
+  "integrity": "sha512-PrqppUmhT4ENdas2pH9caE7efUcxy6EcSFhWzosiVuQBzu2tQ5yLTI6jwomT/1cuBnivzGfxiJCqDNN9FRRh+Q==",
+  "archive_sha256": "b1c607a2a03b734c3f42a525a02c6566ba9d87aad3ee1361778cf1a35aaf4eab",
+  "status": "notice_text_present"
+}

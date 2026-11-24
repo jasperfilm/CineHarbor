@@ -1,0 +1,20 @@
+{
+  "name": "ag-psd",
+  "version": "31.0.2",
+  "notices": [
+    {
+      "file": "frontend/ag-psd_31.0.2/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "035430250509b801de02201d2f9bc9388a1220198f9276d38f4059df882e585c"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/Agamnentzar/ag-psd.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/ag-psd/-/ag-psd-31.0.2.tgz",
+  "integrity": "sha512-5s5PvqbomPIIJ9YjL6robz55rT4RYPiQkww4brisyZEb5jzlHB1EKh47IJg7gIFj0RUrD0cMgdntM907qaZjXA==",
+  "archive_sha256": "cced99f8138c1512fa94b858cf47125e985ae9dc057a39ee03b1dad08fdafe3c",
+  "status": "notice_text_present"
+}

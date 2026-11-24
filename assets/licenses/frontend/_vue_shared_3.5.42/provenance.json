@@ -1,0 +1,21 @@
+{
+  "name": "@vue/shared",
+  "version": "3.5.42",
+  "notices": [
+    {
+      "file": "frontend/_vue_shared_3.5.42/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/vuejs/core.git",
+    "type": "git",
+    "directory": "packages/shared"
+  },
+  "tarball": "https://registry.npmjs.org/@vue/shared/-/shared-3.5.42.tgz",
+  "integrity": "sha512-2rPxex1jQf4jvl9MOHl6YaXCPcrNqz/FstMOEh3QWY+/OME9nQTvl9WYeCwhW7AFjaR0SnngZGlp/wkR6rkI6g==",
+  "archive_sha256": "4dbc63013f3235c9355f7a1aa23aa0976d730e9f8ec054ade78352619ef17825",
+  "status": "notice_text_present"
+}

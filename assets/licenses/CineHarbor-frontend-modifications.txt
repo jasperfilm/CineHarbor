@@ -1,0 +1,12 @@
+CineHarbor frontend modification notice — 2026-11-23
+
+Upstream: ComfyUI frontend 1.59.1, commit cded88fdffbb78f191fc8e454e7f2cfa5016ee43 (GPL-3.0-only).
+
+The upstream archive is preserved. When extracting the locally served frontend, CineHarbor changes only resolveRuntimeSentryDsn() to return an empty string. The existing initErrorReporting() consequently passes enabled=false to Sentry. Unknown resolver formats fail closed rather than silently enabling reporting. This is not a claim about arbitrary custom nodes, remote runtimes or all optional services.
+
+Readable implementation: backend/comfy_frontend_policy.py and backend/comfy_local_bridge.py in the application Resources directory.
+Equivalent upstream source change: in src/main.ts, replace the body of resolveRuntimeSentryDsn() with: return ''. The remaining upstream source and build files are available at the exact commit linked in component-sources.json.
+
+The upstream component retains GPL-3.0-only; these changes do not relicense it.
+
+Release configuration requirement: CineHarbor 1.2.12 Build27 must include the resolver policy and use the policy-versioned extraction cache. Do not describe earlier installed betas as having this modification.

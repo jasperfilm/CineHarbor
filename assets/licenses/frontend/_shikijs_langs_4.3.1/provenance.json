@@ -1,0 +1,21 @@
+{
+  "name": "@shikijs/langs",
+  "version": "4.3.1",
+  "notices": [
+    {
+      "file": "frontend/_shikijs_langs_4.3.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "7a9d8d01038aeacf9e5bcdabbddf2a7815200dce9fc1118468cc553e00ae3eee"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/shikijs/shiki.git",
+    "type": "git",
+    "directory": "packages/langs"
+  },
+  "tarball": "https://registry.npmjs.org/@shikijs/langs/-/langs-4.3.1.tgz",
+  "integrity": "sha512-m0l9nsDqgBHvbZbk7A0/kXz/impK3uB/c6rAn6Gpg/uPtdZRQ+alsN/17MU5thb68XTj/4DxkZAotrM0GGSpDQ==",
+  "archive_sha256": "102c96132b186a1dc515a92ffffed91bf644103414695b8f15cdcc24ee9bfc10",
+  "status": "notice_text_present"
+}

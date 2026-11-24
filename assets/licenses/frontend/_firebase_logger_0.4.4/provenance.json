@@ -1,0 +1,22 @@
+{
+  "name": "@firebase/logger",
+  "version": "0.4.4",
+  "notices": [
+    {
+      "file": "frontend/_firebase_logger_0.4.4/upstream-LICENSE.txt",
+      "source_url": "https://raw.githubusercontent.com/firebase/firebase-js-sdk/ffbf5a60ac756c69dd50bddb69fccd9968844ac5/LICENSE",
+      "source_commit": "ffbf5a60ac756c69dd50bddb69fccd9968844ac5",
+      "sha256": "065e45b5674f9bf76670496e5472611b3fbd87fbeaf99336725430a9909cb687"
+    }
+  ],
+  "license": "Apache-2.0",
+  "source": {
+    "url": "git+https://github.com/firebase/firebase-js-sdk.git",
+    "type": "git",
+    "directory": "packages/logger"
+  },
+  "tarball": "https://registry.npmjs.org/@firebase/logger/-/logger-0.4.4.tgz",
+  "integrity": "sha512-mH0PEh1zoXGnaR8gD1DeGeNZtWFKbnz9hDO91dIml3iou1gpOnLqXQ2dJfB71dj6dpmUjcQ6phY3ZZJbjErr9g==",
+  "archive_sha256": "00605ccb684037aeaad2dc4b5e7b7d0bb150f703cee3aa04c09c6e8b326e28d4",
+  "status": "notice_text_present_repository_root"
+}

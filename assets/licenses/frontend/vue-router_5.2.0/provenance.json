@@ -1,0 +1,20 @@
+{
+  "name": "vue-router",
+  "version": "5.2.0",
+  "notices": [
+    {
+      "file": "frontend/vue-router_5.2.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "91a2845c4db44e7497b514b98634a674c737986ad0db81599307cf733bf850b2"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/vuejs/router.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/vue-router/-/vue-router-5.2.0.tgz",
+  "integrity": "sha512-QAC5i0LEb1GLG0LXDQmHu8L7FX12j0KwU/JTKmLQUJMrn04gQdKP6Du+p0QwpHb3iy71vBlqnHQ8WAfOSAWhqw==",
+  "archive_sha256": "089d437f82a0a8d8cd4004bb7c60d4a7fe57ce52613b7ea533feb60f3acb6a85",
+  "status": "notice_text_present"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "mediabunny",
+  "version": "1.53.1",
+  "notices": [
+    {
+      "file": "frontend/mediabunny_1.53.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04"
+    }
+  ],
+  "license": "MPL-2.0",
+  "source": {
+    "url": "git+https://github.com/Vanilagy/mediabunny.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/mediabunny/-/mediabunny-1.53.1.tgz",
+  "integrity": "sha512-w25gA6mQuHSLzdpWswqwndbKtHFcJ0IRowJaIHgY7rlJaVTHhomfx5mLq4IHqonrsGCGDE/LIrtXz8mxiDzavA==",
+  "archive_sha256": "50b6feb9b149f1650a03f257666e549e5c3893b138f398c6d66d9bfafe10a404",
+  "status": "notice_text_present"
+}

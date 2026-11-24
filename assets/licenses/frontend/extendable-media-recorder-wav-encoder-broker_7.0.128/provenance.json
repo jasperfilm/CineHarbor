@@ -1,0 +1,20 @@
+{
+  "name": "extendable-media-recorder-wav-encoder-broker",
+  "version": "7.0.128",
+  "notices": [
+    {
+      "file": "frontend/extendable-media-recorder-wav-encoder-broker_7.0.128/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "04238a17c611b988a3ef5934e6c247acd4a344c837f60b223f3d9ffb57aa4dde"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/chrisguttandin/extendable-media-recorder-wav-encoder-broker.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/extendable-media-recorder-wav-encoder-broker/-/extendable-media-recorder-wav-encoder-broker-7.0.128.tgz",
+  "integrity": "sha512-4pP+IBbU8n9aP6teDvewleI+QtYCQPaRiSDW12PuPkhjxc89QZkM56w1zXhm0M4niJiqzh8SoAs/ndlWVuQo9A==",
+  "archive_sha256": "ef3fc5f0e54538bad468091cbedf0943955a9b13d569cd74e25712e9db154698",
+  "status": "notice_text_present"
+}

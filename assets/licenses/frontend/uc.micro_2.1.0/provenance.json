@@ -1,0 +1,20 @@
+{
+  "name": "uc.micro",
+  "version": "2.1.0",
+  "notices": [
+    {
+      "file": "frontend/uc.micro_2.1.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE.txt",
+      "sha256": "483acb265f182907d1caf6cff9c16c96f31325ed23792832cc5d8b12d5f88c8a"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/markdown-it/uc.micro.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/uc.micro/-/uc.micro-2.1.0.tgz",
+  "integrity": "sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==",
+  "archive_sha256": "a31660c690ddac370fe4b17fe6a3a73b8df094f99194ac90d0668d797dabf69b",
+  "status": "notice_text_present"
+}

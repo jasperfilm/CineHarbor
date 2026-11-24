@@ -1,0 +1,20 @@
+{
+  "name": "rope-sequence",
+  "version": "1.3.4",
+  "notices": [
+    {
+      "file": "frontend/rope-sequence_1.3.4/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "530424aebdd0e73f53238d1f89df250057bc8d8ce090cf5954197fadce5bf226"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/marijnh/rope-sequence.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/rope-sequence/-/rope-sequence-1.3.4.tgz",
+  "integrity": "sha512-UT5EDe2cu2E/6O4igUr5PSFs23nvvukicWHx6GnOPlHAiiYbzNuCRQCuiUdHJQcqKalLKlrYJnjY0ySGsXNQXQ==",
+  "archive_sha256": "2a483ee02e5a21b59b63a29bca162e6aa2cd8fafb474261040c3d8538a1f067c",
+  "status": "notice_text_present"
+}

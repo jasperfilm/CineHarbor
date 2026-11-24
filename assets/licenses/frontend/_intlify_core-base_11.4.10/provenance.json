@@ -1,0 +1,21 @@
+{
+  "name": "@intlify/core-base",
+  "version": "11.4.10",
+  "notices": [
+    {
+      "file": "frontend/_intlify_core-base_11.4.10/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "403a4d6f9815ae33bd7a613202529f0805045c642f92a169fa673d7fa07dd568"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/intlify/vue-i18n.git",
+    "type": "git",
+    "directory": "packages/core"
+  },
+  "tarball": "https://registry.npmjs.org/@intlify/core-base/-/core-base-11.4.10.tgz",
+  "integrity": "sha512-+yJ74JRWVJokdgG9zYNMyTSzeNV3O9T4vVxk8PvLFHmI+R/BYA//cITh7vhRK37hWLZ4/kTcKcUz1dlWOpypIg==",
+  "archive_sha256": "8a8212e08317374632dd8e1b9988bb15b8ecd0ca9d3182b6dc150ac19c1b0fe5",
+  "status": "notice_text_present"
+}

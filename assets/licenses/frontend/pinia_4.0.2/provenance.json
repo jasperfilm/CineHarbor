@@ -1,0 +1,20 @@
+{
+  "name": "pinia",
+  "version": "4.0.2",
+  "notices": [
+    {
+      "file": "frontend/pinia_4.0.2/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "91a2845c4db44e7497b514b98634a674c737986ad0db81599307cf733bf850b2"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/vuejs/pinia.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/pinia/-/pinia-4.0.2.tgz",
+  "integrity": "sha512-yKVVA7bSj5oRZFp/Ab9wLlmyb5gPUYEiIm4ryiWTe/xe7PtkRdMVOp1X1ggvq0c6Uj7Q0Du1HnV2mtAwM0Ks1g==",
+  "archive_sha256": "e34a4a7ec88cde36b03ef38462a21353c0f9830443126661720824ae8fcb9a28",
+  "status": "notice_text_present"
+}

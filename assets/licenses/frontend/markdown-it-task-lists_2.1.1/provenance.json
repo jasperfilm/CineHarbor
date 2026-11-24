@@ -1,0 +1,20 @@
+{
+  "name": "markdown-it-task-lists",
+  "version": "2.1.1",
+  "notices": [
+    {
+      "file": "frontend/markdown-it-task-lists_2.1.1/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "e7cefb44454d371c9eddb390fb829d34fc6ffa79e63776873c34f8413bf3268b"
+    }
+  ],
+  "license": "ISC",
+  "source": {
+    "url": "git+ssh://git@github.com/revin/markdown-it-task-lists.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/markdown-it-task-lists/-/markdown-it-task-lists-2.1.1.tgz",
+  "integrity": "sha512-TxFAc76Jnhb2OUu+n3yz9RMu4CwGfaT788br6HhEDlvWfdeJcLUsxk1Hgw2yJio0OXsxv7pyIPmvECY7bMbluA==",
+  "archive_sha256": "8e9ed515296f11d716a6460c0bd35ffa163003a373a6d8f65d53ea9f8aec667e",
+  "status": "notice_text_present"
+}

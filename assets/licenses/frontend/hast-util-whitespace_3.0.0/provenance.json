@@ -1,0 +1,20 @@
+{
+  "name": "hast-util-whitespace",
+  "version": "3.0.0",
+  "notices": [
+    {
+      "file": "frontend/hast-util-whitespace_3.0.0/1-license.txt",
+      "upstream_path": "package/license",
+      "sha256": "ca4662cb5d1b738fbe5350c0d5485ba11773b4b7208974082ae6e129a52d631d"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/syntax-tree/hast-util-whitespace.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/hast-util-whitespace/-/hast-util-whitespace-3.0.0.tgz",
+  "integrity": "sha512-88JUN06ipLwsnv+dVn+OIYOvAuvBMy/Qoi6O7mQHxdPXpjy+Cd6xRkWwux7DKO+4sYILtLBRIKgsdpS2gQc7qw==",
+  "archive_sha256": "673f97f5bba3cac0184726f519a5750273e4434b839a769f4fbf09e4b4da2ceb",
+  "status": "notice_text_present"
+}

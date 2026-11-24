@@ -1,0 +1,20 @@
+{
+  "name": "@kurkle/color",
+  "version": "0.3.4",
+  "notices": [
+    {
+      "file": "frontend/_kurkle_color_0.3.4/1-LICENSE.md",
+      "upstream_path": "package/LICENSE.md",
+      "sha256": "89ba0032731489153d552db918b727feb05128cf9eca20092875a9ad14147671"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/kurkle/color.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz",
+  "integrity": "sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==",
+  "archive_sha256": "35076f10eb04bd3ddfa41aa3a5ea3d4107feaec333299aa722fbfbde85043e37",
+  "status": "notice_text_present"
+}

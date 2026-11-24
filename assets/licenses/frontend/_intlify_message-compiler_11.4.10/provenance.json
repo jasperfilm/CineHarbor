@@ -1,0 +1,21 @@
+{
+  "name": "@intlify/message-compiler",
+  "version": "11.4.10",
+  "notices": [
+    {
+      "file": "frontend/_intlify_message-compiler_11.4.10/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "403a4d6f9815ae33bd7a613202529f0805045c642f92a169fa673d7fa07dd568"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/intlify/vue-i18n.git",
+    "type": "git",
+    "directory": "packages/message-compiler"
+  },
+  "tarball": "https://registry.npmjs.org/@intlify/message-compiler/-/message-compiler-11.4.10.tgz",
+  "integrity": "sha512-oUB/scz2EJENXDiUJ7JjZffOrH8UIZ1BuZeHvonbi5fWLavLt04aivuk2OIByOZA0tsci1bkeeQRmwhb5M8Imw==",
+  "archive_sha256": "0c93af2bf4d704384628fbae7f664ff9cb82086cb5d81752f5bcfeaedd95d5bb",
+  "status": "notice_text_present"
+}

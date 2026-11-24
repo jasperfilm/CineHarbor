@@ -1,0 +1,20 @@
+{
+  "name": "ohash",
+  "version": "2.0.11",
+  "notices": [
+    {
+      "file": "frontend/ohash_2.0.11/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "46231df5a7733c3f52f11b71f3df61813007745b62b09031acfb45fb42d75082"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/unjs/ohash.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/ohash/-/ohash-2.0.11.tgz",
+  "integrity": "sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==",
+  "archive_sha256": "e41595f63a907331fb7244a182496651a0bc1c3be36a93cbd038189393ae9ee0",
+  "status": "notice_text_present"
+}

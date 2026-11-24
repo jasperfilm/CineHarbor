@@ -1,0 +1,20 @@
+{
+  "name": "yjs",
+  "version": "13.6.32",
+  "notices": [
+    {
+      "file": "frontend/yjs_13.6.32/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "341baa53605ed85d6f95782322854cca56c655ebc7fd4712649b8e7afc6020ff"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/yjs/yjs.git",
+    "type": "git"
+  },
+  "tarball": "https://registry.npmjs.org/yjs/-/yjs-13.6.32.tgz",
+  "integrity": "sha512-lfiJIIC4Xayt5ItynE407ehlE03pCjeOc4hkR4yxxvvNJ4kuiN25B0g+Qp8XagYz361LLL7DCzR5bvFJ81QKtQ==",
+  "archive_sha256": "dbca91b1729235d44dce944813c800dd910ec2e2c5f6acf55ccbda3bbb828009",
+  "status": "notice_text_present"
+}

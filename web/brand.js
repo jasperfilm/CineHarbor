@@ -1,0 +1,2 @@
+// Generated from assets/branding/product.json.
+window.GCLabsBrand=Object.freeze({"display_name": "CineHarbor", "name_zh": "", "publisher": "GachaFrame", "version": "1.2.12", "build": "32", "working_name": false, "local_bundle_identifier": "com.jasper.workstation", "pricing": "free", "tagline_zh": "", "tagline_en": "Your subscription. Your creativity. Your film.", "support_email": "contact@gachaframe.com", "icon_master": "assets/branding/CineHarbor-master-F-v02.png", "default_locale": "en", "supported_locales": ["en", "zh-Hans", "zh-Hant", "ja", "ko"]});

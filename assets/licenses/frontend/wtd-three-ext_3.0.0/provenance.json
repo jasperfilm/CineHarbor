@@ -1,0 +1,21 @@
+{
+  "name": "wtd-three-ext",
+  "version": "3.0.0",
+  "notices": [
+    {
+      "file": "frontend/wtd-three-ext_3.0.0/1-LICENSE.txt",
+      "upstream_path": "package/LICENSE",
+      "sha256": "6b62f74228c184af6f646f5501287e86c3e046e62dbe98c207f742c95dc4260f"
+    }
+  ],
+  "license": "MIT",
+  "source": {
+    "url": "git+https://github.com/kaisalmen/wtd.git",
+    "type": "git",
+    "directory": "packages/wtd"
+  },
+  "tarball": "https://registry.npmjs.org/wtd-three-ext/-/wtd-three-ext-3.0.0.tgz",
+  "integrity": "sha512-PLZJipCAiinot8D1uB4A7+XHxPAYeZXDhczbbazK7pKdqpE77zMizQH4rSZsaNbzktgnIfpgK/ODqhJTdrUjUw==",
+  "archive_sha256": "a0d93b58b3d7ca6ae1f15f1244fe715df9d61b7d6fd5db5263883c78499d74e6",
+  "status": "notice_text_present"
+}
