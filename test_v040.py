@@ -285,6 +285,7 @@ sem.wait()
         self.console.write(running_op)
         with patch.object(server, 'identity', return_value='creator@example.com'), \
              patch.object(server, 'refresh', return_value={'runtime_state': 'owned', 'managed_session': {'endpoint': 'g4-ep', 'name': server.SESSION}}), \
+             patch.object(server, 'sdk_python', return_value=__import__('sys').executable), \
              patch('console.subprocess.run') as mock_run:
             mock_run.return_value.returncode = 0
             intr = self.api('/api/runtime/interrupt', {})
