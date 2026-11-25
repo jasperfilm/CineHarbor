@@ -27,7 +27,14 @@ cli = Path.home() / '.local/bin/colab'
 import os
 # Preserve the venv executable path: resolving its symlink loses the CLI site-packages.
 sdk_python = Path(os.environ.get('CINEHARBOR_SDK_PYTHON') or os.environ.get('GC_LABS_SDK_PYTHON') or cli.read_text().splitlines()[0][2:]).absolute()
-info = json.loads(subprocess.check_output([str(sdk_python), '-B', '-c', 'import sys,sysconfig,json;print(json.dumps({"prefix":sys.base_prefix,"site":sysconfig.get_path("purelib")}))'], text=True))
+info = json.loads(subprocess.check_output([
+    str(sdk_python), '-B', '-c',
+    'import sys,sysconfig,json; from importlib.metadata import version; '
+    'print(json.dumps({"prefix":sys.base_prefix,"site":sysconfig.get_path("purelib"),'
+    '"python":list(sys.version_info[:2]),"colab_cli":version("google-colab-cli")}))',
+], text=True))
+if info['python'] != [3, 13] or info['colab_cli'] != '0.7.5':
+    raise RuntimeError('构建原生 App 需要 Python 3.13 和 google-colab-cli 0.7.5。请检查 CINEHARBOR_SDK_PYTHON。')
 
 frontend_zip = root / 'vendor/comfy_frontend.zip'
 if not frontend_zip.is_file():

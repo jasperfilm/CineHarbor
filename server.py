@@ -2,7 +2,7 @@
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import unquote
-import base64, copy, hashlib, json, mimetypes, os, re, secrets, shutil, subprocess, sys, threading, time, uuid
+import base64, copy, errno, hashlib, json, mimetypes, os, re, secrets, shutil, subprocess, sys, threading, time, uuid
 
 ROOT = Path(os.environ.get('JASPER_WORKSTATION_ROOT', Path(__file__).resolve().parent))
 # Use built-in MIME tables: an App Sandbox must not read host Apache configuration.
@@ -21,7 +21,7 @@ PRODUCT = json.loads((ROOT/'assets/branding/product.json').read_text()) if (ROOT
 VERSION = PRODUCT['version']
 # CINEHARBOR_DATA is the current override. GC_LABS_DATA remains for existing setups.
 # JASPER_WORKSTATION_DATA is the path the installed Mac app already passes.
-DATA = Path(_env('CINEHARBOR_DATA', 'GC_LABS_DATA', 'JASPER_WORKSTATION_DATA') or (ROOT / 'data'))
+DATA = Path(_env('CINEHARBOR_DATA', 'GC_LABS_DATA', 'JASPER_WORKSTATION_DATA') or (ROOT / 'data')).expanduser()
 WEB = ROOT / 'web'
 ASSETS = DATA / 'assets'
 DATA.mkdir(parents=True, exist_ok=True)
@@ -34,7 +34,10 @@ from account_login import AccountLogin
 LOGIN = AccountLogin()
 
 DB = DATA / 'workspace.json'
-CLI = Path.home() / '.local/bin/colab'
+# Source installs may share the SDK in their Python environment. Preserve the
+# original standalone CLI location when that environment has no entry point.
+_environment_cli = Path(sys.executable).with_name('colab')
+CLI = _environment_cli if _environment_cli.is_file() else Path.home() / '.local/bin/colab'
 EXPECTED = ''
 SESSION = 'gc-labs-workstation'
 LEGACY_SESSION = 'jasper-video-workstation'
@@ -45,25 +48,35 @@ SOURCE = Path(os.environ.get('JASPER_MEDIA_ROOT') or (DATA / 'external-media'))
 COLAB_CLI_MISSING = '尚未安装 Google Colab CLI。请先安装官方 Colab 命令行工具，再核对云端状态。'
 
 
+def _colab_cli_start_error(error, executable):
+    if isinstance(error, FileNotFoundError):
+        if not Path(executable).exists():
+            return RuntimeError(COLAB_CLI_MISSING)
+        return RuntimeError('无法启动 Google Colab CLI。请检查 CLI 的 Python 解释器是否存在。')
+    if isinstance(error, PermissionError):
+        return RuntimeError('Google Colab CLI 权限不足。请检查 CLI 的读取和执行权限。')
+    if error.errno in (errno.ENOEXEC, errno.EISDIR):
+        return RuntimeError('Google Colab CLI 文件格式不正确。请检查 CLI 安装。')
+    return RuntimeError(f'无法启动 Google Colab CLI（系统错误 {error.errno}）。')
+
+
 def sdk_python():
     bundled = _env('CINEHARBOR_PYTHON', 'GC_LABS_PYTHON')
     if bundled:
         return bundled
     try:
-        first = CLI.read_text().splitlines()[0]
-    except OSError:
-        raise RuntimeError(COLAB_CLI_MISSING) from None
+        with CLI.open() as stream:
+            first = stream.readline().rstrip('\r\n')
+    except OSError as e:
+        raise _colab_cli_start_error(e, CLI) from None
+    if not first:
+        raise RuntimeError('Google Colab CLI 文件为空。请检查 CLI 安装。')
     return first[2:] if first.startswith('#!') else sys.executable
 
 
 def cli_command(args):
     entry = _env('CINEHARBOR_CLI_ENTRY', 'GC_LABS_CLI_ENTRY')
     return [sdk_python(), entry, *args] if entry else [str(CLI), *args]
-
-
-def _colab_cli_missing_output(text):
-    lowered = text.lower()
-    return "no module named 'colab_cli'" in lowered or 'no module named "colab_cli"' in lowered
 
 
 def now():
@@ -87,16 +100,20 @@ def cli(args, timeout=25):
     env['NO_COLOR'] = '1'
     env['TERM'] = 'dumb'
     env['PYTHONDONTWRITEBYTECODE'] = '1'
+    command = cli_command(args)
     try:
-        p = subprocess.run(cli_command(args), capture_output=True, text=True, timeout=timeout, env=env, stdin=subprocess.DEVNULL)
-    except OSError:
-        raise RuntimeError(COLAB_CLI_MISSING) from None
+        p = subprocess.run(command, capture_output=True, text=True, timeout=timeout, env=env, stdin=subprocess.DEVNULL)
+    except OSError as e:
+        raise _colab_cli_start_error(e, command[0]) from None
     text = p.stdout + p.stderr
     text = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', text)
     if p.returncode:
         if any(x in text.lower() for x in ('authorization code', 'to authorize', 'no valid default credentials', 'defaultcredentialserror', 'eof when reading', 'invalid_grant', 'invalidgrant', 'refresherror', 'invalid_scope')):
             raise RuntimeError('尚未登录或授权已失效。请在管理台点击Google登录。')
-        if _colab_cli_missing_output(text):
+        launcher = command[1] if _env('CINEHARBOR_CLI_ENTRY', 'GC_LABS_CLI_ENTRY') else command[0]
+        if f'File "{launcher}", line ' in p.stderr and re.search(
+            r"^ModuleNotFoundError: No module named ['\"]colab_cli['\"]\s*$", p.stderr, re.MULTILINE
+        ):
             raise RuntimeError(COLAB_CLI_MISSING)
         raise RuntimeError(text[-3000:])
     return text
@@ -739,11 +756,7 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 return self.reply(refresh())
             except Exception as e:
-                detail = str(e)
-                lowered = detail.lower()
-                if detail == COLAB_CLI_MISSING or (isinstance(e, FileNotFoundError) and 'colab' in lowered) or "no module named 'colab_cli'" in lowered or 'no module named "colab_cli"' in lowered:
-                    detail = COLAB_CLI_MISSING
-                return self.reply({'error': detail}, 502)
+                return self.reply({'error': str(e)}, 502)
         if path == '/api/verified':
             record = DATA / 'verified_state.json'
             return self.reply(json.loads(record.read_text()) if record.exists() else {'gpu': '尚未验证', 'ram_gib': '—', 'torch': '—', 'cuda': '—', 'comfy_revision': '', 'backup_path': '尚未配置', 'backup_status': '尚未验证', 'video_inference_status': '尚未验证'})

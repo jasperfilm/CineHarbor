@@ -255,6 +255,25 @@ class V050StudioAndGuardrailsHTTP(unittest.TestCase):
         self.assertIn('Colab CLI', body)
         self.assertNotIn('no such file', body.lower())
 
+    @unittest.skipUnless(os.name == "posix", "Requires POSIX executable permission and file format errors")
+    def test_status_reports_cli_startup_errors_separately(self):
+        for file_mode, phrase in ((0o600, '权限不足'), (0o700, '文件格式不正确')):
+            with self.subTest(file_mode=file_mode):
+                candidate = self.d / 'colab'
+                candidate.write_text('Not an executable')
+                candidate.chmod(file_mode)
+                with patch.object(server, 'CLI', candidate), patch.dict(os.environ, {}, clear=False):
+                    for key in ('CINEHARBOR_CLI_ENTRY', 'GC_LABS_CLI_ENTRY'):
+                        os.environ.pop(key, None)
+                    req = urllib.request.Request(f'http://127.0.0.1:{self.port}/api/status')
+                    with self.assertRaises(urllib.error.HTTPError) as caught:
+                        urllib.request.urlopen(req, timeout=20)
+                body = caught.exception.read().decode()
+                self.assertEqual(caught.exception.code, 502)
+                self.assertIn(phrase, body)
+                self.assertNotIn(server.COLAB_CLI_MISSING, body)
+                self.assertNotIn(str(candidate), body)
+
 
 if __name__ == '__main__':
     unittest.main()

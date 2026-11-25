@@ -112,6 +112,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKNa
             var env = ProcessInfo.processInfo.environment
             env["PYTHONDONTWRITEBYTECODE"] = "1"
             env["JASPER_WORKSTATION_ROOT"] = code.path; env["JASPER_WORKSTATION_DATA"] = support.path
+            env["CINEHARBOR_DATA"] = support.path
+            env["GC_LABS_DATA"] = support.path
             let cliEntry = code.appendingPathComponent("runtime/colab_entry.py").path
             env["CINEHARBOR_PYTHON"] = python
             env["GC_LABS_PYTHON"] = python

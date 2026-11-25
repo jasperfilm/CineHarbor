@@ -34,14 +34,16 @@ CineHarbor（原 GC Labs）是一款面向 macOS 的本地优先视频制作工�
 
 ## 浏览器模式（macOS、Linux、Windows）
 
-`python -B gclabs_cli.py` 会启动同一个本机服务，并在默认浏览器打开工作台。Linux 和 Windows 用这个方式；Mac 上不想打包 App 时也可以用。安装为可编辑包后，命令 `cineharbor` 与兼容命令 `gclabs` 作用相同。
+macOS、Linux 和 Windows 可用 `python -B gclabs_cli.py` 在默认浏览器打开本地工作台。Google Colab 云端操作需要 macOS 或 Linux 上的官方 CLI。探测视频、提取尾帧和渲染 MP4 需要 Apple Silicon Mac 的 AVFoundation 媒体组件。
+
+在 Python 3.12 或更新版本的虚拟环境中，从源码目录执行 `python -m pip install .`，之后可用 `cineharbor` 或旧命令 `gclabs` 启动。开发时也可执行 `python -m pip install -e .`。Python 发行名沿用 `gc-labs`，方便原地升级。同版本覆盖安装可用 `python -m pip install --force-reinstall .`。如果要用另行准备的本地 ComfyUI 前端或自己编译的 Mac 媒体组件，请从包含这些依赖的源码目录运行启动器。
 
 `--port` 默认 8766，`--page studio` 打开分镜台，`--no-browser` 不自动打开浏览器，`--data-dir` 指定数据目录。环境变量 `CINEHARBOR_DATA` 优先；未设置时仍接受原来的 `GC_LABS_DATA`。
 
-已有数据目录保持不变：macOS 为 `~/Library/Application Support/Jasper Workstation`，Windows 为 `%APPDATA%\GC Labs`，Linux 为 `~/.local/share/gc-labs`。
+已有数据目录保持不变：macOS 为 `~/Library/Application Support/Jasper Workstation`，Windows 为 `%APPDATA%\GC Labs`，Linux 为 `~/.local/share/gc-labs`。如果以前用 `python -B server.py`，项目默认在源码目录的 `data/` 中。改用浏览器启动器时，使用 `--data-dir` 指向原目录。原生 Mac App 继续使用原有的 Application Support 路径。
 
 ## 从源码开始
 
-从源码运行，包括上面的浏览器启动器，需要 Python 3.12 或更新版本，与 `google-colab-cli` 的要求一致。打包原生 macOS App 时，在 Apple Silicon 上准备 macOS 13 或更新系统、Xcode 命令行工具和 CPython 3.13，因为安装包会拷贝这份 3.13 运行时。《[英文说明](README.md#get-started)》列出了本地启动与构建步骤。云端功能使用自己的 Google Colab 账号，机型供应与费用遵循 [Google Colab 的规则](https://research.google.com/colaboratory/faq.html)。退出应用后，已启动的云端运行时仍可能继续运行。
+从源码运行，包括上面的浏览器启动器，需要 Python 3.12 或更新版本，与 `google-colab-cli` 的要求一致。源码包在 macOS 和 Linux 固定使用与当前登录流程兼容的 Colab CLI 0.7.5。打包原生 macOS App 时，在 Apple Silicon 上准备 macOS 13 或更新系统、Xcode 命令行工具和 CPython 3.13，因为安装包会拷贝这份 3.13 运行时。《[英文说明](README.md#get-started)》列出了本地启动与构建步骤。云端功能使用自己的 Google Colab 账号，机型供应与费用遵循 [Google Colab 的规则](https://research.google.com/colaboratory/faq.html)。退出应用后，已启动的云端运行时仍可能继续运行。
 
 源码版含工作流模板、许可及说明。模型权重需按上游许可取得。联系支持可使用 contact@gachaframe.com。
