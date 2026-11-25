@@ -55,7 +55,11 @@ def main():
 
     url = f'http://127.0.0.1:{args.port}/{args.page}'
     print(f'CineHarbor {server.VERSION} ready at {url}')
-    print(f'Workspace data: {data}')
+    try:
+        print(f'Workspace data: {data}')
+    except UnicodeEncodeError:
+        # Redirected Windows consoles may not represent a Unicode workspace path.
+        print(f'Workspace data: {ascii(str(data))}')
     if not args.no_browser:
         threading.Thread(target=lambda: (time.sleep(0.5), webbrowser.open(url)), daemon=True).start()
     try:

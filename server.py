@@ -89,7 +89,13 @@ def _write_json(path, data):
 
 
 def _read_json(path):
-    return json.loads(path.read_text(encoding='utf-8'))
+    try:
+        return json.loads(path.read_text(encoding='utf-8'))
+    except UnicodeDecodeError:
+        if sys.platform != 'win32':
+            raise
+        # Older Windows source installs used the local code page for project files.
+        return json.loads(path.read_text(encoding='locale'))
 
 
 def save(data):
