@@ -48,6 +48,27 @@ class PresetsAndCLITests(unittest.TestCase):
             os.environ.pop('CINEHARBOR_DATA', None)
             self.assertEqual(gclabs_cli.default_data_dir(), Path('/tmp/gc-labs-data'))
 
+    def test_workspace_json_survives_a_narrow_windows_code_page(self):
+        original_write = Path.write_text
+        original_read = Path.read_text
+
+        def write(self, data, *args, **kwargs):
+            if 'encoding' not in kwargs and not args:
+                data.encode('cp1252')
+                kwargs['encoding'] = 'utf-8'
+            return original_write(self, data, *args, **kwargs)
+
+        def read(self, *args, **kwargs):
+            kwargs.setdefault('encoding', 'cp1252')
+            return original_read(self, *args, **kwargs)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            db = Path(tmp) / 'workspace.json'
+            with patch.object(server, 'DB', db), patch.object(Path, 'write_text', write), patch.object(Path, 'read_text', read):
+                server.seed()
+                loaded = server.load()
+        self.assertIn('完整', loaded['models'][0]['description'])
+
     def test_bundled_python_env_prefers_cineharbor_name(self):
         with patch.dict(os.environ, {'CINEHARBOR_PYTHON': '/opt/cineharbor/python', 'GC_LABS_PYTHON': '/opt/gc-labs/python'}):
             self.assertEqual(server.sdk_python(), '/opt/cineharbor/python')

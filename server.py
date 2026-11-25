@@ -83,16 +83,25 @@ def now():
     return time.strftime('%Y-%m-%d %H:%M:%S')
 
 
+def _write_json(path, data):
+    # Windows defaults to a legacy code page. Workspace JSON contains Chinese text.
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+
+
+def _read_json(path):
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
 def save(data):
     with LOCK:
         tmp = DB.with_suffix('.tmp')
-        tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2))
+        _write_json(tmp, data)
         tmp.replace(DB)
 
 
 def load():
     with LOCK:
-        return json.loads(DB.read_text())
+        return _read_json(DB)
 
 
 def cli(args, timeout=25):
@@ -130,7 +139,7 @@ def identity():
 def expected_account():
     profile = DATA / 'profile.json'
     if profile.exists():
-        return json.loads(profile.read_text()).get('expected_account', '')
+        return _read_json(profile).get('expected_account', '')
     if DB.exists():
         return load().get('policy', {}).get('expected_account', EXPECTED)
     return EXPECTED
@@ -143,7 +152,7 @@ def bind_account(email):
     if email != actual:
         raise ValueError('当前CLI账号已变化，请刷新后再确认。')
     tmp = DATA / 'profile.tmp'
-    tmp.write_text(json.dumps({'expected_account': actual}, ensure_ascii=False))
+    _write_json(tmp, {'expected_account': actual})
     tmp.replace(DATA / 'profile.json')
     return {'email': actual, 'bound': True}
 
@@ -237,7 +246,7 @@ def refresh():
         'error': None
     }
     result.update(runtime_state(result))
-    (DATA / 'live_status.json').write_text(json.dumps(result, ensure_ascii=False, indent=2))
+    _write_json(DATA / 'live_status.json', result)
     return result
 
 
@@ -402,7 +411,7 @@ def record_local_film(project_id, result):
         if not active:
             if not re.fullmatch(r'[a-zA-Z0-9_-]+', project_id) or not target.is_file():
                 raise ValueError('The source project is unavailable; the exported file is preserved')
-            workspace = json.loads(target.read_text())
+            workspace = _read_json(target)
         existing = next((a for a in workspace.get('assets', []) if a.get('path') == str(source)), None)
         if existing is None:
             existing = {'id': uuid.uuid4().hex, 'name': source.name, 'file': source.name,
@@ -414,7 +423,7 @@ def record_local_film(project_id, result):
             save(workspace)
         else:
             temporary = target.with_suffix('.tmp')
-            temporary.write_text(json.dumps(workspace, ensure_ascii=False, indent=2))
+            _write_json(temporary, workspace)
             temporary.replace(target)
     return existing['id']
 
@@ -425,7 +434,7 @@ def projects():
     current = load()
     rows = [current['project']]
     for path in sorted(directory.glob('*.json')):
-        item = json.loads(path.read_text())['project']
+        item = _read_json(path)['project']
         if item.get('id') != current['project'].get('id'):
             rows.append(item)
     return rows
@@ -1292,7 +1301,7 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError('操作运行中，请完成后切换项目')
                 directory = DATA / 'projects'
                 directory.mkdir(exist_ok=True)
-                (directory / (d['project']['id'] + '.json')).write_text(json.dumps(d, ensure_ascii=False, indent=2))
+                _write_json(directory / (d['project']['id'] + '.json'), d)
                 if path.endswith('/delete'):
                     candidates = [p for p in directory.glob('*.json') if p.stem != d['project']['id']]
                     if not candidates:
@@ -1300,7 +1309,7 @@ class Handler(BaseHTTPRequestHandler):
                     trash = DATA / 'project-trash'
                     trash.mkdir(exist_ok=True)
                     shutil.move(directory / (d['project']['id'] + '.json'), trash / (d['project']['id'] + '_' + str(int(time.time())) + '.json'))
-                    d = json.loads(candidates[0].read_text())
+                    d = _read_json(candidates[0])
                 elif path.endswith('/new'):
                     name = str(b.get('name', '')).strip()[:80]
                     if not name:
@@ -1316,7 +1325,7 @@ class Handler(BaseHTTPRequestHandler):
                     ident = str(b['id'])
                     if not re.fullmatch(r'[a-zA-Z0-9_-]+', ident):
                         raise ValueError('无效项目')
-                    d = json.loads((directory / (ident + '.json')).read_text())
+                    d = _read_json(directory / (ident + '.json'))
                 save(d)
                 return self.reply({'ok': True})
             if d['project'].get('status') == 'completed' and path in ('/api/shot', '/api/shot/new', '/api/asset', '/api/job'):

@@ -201,7 +201,7 @@ class MobileMonitor:
 
     def snapshot(self):
         live_p = self.s.DATA / 'live_status.json'
-        live = json.loads(live_p.read_text()) if live_p.exists() else {}
+        live = json.loads(live_p.read_text(encoding='utf-8')) if live_p.exists() else {}
         ws = self.s.load()
         ops = self.s.CONSOLE.all() if self.s.CONSOLE else []
         active_ops = [o for o in ops if o.get('state') in ('queued', 'running')]

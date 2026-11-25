@@ -28,7 +28,7 @@ class Console:
         self.worker_lock = threading.Lock()
         self._pending = []
         for p in self.root.glob('*.json'):
-            d = json.loads(p.read_text())
+            d = json.loads(p.read_text(encoding='utf-8'))
             if d.get('state') in ('queued', 'running'):
                 d.update(state='interrupted', message='本机服务已重启。任务不会自动重提；可检查远端任务并恢复跟踪。', finished=time.time())
                 self.write(d)
@@ -38,12 +38,12 @@ class Console:
     def write(self, d):
         p = self.root / (d['id'] + '.json')
         tmp = p.with_suffix('.tmp')
-        tmp.write_text(json.dumps(d, ensure_ascii=False, indent=2))
+        tmp.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding='utf-8')
         tmp.replace(p)
 
     def all(self):
         with self.lock:
-            return sorted([json.loads(p.read_text()) for p in self.root.glob('*.json')], key=lambda x: x['created'], reverse=True)[:50]
+            return sorted([json.loads(p.read_text(encoding='utf-8')) for p in self.root.glob('*.json')], key=lambda x: x['created'], reverse=True)[:50]
 
     def event(self, d, stage, message, **extra):
         with self.lock:
@@ -53,7 +53,7 @@ class Console:
             self.write(d)
 
     def _active_ops(self):
-        return [json.loads(p.read_text()) for p in self.root.glob('*.json') if json.loads(p.read_text()).get('state') in ('queued', 'running')]
+        return [item for p in self.root.glob('*.json') if (item := json.loads(p.read_text(encoding='utf-8'))).get('state') in ('queued', 'running')]
 
     def start(self, kind, body):
         if kind == 'generate_batch':
@@ -160,7 +160,7 @@ class Console:
                         break
                     d, body = self._pending.pop(0)
                 # Skip if cancelled before execution started
-                fresh = json.loads((self.root / f"{d['id']}.json").read_text())
+                fresh = json.loads((self.root / f"{d['id']}.json").read_text(encoding='utf-8'))
                 if fresh.get('state') != 'queued':
                     continue
                 # Check CU budget guardrail before starting the next queued generation
@@ -429,7 +429,7 @@ class Console:
                         except Exception as error:
                             result['local_bridge_cleanup'] = {'stopped': False, 'warning': str(error)}
                     if kind == 'inspect':
-                        (self.s.DATA / 'remote_inspection.json').write_text(json.dumps(result, ensure_ascii=False, indent=2))
+                        (self.s.DATA / 'remote_inspection.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
                     if kind in ('generate', 'resume'):
                         with self.s.LOCK:
                             db = self.s.load()
