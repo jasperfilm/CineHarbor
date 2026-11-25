@@ -1,6 +1,7 @@
 """Local media probing, frame chaining, rough-cut MP4 rendering, FCPXML 1.10 & CapCut/Jianying draft export.
 
-Zero cloud GPU usage. Uses bundled native Apple Silicon AVFoundation helper (`gclabs-media`).
+Zero cloud GPU usage. Uses the bundled native Apple Silicon AVFoundation helper.
+The executable name stays `gclabs-media` so existing app bundles keep finding it.
 """
 import hashlib, io, json, math, shutil, subprocess, tempfile, time, uuid, zipfile
 from fractions import Fraction
@@ -16,7 +17,7 @@ def media_tool_binary(root: Path) -> Path:
     for c in candidates:
         if c.is_file():
             return c
-    raise RuntimeError('本机 AVFoundation 媒体组件 gclabs-media 未就绪。')
+    raise RuntimeError('本机 AVFoundation 媒体组件未就绪。')
 
 
 def probe_media(root: Path, media_path: Path) -> dict:

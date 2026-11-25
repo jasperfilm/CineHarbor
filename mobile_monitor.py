@@ -201,7 +201,7 @@ class MobileMonitor:
 
     def snapshot(self):
         live_p = self.s.DATA / 'live_status.json'
-        live = json.loads(live_p.read_text()) if live_p.exists() else {}
+        live = json.loads(live_p.read_text(encoding='utf-8')) if live_p.exists() else {}
         ws = self.s.load()
         ops = self.s.CONSOLE.all() if self.s.CONSOLE else []
         active_ops = [o for o in ops if o.get('state') in ('queued', 'running')]
@@ -216,7 +216,7 @@ class MobileMonitor:
         budget = ws.get('policy', {}).get('max_cu_budget', 0) or 0
 
         return {
-            'project': ws.get('project', {}).get('name', 'GC Labs'),
+            'project': ws.get('project', {}).get('name', 'CineHarbor'),
             'account': _mask_email(live.get('email', '')),
             'balance': cur_bal,
             'rate': live.get('rate'),
@@ -242,7 +242,7 @@ class MobileMonitor:
 
     def render_html(self, token):
         return f"""<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GC Labs · 手机只读监看</title>
+<title>CineHarbor · 手机只读监看</title>
 <style>
 body{{margin:0;background:#101114;color:#eeeef1;font:15px -apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;padding:18px}}
 .card{{background:#191a20;border:1px solid #303139;border-radius:14px;padding:16px;margin-bottom:14px}}
@@ -255,7 +255,7 @@ progress{{width:100%;height:10px;accent-color:#9ce5bf;margin:8px 0}}
 </style>
 <body>
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-  <b>GC LABS · 只读监看</b><span class="badge">零控制权限 · 安全只读</span>
+  <b>CineHarbor · 只读监看</b><span class="badge">零控制权限 · 安全只读</span>
 </div>
 <div id="root"><div class="card">正在读取本机工作站状态…</div></div>
 <script>

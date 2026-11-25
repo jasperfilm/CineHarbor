@@ -1,6 +1,6 @@
 # GC Labs 0.2.0 local beta verification
 
-- Native app: `~/Applications/GC Labs.app`, Apple Silicon, macOS minimum13.
+- Native app: `~/Applications/GC Labs.app`, Apple Silicon, macOS 13 or later.
 - Self-contained runtime: copied CPython3.13 and official Colab SDK; no private projects, model weights or credentials in app bundle.
 - Ad-hoc code signature verified after application startup and CLI use. Python bytecode writing disabled to preserve the signed bundle.
 - DMG 149MB, image integrity verification succeeded. SHA256: `43e0a99949364f49fc73802f94c5bb007f5bf00c9a702edbf2f34859c461642f`.

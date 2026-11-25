@@ -5,33 +5,49 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gc-labs"
 version = "1.2.12"
-description = "Local-first video production workspace connecting shot planning, user-owned cloud resources and third-party model workflows"
+description = "Local-first video production workspace connecting shot planning, user-owned cloud resources and third-party model workflows. Formerly GC Labs."
 readme = "README.md"
 license = "Apache-2.0"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 authors = [
-  { name = "GC Labs Contributors" }
+  { name = "CineHarbor Contributors" }
 ]
 keywords = ["comfyui", "google-colab", "ai-video", "storyboard", "local-first", "filmmaking"]
 dependencies = [
-  "google-colab-cli>=0.7.0",
+  "google-colab-cli==0.7.5; sys_platform == 'darwin' or sys_platform == 'linux'",
   "aiohttp>=3.9.0",
 ]
 
 [project.scripts]
+cineharbor = "gclabs_cli:main"
 gclabs = "gclabs_cli:main"
 
 [tool.setuptools]
+packages = ["runtime", "web", "assets"]
+include-package-data = false
 py-modules = [
   "server",
   "console",
+  "drama_studio",
+  "license_resources",
   "gclabs_cli",
   "account_login",
+  "comfy_asset_transfer",
+  "comfy_frontend_policy",
   "comfy_local_bridge",
+  "comfy_project_bridge",
+  "comfy_project_store",
+  "comfy_verified_media",
   "mobile_monitor",
   "model_presets",
+  "model_terms",
+  "storyboard_handoff",
   "timeline_export",
   "workflow_converter",
   "workflow_library",
   "workspace_backup",
 ]
+
+[tool.setuptools.package-data]
+web = ["*.html", "*.css", "*.js", "*.png", "*.ipynb", "locales/*.json"]
+assets = ["branding/product.json", "workflow-templates/*.json", "workflow-templates/LICENSE", "licenses/**/*.txt", "licenses/**/*.md", "licenses/**/*.json", "licenses/sources/*.tar.gz"]

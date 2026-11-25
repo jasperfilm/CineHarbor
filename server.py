@@ -2,15 +2,26 @@
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import unquote
-import base64, copy, hashlib, json, mimetypes, os, re, secrets, shutil, subprocess, sys, threading, time, uuid
+import base64, copy, errno, hashlib, json, mimetypes, os, re, secrets, shutil, subprocess, sys, threading, time, uuid
 
 ROOT = Path(os.environ.get('JASPER_WORKSTATION_ROOT', Path(__file__).resolve().parent))
 # Use built-in MIME tables: an App Sandbox must not read host Apache configuration.
 mimetypes.knownfiles = []
 mimetypes.init(files=[])
-PRODUCT = json.loads((ROOT/'assets/branding/product.json').read_text()) if (ROOT/'assets/branding/product.json').is_file() else {'version':'1.0.0','display_name':'GC Labs'}
+
+def _env(*names):
+    for name in names:
+        value = os.environ.get(name)
+        if value:
+            return value
+    return ''
+
+
+PRODUCT = json.loads((ROOT/'assets/branding/product.json').read_text()) if (ROOT/'assets/branding/product.json').is_file() else {'version':'1.0.0','display_name':'CineHarbor'}
 VERSION = PRODUCT['version']
-DATA = Path(os.environ.get('GC_LABS_DATA') or os.environ.get('JASPER_WORKSTATION_DATA') or (ROOT / 'data'))
+# CINEHARBOR_DATA is the current override. GC_LABS_DATA remains for existing setups.
+# JASPER_WORKSTATION_DATA is the path the installed Mac app already passes.
+DATA = Path(_env('CINEHARBOR_DATA', 'GC_LABS_DATA', 'JASPER_WORKSTATION_DATA') or (ROOT / 'data')).expanduser()
 WEB = ROOT / 'web'
 ASSETS = DATA / 'assets'
 DATA.mkdir(parents=True, exist_ok=True)
@@ -23,7 +34,10 @@ from account_login import AccountLogin
 LOGIN = AccountLogin()
 
 DB = DATA / 'workspace.json'
-CLI = Path.home() / '.local/bin/colab'
+# Source installs may share the SDK in their Python environment. Preserve the
+# original standalone CLI location when that environment has no entry point.
+_environment_cli = Path(sys.executable).with_name('colab')
+CLI = _environment_cli if _environment_cli.is_file() else Path.home() / '.local/bin/colab'
 EXPECTED = ''
 SESSION = 'gc-labs-workstation'
 LEGACY_SESSION = 'jasper-video-workstation'
@@ -31,16 +45,37 @@ PORT = int(os.environ.get('JASPER_WORKSTATION_PORT', '8766'))
 SOURCE = Path(os.environ.get('JASPER_MEDIA_ROOT') or (DATA / 'external-media'))
 
 
+COLAB_CLI_MISSING = '尚未安装 Google Colab CLI。请先安装官方 Colab 命令行工具，再核对云端状态。'
+
+
+def _colab_cli_start_error(error, executable):
+    if isinstance(error, FileNotFoundError):
+        if not Path(executable).exists():
+            return RuntimeError(COLAB_CLI_MISSING)
+        return RuntimeError('无法启动 Google Colab CLI。请检查 CLI 的 Python 解释器是否存在。')
+    if isinstance(error, PermissionError):
+        return RuntimeError('Google Colab CLI 权限不足。请检查 CLI 的读取和执行权限。')
+    if error.errno in (errno.ENOEXEC, errno.EISDIR):
+        return RuntimeError('Google Colab CLI 文件格式不正确。请检查 CLI 安装。')
+    return RuntimeError(f'无法启动 Google Colab CLI（系统错误 {error.errno}）。')
+
+
 def sdk_python():
-    bundled = os.environ.get('GC_LABS_PYTHON')
+    bundled = _env('CINEHARBOR_PYTHON', 'GC_LABS_PYTHON')
     if bundled:
         return bundled
-    first = CLI.read_text().splitlines()[0]
+    try:
+        with CLI.open() as stream:
+            first = stream.readline().rstrip('\r\n')
+    except OSError as e:
+        raise _colab_cli_start_error(e, CLI) from None
+    if not first:
+        raise RuntimeError('Google Colab CLI 文件为空。请检查 CLI 安装。')
     return first[2:] if first.startswith('#!') else sys.executable
 
 
 def cli_command(args):
-    entry = os.environ.get('GC_LABS_CLI_ENTRY')
+    entry = _env('CINEHARBOR_CLI_ENTRY', 'GC_LABS_CLI_ENTRY')
     return [sdk_python(), entry, *args] if entry else [str(CLI), *args]
 
 
@@ -48,16 +83,31 @@ def now():
     return time.strftime('%Y-%m-%d %H:%M:%S')
 
 
+def _write_json(path, data):
+    # Windows defaults to a legacy code page. Workspace JSON contains Chinese text.
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+
+
+def _read_json(path):
+    try:
+        return json.loads(path.read_text(encoding='utf-8'))
+    except UnicodeDecodeError:
+        if sys.platform != 'win32':
+            raise
+        # Older Windows source installs used the local code page for project files.
+        return json.loads(path.read_text(encoding='locale'))
+
+
 def save(data):
     with LOCK:
         tmp = DB.with_suffix('.tmp')
-        tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2))
+        _write_json(tmp, data)
         tmp.replace(DB)
 
 
 def load():
     with LOCK:
-        return json.loads(DB.read_text())
+        return _read_json(DB)
 
 
 def cli(args, timeout=25):
@@ -65,12 +115,21 @@ def cli(args, timeout=25):
     env['NO_COLOR'] = '1'
     env['TERM'] = 'dumb'
     env['PYTHONDONTWRITEBYTECODE'] = '1'
-    p = subprocess.run(cli_command(args), capture_output=True, text=True, timeout=timeout, env=env, stdin=subprocess.DEVNULL)
+    command = cli_command(args)
+    try:
+        p = subprocess.run(command, capture_output=True, text=True, timeout=timeout, env=env, stdin=subprocess.DEVNULL)
+    except OSError as e:
+        raise _colab_cli_start_error(e, command[0]) from None
     text = p.stdout + p.stderr
     text = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', text)
     if p.returncode:
         if any(x in text.lower() for x in ('authorization code', 'to authorize', 'no valid default credentials', 'defaultcredentialserror', 'eof when reading', 'invalid_grant', 'invalidgrant', 'refresherror', 'invalid_scope')):
             raise RuntimeError('尚未登录或授权已失效。请在管理台点击Google登录。')
+        launcher = command[1] if _env('CINEHARBOR_CLI_ENTRY', 'GC_LABS_CLI_ENTRY') else command[0]
+        if f'File "{launcher}", line ' in p.stderr and re.search(
+            r"^ModuleNotFoundError: No module named ['\"]colab_cli['\"]\s*$", p.stderr, re.MULTILINE
+        ):
+            raise RuntimeError(COLAB_CLI_MISSING)
         raise RuntimeError(text[-3000:])
     return text
 
@@ -86,7 +145,7 @@ def identity():
 def expected_account():
     profile = DATA / 'profile.json'
     if profile.exists():
-        return json.loads(profile.read_text()).get('expected_account', '')
+        return _read_json(profile).get('expected_account', '')
     if DB.exists():
         return load().get('policy', {}).get('expected_account', EXPECTED)
     return EXPECTED
@@ -99,7 +158,7 @@ def bind_account(email):
     if email != actual:
         raise ValueError('当前CLI账号已变化，请刷新后再确认。')
     tmp = DATA / 'profile.tmp'
-    tmp.write_text(json.dumps({'expected_account': actual}, ensure_ascii=False))
+    _write_json(tmp, {'expected_account': actual})
     tmp.replace(DATA / 'profile.json')
     return {'email': actual, 'bound': True}
 
@@ -193,7 +252,7 @@ def refresh():
         'error': None
     }
     result.update(runtime_state(result))
-    (DATA / 'live_status.json').write_text(json.dumps(result, ensure_ascii=False, indent=2))
+    _write_json(DATA / 'live_status.json', result)
     return result
 
 
@@ -308,7 +367,7 @@ def export_shot(shot, d):
             'nbformat': 4, 'nbformat_minor': 5,
             'metadata': {'colab': {'name': (shot.get('title') or 'workflow') + '.ipynb'}, 'kernelspec': {'display_name': 'Python 3', 'language': 'python', 'name': 'python3'}},
             'cells': [
-                {'cell_type': 'markdown', 'metadata': {}, 'source': ['# ' + str(shot.get('title') or 'GC Labs 工作流任务') + '\n选择 G4 运行时，挂载云盘后依次执行环境准备与真实推理。结果核验后请执行云盘备份释放。']},
+                {'cell_type': 'markdown', 'metadata': {}, 'source': ['# ' + str(shot.get('title') or 'CineHarbor 工作流任务') + '\n选择 G4 运行时，挂载云盘后依次执行环境准备与真实推理。结果核验后请执行云盘备份释放。']},
                 cell('from google.colab import drive\ndrive.mount("/content/drive")'),
                 cell('CONTROL = ' + repr(payload) + '\n' + lib_src + '\n' + common + '\nprint(setup())'),
                 cell('print(generate())')
@@ -358,7 +417,7 @@ def record_local_film(project_id, result):
         if not active:
             if not re.fullmatch(r'[a-zA-Z0-9_-]+', project_id) or not target.is_file():
                 raise ValueError('The source project is unavailable; the exported file is preserved')
-            workspace = json.loads(target.read_text())
+            workspace = _read_json(target)
         existing = next((a for a in workspace.get('assets', []) if a.get('path') == str(source)), None)
         if existing is None:
             existing = {'id': uuid.uuid4().hex, 'name': source.name, 'file': source.name,
@@ -370,7 +429,7 @@ def record_local_film(project_id, result):
             save(workspace)
         else:
             temporary = target.with_suffix('.tmp')
-            temporary.write_text(json.dumps(workspace, ensure_ascii=False, indent=2))
+            _write_json(temporary, workspace)
             temporary.replace(target)
     return existing['id']
 
@@ -381,7 +440,7 @@ def projects():
     current = load()
     rows = [current['project']]
     for path in sorted(directory.glob('*.json')):
-        item = json.loads(path.read_text())['project']
+        item = _read_json(path)['project']
         if item.get('id') != current['project'].get('id'):
             rows.append(item)
     return rows
@@ -1248,7 +1307,7 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError('操作运行中，请完成后切换项目')
                 directory = DATA / 'projects'
                 directory.mkdir(exist_ok=True)
-                (directory / (d['project']['id'] + '.json')).write_text(json.dumps(d, ensure_ascii=False, indent=2))
+                _write_json(directory / (d['project']['id'] + '.json'), d)
                 if path.endswith('/delete'):
                     candidates = [p for p in directory.glob('*.json') if p.stem != d['project']['id']]
                     if not candidates:
@@ -1256,7 +1315,7 @@ class Handler(BaseHTTPRequestHandler):
                     trash = DATA / 'project-trash'
                     trash.mkdir(exist_ok=True)
                     shutil.move(directory / (d['project']['id'] + '.json'), trash / (d['project']['id'] + '_' + str(int(time.time())) + '.json'))
-                    d = json.loads(candidates[0].read_text())
+                    d = _read_json(candidates[0])
                 elif path.endswith('/new'):
                     name = str(b.get('name', '')).strip()[:80]
                     if not name:
@@ -1272,7 +1331,7 @@ class Handler(BaseHTTPRequestHandler):
                     ident = str(b['id'])
                     if not re.fullmatch(r'[a-zA-Z0-9_-]+', ident):
                         raise ValueError('无效项目')
-                    d = json.loads((directory / (ident + '.json')).read_text())
+                    d = _read_json(directory / (ident + '.json'))
                 save(d)
                 return self.reply({'ok': True})
             if d['project'].get('status') == 'completed' and path in ('/api/shot', '/api/shot/new', '/api/asset', '/api/job'):
@@ -1391,12 +1450,12 @@ if __name__ == '__main__':
     try:
         httpd = ThreadingHTTPServer(('127.0.0.1', PORT), Handler)
     except OSError:
-        if os.environ.get('GC_LABS_DYNAMIC_PORT') == '1':
+        if _env('CINEHARBOR_DYNAMIC_PORT', 'GC_LABS_DYNAMIC_PORT') == '1':
             httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
             PORT = httpd.server_port
         else:
             raise
-    port_file = os.environ.get('GC_LABS_PORT_FILE')
+    port_file = _env('CINEHARBOR_PORT_FILE', 'GC_LABS_PORT_FILE')
     if port_file:
         Path(port_file).write_text(json.dumps({'port': PORT, 'version': VERSION}))
     print(f'Local: http://127.0.0.1:{PORT}/studio', flush=True)

@@ -85,7 +85,7 @@ def import_project_file(server,source):
   d['jobs']=[];d['schema_version']=2
   d['models']=server.MODELS;d['policy']=server.load()['policy'];d['events']=[{'time':server.now(),'text':'从本机备份导入独立项目；历史任务不会自动提交。'}]
   old=server.load();folder=server.DATA/'projects';folder.mkdir(exist_ok=True)
-  (folder/(old['project']['id']+'.json')).write_text(json.dumps(old,ensure_ascii=False,indent=2))
+  (folder/(old['project']['id']+'.json')).write_text(json.dumps(old,ensure_ascii=False,indent=2), encoding='utf-8')
   for asset,blob in assets:shutil.move(str(blob),str(server.ASSETS/asset['file']))
   server.save(d)
   return {'project':d['project'],'assets':len(assets),'missing_external_assets':missing}

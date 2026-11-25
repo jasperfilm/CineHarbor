@@ -70,4 +70,4 @@ assert.match(mgrHtml,/已达到本次会话设定的 CU 算力预算护栏上限
 assert.match(mgrHtml,/id="monitor-toggle"/);
 assert.match(mgrHtml,/<svg id="qr"><\/svg>/);
 
-console.log('GC Labs 0.5.0 Elements, Multi-Takes, Full-Precision Presets, CU Budget & Mobile QR Monitor UI passed.');
+console.log('CineHarbor 0.5.0 Elements, Multi-Takes, Full-Precision Presets, CU Budget & Mobile QR Monitor UI passed.');

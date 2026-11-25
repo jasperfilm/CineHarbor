@@ -1,4 +1,6 @@
-# GC Labs app identity
+# CineHarbor app identity
+
+Formerly GC Labs. The prompts below are the original icon brief and stay here as the generation record. The shipping mark is `CineHarbor-master-F-v02.png`.
 
 使用内置 image_gen 生成；随后仅用 sips/iconutil 导出原生图标尺寸和格式，没有使用外部付费API。
 

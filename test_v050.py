@@ -1,4 +1,4 @@
-"""GC Labs 0.5.0 test suite:
+"""CineHarbor 0.5.0 test suite:
 - Verified G4 full-precision model presets & automatic fp8->bf16/fp16 node upgrade
 - CU budget guardrail (pauses subsequent queued jobs without killing running GPU)
 - Opt-in read-only LAN/Tailscale mobile monitor + local QR SVG + masked identity + zero write methods
@@ -6,7 +6,7 @@
 - Project-level Character/Scene/Prop elements with automatic prompt & reference inheritance
 - Cross-platform CLI data directory resolution
 """
-import base64, json, tempfile, threading, time, unittest, urllib.error, urllib.request
+import base64, json, os, tempfile, threading, time, unittest, urllib.error, urllib.request
 from pathlib import Path
 from unittest.mock import patch
 import server
@@ -19,7 +19,8 @@ import mobile_monitor
 class PresetsAndCLITests(unittest.TestCase):
     def test_all_presets_are_full_precision_and_validated(self):
         presets = list_presets()
-        self.assertGreaterEqual(len(presets), 5)
+        self.assertEqual(len(presets), 6)
+        self.assertIn('qwen_image_edit_2511_bf16', [p['id'] for p in presets])
         for p in presets:
             self.assertTrue(p['model_files'])
             for mf in p['model_files']:
@@ -30,6 +31,7 @@ class PresetsAndCLITests(unittest.TestCase):
     def test_cross_platform_cli_paths(self):
         with patch.dict('os.environ', {}, clear=False):
             os_env = __import__('os').environ
+            os_env.pop('CINEHARBOR_DATA', None)
             os_env.pop('GC_LABS_DATA', None)
             os_env.pop('JASPER_WORKSTATION_DATA', None)
             with patch('platform.system', return_value='Darwin'):
@@ -38,6 +40,41 @@ class PresetsAndCLITests(unittest.TestCase):
                 self.assertTrue(str(gclabs_cli.default_data_dir()).endswith('gc-labs'))
             with patch('platform.system', return_value='Windows'):
                 self.assertTrue(str(gclabs_cli.default_data_dir()).endswith('GC Labs'))
+
+    def test_data_dir_prefers_cineharbor_env_and_accepts_gc_labs(self):
+        with patch.dict(os.environ, {'CINEHARBOR_DATA': '/tmp/cineharbor-data', 'GC_LABS_DATA': '/tmp/gc-labs-data'}):
+            self.assertEqual(gclabs_cli.default_data_dir(), Path('/tmp/cineharbor-data'))
+        with patch.dict(os.environ, {'GC_LABS_DATA': '/tmp/gc-labs-data'}, clear=False):
+            os.environ.pop('CINEHARBOR_DATA', None)
+            self.assertEqual(gclabs_cli.default_data_dir(), Path('/tmp/gc-labs-data'))
+
+    def test_workspace_json_survives_a_narrow_windows_code_page(self):
+        original_write = Path.write_text
+        original_read = Path.read_text
+
+        def write(self, data, *args, **kwargs):
+            if 'encoding' not in kwargs and not args:
+                data.encode('cp1252')
+                kwargs['encoding'] = 'utf-8'
+            return original_write(self, data, *args, **kwargs)
+
+        def read(self, *args, **kwargs):
+            kwargs.setdefault('encoding', 'cp1252')
+            return original_read(self, *args, **kwargs)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            db = Path(tmp) / 'workspace.json'
+            with patch.object(server, 'DB', db), patch.object(Path, 'write_text', write), patch.object(Path, 'read_text', read):
+                server.seed()
+                loaded = server.load()
+        self.assertIn('完整', loaded['models'][0]['description'])
+
+    def test_bundled_python_env_prefers_cineharbor_name(self):
+        with patch.dict(os.environ, {'CINEHARBOR_PYTHON': '/opt/cineharbor/python', 'GC_LABS_PYTHON': '/opt/gc-labs/python'}):
+            self.assertEqual(server.sdk_python(), '/opt/cineharbor/python')
+        with patch.dict(os.environ, {'GC_LABS_PYTHON': '/opt/gc-labs/python'}, clear=False):
+            os.environ.pop('CINEHARBOR_PYTHON', None)
+            self.assertEqual(server.sdk_python(), '/opt/gc-labs/python')
 
 
 class V050StudioAndGuardrailsHTTP(unittest.TestCase):
@@ -223,6 +260,40 @@ class V050StudioAndGuardrailsHTTP(unittest.TestCase):
 
         off = self.api('/api/monitor/toggle', {'enabled': False})
         self.assertFalse(off['enabled'])
+
+    def test_status_hides_missing_colab_cli_path(self):
+        missing = self.d / 'missing-colab'
+        with patch.object(server, 'CLI', missing), patch.dict(os.environ, {}, clear=False):
+            for key in ('CINEHARBOR_CLI_ENTRY', 'GC_LABS_CLI_ENTRY', 'CINEHARBOR_PYTHON', 'GC_LABS_PYTHON'):
+                os.environ.pop(key, None)
+            req = urllib.request.Request(f'http://127.0.0.1:{self.port}/api/status', headers={'X-Local-Key': server.KEY})
+            with self.assertRaises(urllib.error.HTTPError) as caught:
+                urllib.request.urlopen(req, timeout=20)
+        body = caught.exception.read().decode()
+        self.assertEqual(caught.exception.code, 502)
+        self.assertNotIn(str(missing), body)
+        self.assertNotIn(str(Path.home()), body)
+        self.assertIn('Colab CLI', body)
+        self.assertNotIn('no such file', body.lower())
+
+    @unittest.skipUnless(os.name == "posix", "Requires POSIX executable permission and file format errors")
+    def test_status_reports_cli_startup_errors_separately(self):
+        for file_mode, phrase in ((0o600, '权限不足'), (0o700, '文件格式不正确')):
+            with self.subTest(file_mode=file_mode):
+                candidate = self.d / 'colab'
+                candidate.write_text('Not an executable')
+                candidate.chmod(file_mode)
+                with patch.object(server, 'CLI', candidate), patch.dict(os.environ, {}, clear=False):
+                    for key in ('CINEHARBOR_CLI_ENTRY', 'GC_LABS_CLI_ENTRY'):
+                        os.environ.pop(key, None)
+                    req = urllib.request.Request(f'http://127.0.0.1:{self.port}/api/status')
+                    with self.assertRaises(urllib.error.HTTPError) as caught:
+                        urllib.request.urlopen(req, timeout=20)
+                body = caught.exception.read().decode()
+                self.assertEqual(caught.exception.code, 502)
+                self.assertIn(phrase, body)
+                self.assertNotIn(server.COLAB_CLI_MISSING, body)
+                self.assertNotIn(str(candidate), body)
 
 
 if __name__ == '__main__':

@@ -21,7 +21,7 @@ def start(server,endpoint):
  frontend=server.ROOT/'vendor/comfy_frontend.zip'
  if not frontend.exists():raise RuntimeError('安装包缺少官方ComfyUI前端。')
  log=open(server.DATA/'bridge.log','ab')
- env=os.environ.copy();env['PYTHONDONTWRITEBYTECODE']='1';env['GC_LABS_CACHE']=str(server.DATA/'cache')
+ env=os.environ.copy();env['PYTHONDONTWRITEBYTECODE']='1';cache=str(server.DATA/'cache');env['CINEHARBOR_CACHE']=cache;env['GC_LABS_CACHE']=cache
  process=subprocess.Popen([server.sdk_python(),str(server.ROOT/'comfy_local_bridge.py'),'--endpoint',endpoint,'--frontend',str(frontend)],stdout=log,stderr=log,env=env);log.close()
  record={'pid':process.pid,'endpoint':endpoint};(server.DATA/'bridge.json').write_text(json.dumps(record))
  for _ in range(90):
